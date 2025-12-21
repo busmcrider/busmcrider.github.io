@@ -45,6 +45,18 @@ input[type="range"] {
   width: 100%;
 }
 
+#download svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+#volume {
+  width: 80px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
 #playlist {
   list-style: none;
   padding: 0;

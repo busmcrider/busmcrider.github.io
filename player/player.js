@@ -31,6 +31,36 @@ const playlistToggle = document.getElementById("playlist-toggle");
 const playlistWrapper = document.querySelector(".playlist-wrapper");
 const playlistChevron = document.getElementById("playlist-chevron");
 
+const volumeSlider = document.getElementById("volume");
+const downloadBtn = document.getElementById("download");
+
+downloadBtn.onclick = () => {
+    fetch(audio.src)
+        .then(res => res.arrayBuffer())
+        .then(data => {
+            const blob = new Blob([data], { type: 'audio/mpeg' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = nowPlaying.textContent + ".mp3";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        })
+        .catch(err => console.error("Download failed:", err));
+};
+
+audio.volume = 1.0; // 100%
+
+let lastVolume = 1.0;
+
+
+volumeSlider.oninput = () => {
+  audio.volume = volumeSlider.value / 100;
+};
+
+
 let index = 0;
 let autoplay = true;
 let loopMode = 0; // 0 off, 1 track, 2 all
@@ -148,6 +178,27 @@ document.addEventListener("keydown", e => {
     case "A":
       autoplayBtn.click();
       break;
+      case "ArrowUp":
+  e.preventDefault();
+  audio.volume = Math.min(1, audio.volume + 0.1);
+  volumeSlider.value = Math.round(audio.volume * 100);
+  break;
+case "ArrowDown":
+  e.preventDefault();
+  audio.volume = Math.max(0, audio.volume - 0.1);
+  volumeSlider.value = Math.round(audio.volume * 100);
+  break;
+  case "m":
+case "M":
+    e.preventDefault();
+    if (audio.volume > 0) {
+        lastVolume = audio.volume;
+        audio.volume = 0;
+    } else {
+        audio.volume = lastVolume;
+    }
+    volumeSlider.value = Math.round(audio.volume * 100);
+    break;
   }
 });
 
