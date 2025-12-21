@@ -1,19 +1,26 @@
-const tracks = [
-  { title: "A1 - Sippin' on Gin", src: "audio/A1 - Sippin' on Gin.mp3" },
-  { title: "A2 - Captain Save a Hoe", src: "audio/A2 - Captain Save a Hoe.mp3" },
-  { title: "A3 - Bad Guy", src: "audio/A3 - Bad Guy.mp3" },
-  { title: "A4 - Master of Strings", src: "audio/A4 - Master of Strings.mp3" },
-  { title: "A5 - King Kunta", src: "audio/A5 - King Kunta.mp3" },
-  { title: "A6 - Outlaw's Paradise", src: "audio/A6 - Outlaw's Paradise.mp3" },
-  { title: "A7 - Regulate", src: "audio/A7 - Regulate.mp3" },
-  { title: "B1 - Big Iron", src: "audio/B1 - Big Iron.mp3" },
-  { title: "B2 - Friends in Low Places", src: "audio/B2 - Friends in Low Places.mp3" },
-  { title: "B3 - Ring of Fire (Slow)", src: "audio/B3 - Ring of Fire (Slow).mp3" },
-  { title: "B4 - Ring of Fire", src: "audio/B4 - Ring of Fire.mp3" },
-  { title: "B5 - A Horse with No Name", src: "audio/B5 - A Horse with No Name.mp3" },
-  { title: "B6 - Walk The Line", src: "audio/B6 - Walk The Line.mp3" },
-  { title: "B7 - (Ghost)Riders", src: "audio/B7 - (Ghost)Riders.mp3" }
-];
+let tracks = [];
+
+// Fetch the playlist from JSON manifest
+fetch("audio/tracks.json")
+  .then(res => res.json())
+  .then(data => {
+    tracks = data.map(t => ({
+      src: "audio/" + t.file,
+      title: t.title ? t.title : t.file.replace(/\.mp3$/i, "")
+    }));
+
+    // populate playlist and load first track
+    playlistEl.innerHTML = "";
+    tracks.forEach((t, i) => {
+      const li = document.createElement("li");
+      li.textContent = t.title;
+      li.onclick = () => loadTrack(i, true);
+      playlistEl.appendChild(li);
+    });
+
+    loadTrack(0);
+  })
+  .catch(err => console.error("Error loading tracks.json", err));
 
 const audio = document.getElementById("audio");
 const playBtn = document.getElementById("play");
