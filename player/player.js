@@ -63,7 +63,7 @@ volumeSlider.oninput = () => {
 
 let index = 0;
 let autoplay = true;
-let loopMode = 0; // 0 off, 1 track, 2 all
+let loopMode = 2; // 0 off, 1 track, 2 all
 
 tracks.forEach((t, i) => {
   const li = document.createElement("li");
@@ -179,26 +179,26 @@ document.addEventListener("keydown", e => {
       autoplayBtn.click();
       break;
       case "ArrowUp":
-  e.preventDefault();
-  audio.volume = Math.min(1, audio.volume + 0.1);
-  volumeSlider.value = Math.round(audio.volume * 100);
-  break;
-case "ArrowDown":
-  e.preventDefault();
-  audio.volume = Math.max(0, audio.volume - 0.1);
-  volumeSlider.value = Math.round(audio.volume * 100);
-  break;
-  case "m":
-case "M":
-    e.preventDefault();
-    if (audio.volume > 0) {
-        lastVolume = audio.volume;
-        audio.volume = 0;
-    } else {
-        audio.volume = lastVolume;
-    }
-    volumeSlider.value = Math.round(audio.volume * 100);
-    break;
+        e.preventDefault();
+        audio.volume = Math.min(1, audio.volume + 0.1);
+        volumeSlider.value = Math.round(audio.volume * 100);
+      break;
+      case "ArrowDown":
+        e.preventDefault();
+        audio.volume = Math.max(0, audio.volume - 0.1);
+        volumeSlider.value = Math.round(audio.volume * 100);
+      break;
+      case "m":
+      case "M":
+        e.preventDefault();
+          if (audio.volume > 0) {
+            lastVolume = audio.volume;
+            audio.volume = 0;
+          } else {
+            audio.volume = lastVolume;
+          }
+        volumeSlider.value = Math.round(audio.volume * 100);
+      break;
   }
 });
 
