@@ -1,8 +1,3 @@
-layout: page
-title: "Minuta Clock"
-permalink: /minuta-clock
-
-<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -398,3 +393,4 @@ window.addEventListener('hashchange', () => { loadStateFromHash(); applyStateToD
   </script>
 </body>
 </html>
+
