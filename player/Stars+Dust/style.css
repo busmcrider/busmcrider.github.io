@@ -4,9 +4,21 @@
 
 body {
   margin: 0;
-  background: #111;
-  color: #eee;
   font-family: system-ui, sans-serif;
+  color: #eee;
+  background: url('Stars+Dust.jpeg') no-repeat center center fixed;
+  background-size: cover;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: -1;
 }
 
 .player {
@@ -17,7 +29,14 @@ body {
 
 #now-playing {
   margin-bottom: 8px;
-  font-size: 14px;
+  font-size: 24px;
+}
+
+.now-playing {
+  display: flex;
+  justify-content: space-between;
+  font-size: 24px;
+  margin-bottom: 8px;
 }
 
 .controls,

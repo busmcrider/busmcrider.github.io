@@ -1,18 +1,18 @@
 const tracks = [
-  { title: "A1 - Sippin' on Gin", src: "audio/A1 - Sippin' on Gin.mp3" },
-  { title: "A2 - Captain Save a Hoe", src: "audio/A2 - Captain Save a Hoe.mp3" },
-  { title: "A3 - Bad Guy", src: "audio/A3 - Bad Guy.mp3" },
-  { title: "A4 - Master of Strings", src: "audio/A4 - Master of Strings.mp3" },
-  { title: "A5 - King Kunta", src: "audio/A5 - King Kunta.mp3" },
-  { title: "A6 - Outlaw's Paradise", src: "audio/A6 - Outlaw's Paradise.mp3" },
-  { title: "A7 - Regulate", src: "audio/A7 - Regulate.mp3" },
-  { title: "B1 - Big Iron", src: "audio/B1 - Big Iron.mp3" },
-  { title: "B2 - Friends in Low Places", src: "audio/B2 - Friends in Low Places.mp3" },
-  { title: "B3 - Ring of Fire (Slow)", src: "audio/B3 - Ring of Fire (Slow).mp3" },
-  { title: "B4 - Ring of Fire", src: "audio/B4 - Ring of Fire.mp3" },
-  { title: "B5 - A Horse with No Name", src: "audio/B5 - A Horse with No Name.mp3" },
-  { title: "B6 - Walk The Line", src: "audio/B6 - Walk The Line.mp3" },
-  { title: "B7 - (Ghost)Riders", src: "audio/B7 - (Ghost)Riders.mp3" }
+  { title: "Sippin' on Gin", src: "audio/A1 - Sippin' on Gin.mp3" },
+  { title: "Captain Save a Hoe", src: "audio/A2 - Captain Save a Hoe.mp3" },
+  { title: "Bad Guy", src: "audio/A3 - Bad Guy.mp3" },
+  { title: "Master of Strings", src: "audio/A4 - Master of Strings.mp3" },
+  { title: "King Kunta", src: "audio/A5 - King Kunta.mp3" },
+  { title: "Outlaw's Paradise", src: "audio/A6 - Outlaw's Paradise.mp3" },
+  { title: "Regulate", src: "audio/A7 - Regulate.mp3" },
+  { title: "Big Iron", src: "audio/B1 - Big Iron.mp3" },
+  { title: "Friends in Low Places", src: "audio/B2 - Friends in Low Places.mp3" },
+  { title: "Ring of Fire (Slow)", src: "audio/B3 - Ring of Fire (Slow).mp3" },
+  { title: "Ring of Fire", src: "audio/B4 - Ring of Fire.mp3" },
+  { title: "A Horse with No Name", src: "audio/B5 - A Horse with No Name.mp3" },
+  { title: "Walk The Line", src: "audio/B6 - Walk The Line.mp3" },
+  { title: "(Ghost)Riders", src: "audio/B7 - (Ghost)Riders.mp3" }
 ];
 
 const audio = document.getElementById("audio");
@@ -33,6 +33,10 @@ const playlistChevron = document.getElementById("playlist-chevron");
 
 const volumeSlider = document.getElementById("volume");
 const downloadBtn = document.getElementById("download");
+
+const trackTitleEl = document.getElementById("track-title");
+const trackTimeEl = document.getElementById("track-time");
+
 
 downloadBtn.onclick = () => {
     fetch(audio.src)
@@ -84,7 +88,7 @@ function scrollToActive() {
 function loadTrack(i, play=false) {
   index = i;
   audio.src = tracks[i].src;
-  nowPlaying.textContent = tracks[i].title;
+  trackTitleEl.textContent = tracks[i].title;
   playlistTitle.textContent = tracks[i].title;
 
   [...playlistEl.children].forEach((li, n) =>
@@ -94,6 +98,12 @@ function loadTrack(i, play=false) {
   scrollToActive();
 
   if (play) audio.play();
+}
+
+function formatTime(sec) {
+  const m = Math.floor(sec / 60);
+  const s = Math.floor(sec % 60);
+  return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
 function updatePlayIcon() {
@@ -134,7 +144,10 @@ audio.onended = () => {
 };
 
 audio.onloadedmetadata = () => seek.max = audio.duration;
-audio.ontimeupdate = () => seek.value = audio.currentTime;
+audio.ontimeupdate = () => {
+  seek.value = audio.currentTime;
+  trackTimeEl.textContent = `${formatTime(audio.currentTime)}/${formatTime(audio.duration || 0)}`;
+};
 seek.oninput = () => audio.currentTime = seek.value;
 
 autoplayBtn.onclick = () => {
@@ -179,26 +192,26 @@ document.addEventListener("keydown", e => {
       autoplayBtn.click();
       break;
       case "ArrowUp":
-        e.preventDefault();
-        audio.volume = Math.min(1, audio.volume + 0.1);
-        volumeSlider.value = Math.round(audio.volume * 100);
-      break;
-      case "ArrowDown":
-        e.preventDefault();
-        audio.volume = Math.max(0, audio.volume - 0.1);
-        volumeSlider.value = Math.round(audio.volume * 100);
-      break;
-      case "m":
-      case "M":
-        e.preventDefault();
-          if (audio.volume > 0) {
-            lastVolume = audio.volume;
-            audio.volume = 0;
-          } else {
-            audio.volume = lastVolume;
-          }
-        volumeSlider.value = Math.round(audio.volume * 100);
-      break;
+  e.preventDefault();
+  audio.volume = Math.min(1, audio.volume + 0.1);
+  volumeSlider.value = Math.round(audio.volume * 100);
+  break;
+case "ArrowDown":
+  e.preventDefault();
+  audio.volume = Math.max(0, audio.volume - 0.1);
+  volumeSlider.value = Math.round(audio.volume * 100);
+  break;
+  case "m":
+case "M":
+    e.preventDefault();
+    if (audio.volume > 0) {
+        lastVolume = audio.volume;
+        audio.volume = 0;
+    } else {
+        audio.volume = lastVolume;
+    }
+    volumeSlider.value = Math.round(audio.volume * 100);
+    break;
   }
 });
 
