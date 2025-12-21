@@ -37,6 +37,16 @@ body::before {
   justify-content: space-between;
   font-size: 24px;
   margin-bottom: 8px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+#track-title {
+  display: inline-block;
+  min-width: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  animation: none;
 }
 
 .controls,
