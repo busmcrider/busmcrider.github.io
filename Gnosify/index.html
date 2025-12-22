@@ -6,10 +6,10 @@
   <meta name="color-scheme" content="dark">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Gnosify</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../__shared/style.css">
 </head>
 
-<body>
+<body style="background-image: url('Gnosify.jpeg');">
 
   <div class="player">
 
@@ -72,8 +72,18 @@
     </details>
   </div>
 
-  <script src="player.js"></script>
-
+  <script>
+    const tracks = [
+      { title: "The Cosmic Groove Chronicles", src: "audio/1 - The Cosmic Groove Chronicles.mp3" },
+      { title: "War of Troy", src: "audio/2 - War of Troy.mp3" },
+      { title: "Shadows on the Wall", src: "audio/3 - Shadows on the Wall.mp3" },
+      { title: "Cosmic Blueprints", src: "audio/4 - Cosmic Blueprints.mp3" },
+      { title: "Enoch 2", src: "audio/5 - Enoch 2.mp3" },
+      { title: "Trojan Odyssey", src: "audio/6 - Trojan Odyssey.mp3" },
+      { title: "The Apocryphon Flow", src: "audio/7 - The Apocryphon Flow.mp3" },
+    ];
+  </script>
+  <script src="../__shared/player.js"></script>
 </body>
 
 </html>

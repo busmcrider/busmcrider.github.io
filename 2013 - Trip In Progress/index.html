@@ -6,10 +6,10 @@
   <meta name="color-scheme" content="dark">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Trip In Progress</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../__shared/style.css">
 </head>
 
-<body>
+<body style="background-image: url('Trip In Progress.jpg');">
 
   <div class="player">
 
@@ -72,7 +72,17 @@
     </details>
   </div>
 
-  <script src="player.js"></script>
+  <script>
+    const tracks = [
+      { title: "I Don't Know (ft. Eskae)", src: "audio/01 I Don't Know (ft. Eskae).mp3" },
+      { title: "Brackets", src: "audio/02 Brackets 1.mp3" },
+      { title: "Glimpse", src: "audio/03 Glimpse.mp3" },
+      { title: "Afterthought (ft. Isaac Allen)", src: "audio/04 Afterthought (ft. Isaac Allen).mp3" },
+      { title: "Lionfish (ft. Isaac Allen)", src: "audio/05 Lionfish (ft. Isaac Allen).mp3" },
+      { title: "Reflection", src: "audio/06 Reflection.mp3" }
+    ];
+  </script>
+  <script src="../__shared/player.js"></script>
 
 </body>
 

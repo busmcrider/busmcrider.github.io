@@ -6,10 +6,10 @@
   <meta name="color-scheme" content="dark">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Strong Baby!</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../__shared/style.css">
 </head>
 
-<body>
+<body style="background-image: url('Strong Baby!.jpeg');">
 
   <div class="player">
 
@@ -72,8 +72,23 @@
     </details>
   </div>
 
-  <script src="player.js"></script>
-
+  <script>
+  const tracks = [
+    { title: "Strong Baby!", src: "audio/1 - Strong Baby!.mp3" },
+    { title: "Power Bouncing!", src: "audio/2 - Power Bouncing!.mp3" },
+    { title: "Miss Never Naps!", src: "audio/3 - Miss Never Naps!.mp3" },
+    { title: "Holy Bellies!", src: "audio/4 - Holy Bellies!.mp3" },
+    { title: "The Squiggle Wiggle Giggle Jiggle!", src: "audio/5 - The Squiggle Wiggle Giggle Jiggle!.mp3" },
+    { title: "Cat Battles!", src: "audio/6 - Cat Battles!.mp3" },
+    { title: "Toenail Shuffle! (Demo)", src: "audio/7 - Toenail Shuffle! (Demo).mp3" },
+    { title: "D'oh Say Can You See!", src: "audio/8 - D'oh Say Can You See!.mp3" },
+    { title: "Feeling Destructo!", src: "audio/9 - Feeling Destructo!.mp3" },
+    { title: "Holy Bellies! (Climax)", src: "audio/10 - Holy Bellies! (Climax).mp3" },
+    { title: "The Squiggle Wiggle Giggle Jiggle! (Demo)", src: "audio/11 - The Squiggle Wiggle Giggle Jiggle! (Demo).mp3" },
+    { title: "Cat Battles! (End Credits)", src: "audio/12 - Cat Battles! (End Credits).mp3" }
+  ];
+  </script>
+  <script src="../__shared/player.js"></script>
 </body>
 
 </html>

@@ -6,10 +6,10 @@
   <meta name="color-scheme" content="dark">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Apt. 5</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../__shared/style.css">
 </head>
 
-<body>
+<body style="background-image: url('Apt. 5.jpg');">
 
   <div class="player">
 
@@ -72,7 +72,17 @@
     </details>
   </div>
 
-  <script src="player.js"></script>
+  <script>
+    const tracks = [
+      { title: "Off World (ft. Isaac Allen)", src: "audio/01 Off World (ft. Isaac Allen) 1.mp3" },
+      { title: "Ass 2", src: "audio/02 Ass 2.mp3" },
+      { title: "Nocturnal", src: "audio/03 Nocturnal.mp3" },
+      { title: "Going Nowhere", src: "audio/04 Going Nowhere.mp3" },
+      { title: "D. Duchovny Cries Reading The New X-Files Script", src: "audio/05 David Duchovny Cries Reading The New X-Files Script.mp3" },
+      { title: "Palace With No End", src: "audio/06 Palace With No End.mp3" }
+    ];
+  </script>
+  <script src="../__shared/player.js"></script>
 
 </body>
 

@@ -6,10 +6,10 @@
   <meta name="color-scheme" content="dark">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Saline</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../__shared/style.css">
 </head>
 
-<body>
+<body style="background-image: url('Saline.jpg');">
 
   <div class="player">
 
@@ -72,7 +72,17 @@
     </details>
   </div>
 
-  <script src="player.js"></script>
+  <script>
+    const tracks = [
+      { title: "Suggestion", src: "audio/01 Suggestion 1.mp3" },
+      { title: "Riverstones (ft. Isaac Allen)", src: "audio/02 Riverstones (ft. Isaac Allen).mp3" },
+      { title: "Primal", src: "audio/03 Primal.mp3" },
+      { title: "Reeses Pieces", src: "audio/04 Reeses Pieces.mp3" },
+      { title: "A Year Earlier", src: "audio/05 A Year Earlier.mp3" },
+      { title: "240_alter", src: "audio/06 240_alter.mp3" }
+    ];
+  </script>
+  <script src="../__shared/player.js"></script>
 
 </body>
 
