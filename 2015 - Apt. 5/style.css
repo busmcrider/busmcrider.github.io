@@ -1,0 +1,242 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: system-ui, sans-serif;
+  color: #eee;
+  background: url('Apt. 5.jpg') no-repeat center center;
+  background-size: cover;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: -1;
+}
+
+.player {
+  max-width: 420px;
+  padding: 16px;
+  margin: auto;
+}
+
+#now-playing {
+  margin-bottom: 8px;
+  font-size: 24px;
+}
+
+.now-playing {
+  display: flex;
+  justify-content: space-between;
+  font-size: 24px;
+  margin-bottom: 8px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+#track-title {
+  display: inline-block;
+  min-width: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  animation: none;
+}
+
+.controls,
+.options {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 8px 0;
+}
+
+button {
+  background: none;
+  border: 1px solid #444;
+  color: #eee;
+  padding: 8px;
+}
+
+button svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+input[type="range"] {
+  width: 100%;
+}
+
+#download svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+#volume {
+  width: 80px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+#playlist {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  max-height: 35vh;
+  border-top: 1px solid #333;
+  border-bottom: 1px solid #333;
+}
+
+#playlist li {
+  padding: 8px 6px;
+  cursor: pointer;
+  line-height: 1.3;
+}
+
+#playlist li.active {
+  background: #333;
+}
+
+/* Firefox */
+#playlist {
+  scrollbar-width: thin;
+  scrollbar-color: #444 #111;
+}
+
+/* WebKit */
+#playlist::-webkit-scrollbar {
+  width: 8px;
+}
+
+#playlist::-webkit-scrollbar-track {
+  background: #111;
+}
+
+#playlist::-webkit-scrollbar-thumb {
+  background-color: #444;
+  border-radius: 4px;
+}
+
+.playlist-wrapper {
+  margin-top: 12px;
+}
+
+.playlist-header {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background: #111;
+  padding: 6px 8px;
+  font-size: 12px;
+  border-bottom: 1px solid #333;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.playlist-wrapper.collapsed #playlist {
+  max-height: 0;
+  overflow: hidden;
+}
+
+.shortcuts summary {
+  cursor: pointer;
+  margin-top: 12px;
+}
+
+input,
+button {
+  background-color: #111;
+  color: #eee;
+  border-color: #444;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html, body {
+  color: #eee;
+}
+
+/* Range input – cross-browser dark styling */
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+}
+
+/* Track */
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  background: #333;
+  border-radius: 2px;
+}
+
+input[type="range"]::-moz-range-track {
+  height: 4px;
+  background: #333;
+  border-radius: 2px;
+}
+
+/* Thumb */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  background: #eee;
+  border-radius: 50%;
+  margin-top: -5px;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  background: #eee;
+  border-radius: 50%;
+  border: none;
+}
+
+@media (hover: none), (max-width: 600px) {
+  .options #volume {
+    display: none;
+  }
+}
+
+@media (hover: none), (max-width: 600px) {
+  .shortcuts {
+    display: none !important;
+  }
+}
+
+@media (min-width: 801px) {
+  body {
+    background-attachment: fixed;
+  }
+}
+
+/* Mobile optimization */
+@media (max-height: 600px) {
+  #playlist {
+    max-height: 28vh;
+  }
+}
+
+/* Desktop optimization */
+@media (min-width: 800px) {
+  #playlist {
+    max-height: 300px;
+  }
+}

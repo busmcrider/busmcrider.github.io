@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Apt. 5</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div class="player">
+
+    <div id="now-playing" class="now-playing">
+      <span id="track-title">Track Title</span>
+      <span id="track-time">0:00/0:00</span>
+    </div>
+
+    <audio id="audio"></audio>
+
+    <div class="controls">
+      <button id="prev" aria-label="Previous">
+        <svg viewBox="0 0 24 24"><path d="M6 4h2v16H6zm3 8 9 6V6z"/></svg>
+      </button>
+
+      <button id="play" aria-label="Play/Pause">
+        <svg id="play-icon" viewBox="0 0 24 24">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+      </button>
+
+      <button id="next" aria-label="Next">
+        <svg viewBox="0 0 24 24"><path d="M16 4h2v16h-2zM6 18l9-6-9-6z"/></svg>
+      </button>
+    </div>
+
+    <input type="range" id="seek" value="0" min="0" step="1">
+
+    <div class="options">
+      <input type="range" id="volume" min="0" max="100" value="100">
+      <button id="autoplay">AUTO</button>
+      <button id="loop">↻ ALL</button>
+      <button id="download" aria-label="Download Current Track">
+        <svg viewBox="0 0 24 24">
+          <path d="M5 20h14v-2H5v2zm7-18v12l4-4h-3V4h-2v6H8l4 4z"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="playlist-wrapper">
+      <button class="playlist-header" id="playlist-toggle">
+        <span id="playlist-title">Now Playing</span>
+        <span id="playlist-chevron">▾</span>
+      </button>
+      <ul id="playlist"></ul>
+    </div>
+
+    <details open class="shortcuts">
+      <summary>Keyboard shortcuts:</summary>
+      <ul>
+        <li>Space — Play / Pause</li>
+        <li>→ — Next track</li>
+        <li>← — Previous track</li>
+        <li>↑ — Increase volume</li>
+        <li>↓ — Decrease volume</li>
+        <li>A — Toggle autoplay</li>
+        <li>L — Cycle loop mode</li>
+        <li>M — Toggle mute</li>
+      </ul>
+    </details>
+  </div>
+
+  <script src="player.js"></script>
+
+</body>
+
+</html>
