@@ -4,7 +4,10 @@
 
 body {
   margin: 0;
-  padding-bottom: 40px;
+  padding-bottom: 80px;
+  padding-top: 80px;
+  padding-left: 40px;
+  padding-right: 40px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
