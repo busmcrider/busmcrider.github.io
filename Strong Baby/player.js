@@ -37,20 +37,12 @@ const trackTimeEl = document.getElementById("track-time");
 
 
 downloadBtn.onclick = () => {
-    fetch(audio.src)
-        .then(res => res.arrayBuffer())
-        .then(data => {
-            const blob = new Blob([data], { type: 'audio/mpeg' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = nowPlaying.textContent + ".mp3";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-        })
-        .catch(err => console.error("Download failed:", err));
+  const link = document.createElement("a");
+  link.href = audio.src;
+  link.download = tracks[index].title + ".mp3";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 };
 
 audio.volume = 1.0; // 100%
