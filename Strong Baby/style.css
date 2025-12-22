@@ -215,8 +215,11 @@ input[type="range"]::-moz-range-thumb {
   .options #volume {
     display: none;
   }
+}
+
+@media (hover: none), (max-width: 600px) {
   .shortcuts {
-    display: none;
+    display: none !important;
   }
 }
 
