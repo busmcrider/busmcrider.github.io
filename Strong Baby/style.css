@@ -215,6 +215,9 @@ input[type="range"]::-moz-range-thumb {
   .options #volume {
     display: none;
   }
+  .shortcuts {
+    display: none;
+  }
 }
 
 /* Mobile optimization */
