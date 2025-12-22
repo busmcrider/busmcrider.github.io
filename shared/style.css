@@ -240,3 +240,24 @@ input[type="range"]::-moz-range-thumb {
     max-height: 300px;
   }
 }
+
+/* Footer navigation */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  max-width: 420px;
+  margin: 24px auto 0;
+  padding: 16px;
+  border-top: 1px solid #333;
+}
+
+.footer a {
+  color: #eee;
+  text-decoration: none;
+  padding: 8px;
+}
+
+.footer a:hover {
+  color: #fff;
+  background: #333;
+}

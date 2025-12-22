@@ -191,3 +191,35 @@ case "M":
 });
 
 loadTrack(0);
+
+// Album navigation
+const albums = [
+  "Stars+Dust",
+  "Gnosify",
+  "Strong Baby!",
+  "2013 - Trip In Progress",
+  "2014 - Saline",
+  "2015 - Apt. 5",
+  "2016 - Test Subject",
+  "2017 - Half Stringer"
+];
+
+// Get current path and decode URL encoding
+const currentPath = window.location.pathname.replace(/^\/|\/$/g, '');
+const currentAlbum = decodeURIComponent(currentPath);
+
+const currentIndex = albums.indexOf(currentAlbum);
+
+if (currentIndex !== -1) {
+  const prevIndex = (currentIndex - 1 + albums.length) % albums.length;
+  const nextIndex = (currentIndex + 1) % albums.length;
+
+  const footer = document.createElement('footer');
+  footer.className = 'footer';
+  footer.innerHTML = `
+    <a href="/${encodeURIComponent(albums[prevIndex])}/">LAST</a>
+    <a href="/">HOME</a>
+    <a href="/${encodeURIComponent(albums[nextIndex])}/">NEXT</a>
+  `;
+  document.body.appendChild(footer);
+}
