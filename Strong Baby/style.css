@@ -14,15 +14,9 @@ body::before {
   content: "";
   position: fixed;
   inset: 0;
-  height: 100dvh;
+  height: calc(var(--vh, 1vh) * 100);
   background: rgba(0,0,0,0.5);
   z-index: -1;
-}
-
-@supports not (height: 100dvh) {
-  body::before {
-    height: 100vh;
-  }
 }
 
 .player {
