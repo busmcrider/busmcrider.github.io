@@ -211,6 +211,12 @@ input[type="range"]::-moz-range-thumb {
   border: none;
 }
 
+@media (hover: none), (max-width: 600px) {
+  .options #volume {
+    display: none;
+  }
+}
+
 /* Mobile optimization */
 @media (max-height: 600px) {
   #playlist {
