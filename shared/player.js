@@ -60,6 +60,30 @@ function scrollToActive() {
   }
 }
 
+function updateMediaSession() {
+  if ('mediaSession' in navigator) {
+    const track = tracks[index];
+
+    const albumName = document.title || 'Album';
+
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: track.title,
+      artist: track.artist || 'Unknown Artist',
+      album: track.album || albumName,
+      artwork: [{
+        src: track.artwork || 'cover.jpg',
+        sizes: '512x512',
+        type: 'image/jpeg'
+      }]
+    });
+
+    navigator.mediaSession.setActionHandler('play', () => audio.play());
+    navigator.mediaSession.setActionHandler('pause', () => audio.pause());
+    navigator.mediaSession.setActionHandler('previoustrack', () => loadTrack((index - 1 + tracks.length) % tracks.length, true));
+    navigator.mediaSession.setActionHandler('nexttrack', () => nextTrack());
+  }
+}
+
 function loadTrack(i, play=false) {
   index = i;
   audio.src = tracks[i].src;
@@ -71,6 +95,7 @@ function loadTrack(i, play=false) {
   );
 
   scrollToActive();
+  updateMediaSession();
 
   if (play) audio.play();
 }
@@ -197,11 +222,11 @@ const albums = [
   "Stars+Dust",
   "Gnosify",
   "Strong Baby!",
-  "2013 - Trip In Progress",
-  "2014 - Saline",
-  "2015 - Apt. 5",
+  "2017 - Half Stringer",
   "2016 - Test Subject",
-  "2017 - Half Stringer"
+  "2015 - Apt. 5",
+  "2014 - Saline",
+  "2013 - Trip In Progress"
 ];
 
 // Get current path and decode URL encoding
