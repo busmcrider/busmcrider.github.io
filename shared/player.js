@@ -125,6 +125,11 @@ function nextTrack() {
     loadTrack(index + 1, true);
   } else if (loopMode === 2) {
     loadTrack(0, true);
+  } else if (loopMode === 0 && autoplay && currentIndex !== -1) {
+    // We're at the end of the playlist, loop is OFF, autoplay is ON
+    // Navigate to next album
+    const nextIndex = (currentIndex + 1) % albums.length;
+    window.location.href = `/${encodeURIComponent(albums[nextIndex])}/`;
   }
 }
 
