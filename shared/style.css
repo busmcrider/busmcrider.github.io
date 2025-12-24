@@ -33,6 +33,28 @@ body::before {
   flex: 1;
 }
 
+.album-header {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #333;
+}
+
+.album-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: #eee;
+  line-height: 1.2;
+}
+
+.album-artist {
+  font-size: 14px;
+  margin: 0;
+  color: #999;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
 #now-playing {
   margin-bottom: 8px;
   font-size: 24px;

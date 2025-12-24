@@ -42,7 +42,7 @@ volumeSlider.oninput = () => {
 
 let index = 0;
 let autoplay = true;
-let loopMode = 2; // 0 off, 1 track, 2 all
+let loopMode = 0; // 0 off, 1 track, 2 all
 
 tracks.forEach((t, i) => {
   const li = document.createElement("li");
@@ -252,4 +252,13 @@ if (currentIndex !== -1) {
     <a href="/${encodeURIComponent(albums[nextIndex])}/">NEXT</a>
   `;
   document.body.appendChild(footer);
+}
+
+// Set album header
+const albumTitleEl = document.getElementById('album-title');
+const albumArtistEl = document.getElementById('album-artist');
+
+if (albumTitleEl && albumArtistEl) {
+  albumTitleEl.textContent = document.title;
+  albumArtistEl.textContent = tracks[0]?.artist || 'Unknown Artist';
 }
