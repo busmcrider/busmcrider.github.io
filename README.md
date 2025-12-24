@@ -4,6 +4,8 @@ Music:
 
 [Gnosify](https://busmcrider.github.io/Gnosify/) (Happy Birthday James!)
 
+[Gnosify II](https://busmcrider.github.io/Gnosify II/)
+
 [Strong Baby!](https://busmcrider.github.io/Strong Baby!/) (For Van!)
 
 ...

@@ -226,6 +226,7 @@ loadTrack(0);
 const albums = [
   "Stars+Dust",
   "Gnosify",
+  "Gnosify II"
   "Strong Baby!",
   "2017 - Half Stringer",
   "2016 - Test Subject",
