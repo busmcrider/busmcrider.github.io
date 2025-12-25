@@ -8,6 +8,8 @@ Music:
 
 [Strong Baby!](https://busmcrider.github.io/Strong Baby!/) (For Van!)
 
+[Chorus of Meows](https://busmcrider.github.io/Chorus of Meows/) (For the cats!)
+
 ...
 
 Old:

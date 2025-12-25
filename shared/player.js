@@ -228,6 +228,7 @@ const albums = [
   "Gnosify",
   "Gnosify II",
   "Strong Baby!",
+  "Chorus of Meows",
   "2017 - Half Stringer",
   "2016 - Test Subject",
   "2015 - Apt. 5",
