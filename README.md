@@ -2,13 +2,11 @@ Music:
 
 [Stars+Dust](https://busmcrider.github.io/Stars+Dust/) (Merry Christmas!)
 
-[Gnosify](https://busmcrider.github.io/Gnosify/) (Happy Birthday James!)
-
-[Gnosify II](https://busmcrider.github.io/Gnosify II/)
+[Gnosify](https://busmcrider.github.io/Gnosify/) + [Gnosify II](https://busmcrider.github.io/Gnosify II/) (Happy Birthday James!)
 
 [Strong Baby!](https://busmcrider.github.io/Strong Baby!/) (For Van!)
 
-[Chorus of Meows](https://busmcrider.github.io/Chorus of Meows/) (For the cats!)
+[Chorus of Meows](https://busmcrider.github.io/Chorus of Meows/) + [Cat Battles!](https://busmcrider.github.io/Cat Battles!/) (For the cats!)
 
 ...
 
