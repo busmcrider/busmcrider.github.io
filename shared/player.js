@@ -231,6 +231,7 @@ const albums = [
   "Strong Baby!",
   "Chorus of Meows",
   "Cat Battles!",
+  "Girlz Rapp",
   "2017 - Half Stringer",
   "2016 - Test Subject",
   "2015 - Apt. 5",
