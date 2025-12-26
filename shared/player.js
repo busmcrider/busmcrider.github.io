@@ -225,6 +225,7 @@ loadTrack(0);
 // Album navigation
 const albums = [
   "Stars+Dust",
+  "Real Fake Protest Songs",
   "Gnosify",
   "Gnosify II",
   "Strong Baby!",

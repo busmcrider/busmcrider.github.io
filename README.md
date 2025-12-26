@@ -1,6 +1,6 @@
 Music:
 
-[Stars+Dust](https://busmcrider.github.io/Stars+Dust/) (Merry Christmas!)
+[Stars+Dust](https://busmcrider.github.io/Stars+Dust/) + [Real Fake Protest Songs](https://busmcrider.github.io/Real Fake Protest Songs/) (Merry Christmas!)
 
 [Gnosify](https://busmcrider.github.io/Gnosify/) + [Gnosify II](https://busmcrider.github.io/Gnosify II/) (Happy Birthday James!)
 
