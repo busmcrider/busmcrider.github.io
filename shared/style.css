@@ -67,6 +67,7 @@ body::before {
   margin-bottom: 8px;
   overflow: hidden;
   white-space: nowrap;
+  position: relative;
 }
 
 #track-title {
@@ -74,15 +75,14 @@ body::before {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 65%;
+  flex: 1;
+  min-width: 0;
+  margin-right: 16px;
 }
 
 #track-title.long {
   animation: scroll-text 15s linear infinite;
-  max-width: none;
-  overflow: visible;
   text-overflow: unset;
-  padding-right: 50px;
 }
 
 @keyframes scroll-text {
@@ -90,7 +90,7 @@ body::before {
     transform: translateX(0);
   }
   85%, 100% {
-    transform: translateX(-200px);
+    transform: translateX(-150px);
   }
 }
 
