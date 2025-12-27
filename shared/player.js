@@ -141,6 +141,7 @@ function loadTrack(i, play=false) {
 
   scrollToActive();
   updateMediaSession();
+  updateUrl();
 
   // Enable scrolling for long titles
   trackTitleEl.classList.remove('long');
@@ -155,11 +156,10 @@ function loadTrack(i, play=false) {
       if (textWidth > elementWidth + threshold) {
         shouldScroll = true;
 
-        // Use constants from music.js (or define locally if not imported)
-        const scrollGap = typeof SCROLL_GAP_PX !== 'undefined' ? SCROLL_GAP_PX : 50;
-        const scrollSpeed = typeof SCROLL_SPEED_PX_PER_SEC !== 'undefined' ? SCROLL_SPEED_PX_PER_SEC : 25;
-        const minDuration = typeof SCROLL_DURATION_MIN !== 'undefined' ? SCROLL_DURATION_MIN : 8;
-        const maxDuration = typeof SCROLL_DURATION_MAX !== 'undefined' ? SCROLL_DURATION_MAX : 30;
+        const scrollGap = 50;
+        const scrollSpeed = 25;
+        const minDuration = 8;
+        const maxDuration = 30;
 
         const scrollDistance = -(textWidth + scrollGap);
         trackTitleEl.style.setProperty('--scroll-distance', `${scrollDistance}px`);
@@ -182,6 +182,16 @@ function loadTrack(i, play=false) {
     });
 
   if (play) audio.play();
+}
+
+function updateUrl() {
+  const albumPath = window.location.pathname.split('/').filter(p => p)[0];
+  const trackNumber = index + 1; // Convert 0-based index to 1-based number
+  const newUrl = `/${encodeURIComponent(albumPath)}/${trackNumber}`;
+
+  if (window.history.replaceState) {
+    window.history.replaceState({}, document.title, newUrl);
+  }
 }
 
 function formatTime(sec) {
@@ -317,7 +327,13 @@ case "M":
   }
 });
 
-loadTrack(0);
+// Initialize player with URL track number if present
+const initialTrack = window.initialTrackIndex;
+if (initialTrack !== null) {
+  loadTrack(initialTrack, true);
+} else {
+  loadTrack(0);
+}
 
 const albums = window.albums;
 

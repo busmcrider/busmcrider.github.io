@@ -202,6 +202,7 @@ const albumConfigs = [
 // Extract album name from path (first segment after root)
 const pathParts = window.location.pathname.split('/').filter(p => p);
 const detectedAlbum = pathParts[0] ? decodeURIComponent(pathParts[0]) : '';
+const detectedTrackNumber = pathParts[1] ? parseInt(pathParts[1], 10) : null;
 
 // Get the config for this album
 const albumConfig = albumConfigs.find(album => album.title === detectedAlbum);
@@ -302,3 +303,13 @@ if (!albumConfig) {
 
 // Export albums list for navigation
 window.albums = albumConfigs.map(album => album.title);
+
+// Export detected track index (convert from 1-based URL to 0-based index)
+// URL "/Album/1" = index 0, "/Album/2" = index 1, etc.
+window.initialTrackIndex = (detectedTrackNumber !== null &&
+                            !isNaN(detectedTrackNumber) &&
+                            albumConfig &&
+                            detectedTrackNumber >= 1 &&
+                            detectedTrackNumber <= albumConfig.tracks.length)
+                            ? detectedTrackNumber - 1
+                            : null;
