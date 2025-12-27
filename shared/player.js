@@ -106,10 +106,7 @@ function loadTrack(i, play=false) {
   // Enable scrolling for long titles
   trackTitleEl.classList.remove('long');
   requestAnimationFrame(() => {
-    const availableWidth = nowPlaying.offsetWidth - trackTimeEl.offsetWidth - 40;
-    const textWidth = trackTitleEl.offsetWidth;
-
-    if (textWidth > availableWidth) {
+    if (trackTitleEl.scrollWidth > trackTitleEl.offsetWidth) {
       trackTitleEl.classList.add('long');
     }
   });

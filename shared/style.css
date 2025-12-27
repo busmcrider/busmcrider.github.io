@@ -72,20 +72,25 @@ body::before {
 #track-title {
   display: inline-block;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 65%;
 }
 
 #track-title.long {
-  animation: scroll-text 10s linear infinite;
-  display: inline-block;
-  padding-right: 50px; /* Space before it loops */
+  animation: scroll-text 15s linear infinite;
+  max-width: none;
+  overflow: visible;
+  text-overflow: unset;
+  padding-right: 50px;
 }
 
 @keyframes scroll-text {
-  0%, 10% {
+  0%, 15% {
     transform: translateX(0);
   }
-  90%, 100% {
-    transform: translateX(calc(-100% + 60vw));
+  85%, 100% {
+    transform: translateX(-200px);
   }
 }
 
