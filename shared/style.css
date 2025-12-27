@@ -87,7 +87,7 @@ body::before {
 }
 
 #track-title.long {
-  animation: scroll-text 20s linear infinite;
+  animation: scroll-text var(--scroll-duration, 20s) linear infinite;
   text-overflow: unset;
   overflow: visible;
   max-width: none;

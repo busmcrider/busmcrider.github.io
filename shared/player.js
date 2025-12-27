@@ -116,9 +116,17 @@ function loadTrack(i, play=false) {
 
     if (textWidth > wrapperWidth) {
       shouldScroll = true;
-      trackTitleEl.setAttribute('data-title', tracks[i].title);
       const scrollDistance = -(textWidth + 50); // Full text width + gap
       trackTitleEl.style.setProperty('--scroll-distance', `${scrollDistance}px`);
+
+      // Calculate duration for consistent scroll speed (25px/s)
+      const scrollSpeed = 25; // pixels per second
+      const scrollTime = Math.abs(scrollDistance) / scrollSpeed;
+      const totalDuration = scrollTime / 0.9; // 90% is scrolling, 10% is pause
+      const duration = Math.max(8, Math.min(30, totalDuration)); // Clamp between 8-30s
+      trackTitleEl.style.setProperty('--scroll-duration', `${duration}s`);
+
+      trackTitleEl.setAttribute('data-title', tracks[i].title);
 
       // Only add .long class if audio is currently playing
       if (!audio.paused) {
