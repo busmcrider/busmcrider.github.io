@@ -91,16 +91,21 @@ body::before {
   overflow: visible;
 }
 
+#track-title.long::after {
+  content: attr(data-title);
+  padding-left: 50px;
+}
+
 #track-time {
   flex-shrink: 0;
   white-space: nowrap;
 }
 
 @keyframes scroll-text {
-  0%, 15% {
+  0% {
     transform: translateX(0);
   }
-  85%, 100% {
+  100% {
     transform: translateX(var(--scroll-distance, -200px));
   }
 }

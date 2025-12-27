@@ -114,7 +114,8 @@ function loadTrack(i, play=false) {
 
     if (textWidth > wrapperWidth) {
       trackTitleEl.classList.add('long');
-      const scrollDistance = -(textWidth - wrapperWidth + 50); // +50px padding
+      trackTitleEl.setAttribute('data-title', tracks[i].title);
+      const scrollDistance = -(textWidth + 50); // Full text width + gap
       trackTitleEl.style.setProperty('--scroll-distance', `${scrollDistance}px`);
     }
   });
