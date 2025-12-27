@@ -186,12 +186,10 @@ function loadTrack(i, play=false) {
 
 function updateUrl() {
   const trackNumber = index + 1;
-  const newHash = `#${trackNumber}`;
 
   if (window.history.replaceState) {
-    // Keep the same path, just update the hash
-    const newUrl = window.location.pathname + newHash;
-    window.history.replaceState({}, document.title, newUrl);
+    // Pass just the hash - browser preserves origin and path automatically
+    window.history.replaceState({}, document.title, `#${trackNumber}`);
   }
 }
 
