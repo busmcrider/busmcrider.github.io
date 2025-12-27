@@ -228,22 +228,11 @@ case "M":
 
 loadTrack(0);
 
-// Use albums from music.js if available, otherwise use local fallback
-const albums = window.albums || [
-  "Stars+Dust",
-  "Real Fake Protest Songs",
-  "Gnosify",
-  "Gnosify II",
-  "Strong Baby!",
-  "Chorus of Meows",
-  "Cat Battles!",
-  "Girlz Rapp",
-  "2017 - Half Stringer",
-  "2016 - Test Subject",
-  "2015 - Apt. 5",
-  "2014 - Saline",
-  "2013 - Trip In Progress"
-];
+const albums = window.albums;
+
+if (!albums) {
+  console.error('ERROR: music not loaded!');
+}
 
 // Get current path and decode URL encoding
 const currentPath = window.location.pathname.replace(/^\/|\/$/g, '');
@@ -263,13 +252,4 @@ if (currentIndex !== -1) {
     <a href="/${encodeURIComponent(albums[nextIndex])}/">NEXT</a>
   `;
   document.body.appendChild(footer);
-}
-
-// Set album header
-const albumTitleEl = document.getElementById('album-title');
-const albumArtistEl = document.getElementById('album-artist');
-
-if (albumTitleEl && albumArtistEl) {
-  albumTitleEl.textContent = document.title;
-  albumArtistEl.textContent = tracks[0]?.artist || 'Unknown Artist';
 }
