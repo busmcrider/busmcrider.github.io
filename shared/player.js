@@ -108,6 +108,7 @@ function loadTrack(i, play=false) {
   // Enable scrolling for long titles
   trackTitleEl.classList.remove('long');
   trackTitleEl.style.setProperty('--scroll-distance', '0px');
+  trackTitleEl.removeAttribute('data-title');
 
   requestAnimationFrame(() => {
     const textWidth = trackTitleEl.scrollWidth;
