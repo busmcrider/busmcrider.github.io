@@ -83,12 +83,14 @@ body::before {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 #track-title.long {
-  animation: scroll-text 15s linear infinite;
+  animation: scroll-text 20s linear infinite;
   text-overflow: unset;
   overflow: visible;
+  max-width: none;
 }
 
 #track-title.long::after {
