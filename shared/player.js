@@ -94,9 +94,6 @@ function loadTrack(i, play=false) {
   index = i;
   audio.src = tracks[i].src;
   trackTitleEl.textContent = tracks[i].title;
-    // Enable scrolling for long titles
-  const isLong = trackTitleEl.scrollWidth > trackTitleEl.clientWidth;
-  trackTitleEl.classList.toggle('long', isLong);
   playlistTitle.textContent = tracks[i].title;
 
   [...playlistEl.children].forEach((li, n) =>
@@ -105,6 +102,17 @@ function loadTrack(i, play=false) {
 
   scrollToActive();
   updateMediaSession();
+
+  // Enable scrolling for long titles
+  trackTitleEl.classList.remove('long');
+  requestAnimationFrame(() => {
+    const availableWidth = nowPlaying.offsetWidth - trackTimeEl.offsetWidth - 40;
+    const textWidth = trackTitleEl.offsetWidth;
+
+    if (textWidth > availableWidth) {
+      trackTitleEl.classList.add('long');
+    }
+  });
 
   if (play) audio.play();
 }
