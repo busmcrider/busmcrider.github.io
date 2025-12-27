@@ -105,9 +105,24 @@ function loadTrack(i, play=false) {
 
   // Enable scrolling for long titles
   trackTitleEl.classList.remove('long');
+  trackTitleEl.style.setProperty('--scroll-distance', '0px');
+
   requestAnimationFrame(() => {
+    // scrollWidth > offsetWidth means text is overflowing the container
     if (trackTitleEl.scrollWidth > trackTitleEl.offsetWidth) {
+      // Calculate how far we need to scroll to show all text
+      const containerWidth = trackTitleEl.offsetWidth;
+
+      // Add .long class first to get full text width
       trackTitleEl.classList.add('long');
+
+      // Wait one more frame for width to update
+      requestAnimationFrame(() => {
+        const fullTextWidth = trackTitleEl.offsetWidth;
+        const scrollDistance = -(fullTextWidth - containerWidth + 50); // +50px padding
+
+        trackTitleEl.style.setProperty('--scroll-distance', `${scrollDistance}px`);
+      });
     }
   });
 

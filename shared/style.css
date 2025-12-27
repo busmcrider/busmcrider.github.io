@@ -83,6 +83,8 @@ body::before {
 #track-title.long {
   animation: scroll-text 15s linear infinite;
   text-overflow: unset;
+  flex: none;
+  width: max-content;
 }
 
 @keyframes scroll-text {
@@ -90,7 +92,7 @@ body::before {
     transform: translateX(0);
   }
   85%, 100% {
-    transform: translateX(-150px);
+    transform: translateX(var(--scroll-distance, -200px));
   }
 }
 
