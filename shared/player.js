@@ -110,11 +110,10 @@ function loadTrack(i, play=false) {
   trackTitleEl.style.setProperty('--scroll-distance', '0px');
 
   requestAnimationFrame(() => {
-    const wrapper = trackTitleEl.parentElement;
-    const wrapperWidth = wrapper.offsetWidth;
     const textWidth = trackTitleEl.scrollWidth;
+    const elementWidth = trackTitleEl.offsetWidth;
 
-    if (textWidth > wrapperWidth) {
+    if (textWidth > elementWidth + 3) {
       shouldScroll = true;
       const scrollDistance = -(textWidth + 50); // Full text width + gap
       trackTitleEl.style.setProperty('--scroll-distance', `${scrollDistance}px`);
