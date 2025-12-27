@@ -102,7 +102,7 @@ body::before {
 }
 
 @keyframes scroll-text {
-  0% {
+  0%, 10% {
     transform: translateX(0);
   }
   100% {

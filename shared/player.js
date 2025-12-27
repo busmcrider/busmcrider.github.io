@@ -50,6 +50,8 @@ let index = 0;
 let autoplay = true;
 let loopMode = 0; // 0 off, 1 track, 2 all
 
+let shouldScroll = false;
+
 tracks.forEach((t, i) => {
   const li = document.createElement("li");
   li.textContent = t.title;
@@ -113,10 +115,17 @@ function loadTrack(i, play=false) {
     const textWidth = trackTitleEl.scrollWidth;
 
     if (textWidth > wrapperWidth) {
-      trackTitleEl.classList.add('long');
+      shouldScroll = true;
       trackTitleEl.setAttribute('data-title', tracks[i].title);
       const scrollDistance = -(textWidth + 50); // Full text width + gap
       trackTitleEl.style.setProperty('--scroll-distance', `${scrollDistance}px`);
+
+      // Only add .long class if audio is currently playing
+      if (!audio.paused) {
+        trackTitleEl.classList.add('long');
+      }
+    } else {
+      shouldScroll = false;
     }
   });
 
@@ -159,9 +168,19 @@ function nextTrack() {
 audio.onplay = () => {
   updatePlayIcon();
   scrollToActive();
+
+  // Add scrolling animation if title is long
+  if (shouldScroll) {
+    trackTitleEl.classList.add('long');
+  }
 };
 
-audio.onpause = updatePlayIcon;
+audio.onpause = () => {
+  updatePlayIcon();
+
+  // Remove scrolling animation when paused, show ellipsis instead
+  trackTitleEl.classList.remove('long');
+};
 
 audio.onended = () => {
   if (loopMode === 1) {
