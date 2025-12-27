@@ -21,10 +21,16 @@ const trackTitleEl = document.getElementById("track-title");
 const trackTimeEl = document.getElementById("track-time");
 
 // Safety check: warn if tracks not defined anywhere
-if (typeof tracks === 'undefined') {
+if (typeof tracks === 'undefined' || !Array.isArray(tracks) || tracks.length === 0) {
   console.error('❌ ERROR: No tracks array found!');
-  console.error('Make sure music.js is loaded OR inline <script> with tracks exists in your HTML.');
-  alert('Music player error: No tracks found. Check console for details.');
+  document.body.innerHTML = `
+    <div style="text-align:center;padding:40px;color:#eee;font-family:system-ui;">
+      <h1>😞 Player Error</h1>
+      <p>Could not load music!</p>
+      <a href="/" style="color:#eee;text-decoration:underline;">← Go Home</a>
+    </div>
+  `;
+  throw new Error('Tracks not loaded - stopping player initialization');
 }
 
 downloadBtn.onclick = () => {
@@ -36,15 +42,34 @@ downloadBtn.onclick = () => {
   document.body.removeChild(link);
 };
 
-audio.volume = 1.0; // 100%
+// Try to restore saved volume
+try {
+  const savedVolume = localStorage.getItem('musicPlayerVolume');
+  if (savedVolume !== null) {
+    const vol = parseFloat(savedVolume);
+    if (!isNaN(vol) && vol >= 0 && vol <= 100) {
+      audio.volume = vol / 100;
+      volumeSlider.value = vol;
+    } else {
+      audio.volume = 1.0;
+    }
+  } else {
+    audio.volume = 1.0;
+  }
+} catch (e) {
+  audio.volume = 1.0;
+}
 
-let lastVolume = 1.0;
-
+let lastVolume = audio.volume;
 
 volumeSlider.oninput = () => {
   audio.volume = volumeSlider.value / 100;
+  try {
+    localStorage.setItem('musicPlayerVolume', volumeSlider.value);
+  } catch (e) {
+    // localStorage unavailable, ignore
+  }
 };
-
 
 let index = 0;
 let autoplay = true;

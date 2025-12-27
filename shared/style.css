@@ -329,3 +329,15 @@ input[type="range"]::-moz-range-thumb {
   color: #fff;
   background: #333;
 }
+
+/* Keyboard navigation accessibility */
+button:focus:not(:focus-visible),
+input:focus:not(:focus-visible) {
+  outline: none;
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid #eee;
+  outline-offset: 2px;
+}
