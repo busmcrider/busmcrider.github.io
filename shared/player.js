@@ -349,15 +349,12 @@ if (initialTrack !== null) {
 }
 
 const albums = window.albums;
-
 if (!albums) {
   console.error('ERROR: music not loaded!');
 }
 
 // Get current album from path (strip leading/trailing slashes)
-const pathParts = window.location.pathname.split('/').filter(p => p);
-const currentAlbum = pathParts[0] ? decodeURIComponent(pathParts[0]) : '';
-
+const currentAlbum = window.currentAlbum || '';
 const currentIndex = albums.indexOf(currentAlbum);
 
 if (currentIndex !== -1) {

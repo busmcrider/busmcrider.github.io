@@ -203,6 +203,7 @@ const albumConfigs = [
 // Track numbers in URL hash are 1-based for human friendliness
 const pathParts = window.location.pathname.split('/').filter(p => p);
 const detectedAlbum = pathParts[0] ? decodeURIComponent(pathParts[0]) : '';
+window.currentAlbum = detectedAlbum;
 
 // Get track number from hash (e.g., #7)
 const hash = window.location.hash.replace('#', '');
