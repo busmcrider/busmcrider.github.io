@@ -185,9 +185,15 @@ function loadTrack(i, play=false) {
 }
 
 function updateUrl() {
-  const albumPath = window.location.pathname.split('/').filter(p => p)[0];
-  const trackNumber = index + 1; // Convert 0-based index to 1-based number
-  const newUrl = `/${encodeURIComponent(albumPath)}/${trackNumber}`;
+  // Get path parts (pathname is already decoded by browser)
+  const pathParts = window.location.pathname.split('/').filter(p => p);
+
+  // First part is the album name (decoded), need to re-encode for URL
+  const albumName = pathParts[0];
+  const trackNumber = index + 1;
+
+  // Build URL with properly encoded album name
+  const newUrl = `/${encodeURIComponent(albumName)}/${trackNumber}`;
 
   if (window.history.replaceState) {
     window.history.replaceState({}, document.title, newUrl);
