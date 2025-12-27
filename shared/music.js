@@ -220,6 +220,46 @@ if (!albumConfig) {
     setAlbumInfo();
   }
 
+  function generateFavicon(imageUrl) {
+  // Create an image element
+  const img = new Image();
+
+  // Set up cross-origin if needed (for external images)
+  img.crossOrigin = 'anonymous';
+
+  img.onload = function() {
+    // Create a canvas
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = 512;
+
+    // Draw the image scaled to 512x512
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, 512, 512);
+
+    // Convert to data URL (JPEG at 100% quality)
+    const faviconUrl = canvas.toDataURL('image/jpeg', 1.0);
+
+    // Find existing favicon or create new one
+    let favicon = document.querySelector("link[rel*='icon']");
+    if (!favicon) {
+      favicon = document.createElement('link');
+      favicon.rel = 'icon';
+      document.head.appendChild(favicon);
+    }
+
+    // Set the favicon
+    favicon.href = faviconUrl;
+  };
+
+  img.onerror = function() {
+    console.warn('Could not load image for favicon:', imageUrl);
+  };
+
+  // Start loading the image
+  img.src = imageUrl;
+}
+
   function setAlbumInfo() {
     // Set album header text
     const albumTitle = document.getElementById('album-title');
@@ -231,6 +271,8 @@ if (!albumConfig) {
     // Set background image
     if (albumConfig.background) {
       document.body.style.backgroundImage = `url('${albumConfig.background}')`;
+      // Generate favicon from background image
+      generateFavicon(albumConfig.background);
     }
   }
 
