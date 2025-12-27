@@ -70,21 +70,30 @@ body::before {
   position: relative;
 }
 
+.track-title-wrapper {
+  flex: 1;
+  min-width: 0;
+  margin-right: 16px;
+  overflow: hidden;
+  position: relative;
+}
+
 #track-title {
   display: inline-block;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  flex: 1;
-  min-width: 0;
-  margin-right: 16px;
 }
 
 #track-title.long {
   animation: scroll-text 15s linear infinite;
   text-overflow: unset;
-  flex: none;
-  width: max-content;
+  overflow: visible;
+}
+
+#track-time {
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 @keyframes scroll-text {
