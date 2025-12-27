@@ -199,10 +199,14 @@ const albumConfigs = [
   }
 ];
 
-// Extract album name from path (first segment after root)
+// Extract album name from path and optional track number from hash
+// Track numbers in URL hash are 1-based for human friendliness
 const pathParts = window.location.pathname.split('/').filter(p => p);
 const detectedAlbum = pathParts[0] ? decodeURIComponent(pathParts[0]) : '';
-const detectedTrackNumber = pathParts[1] ? parseInt(pathParts[1], 10) : null;
+
+// Get track number from hash (e.g., #7)
+const hash = window.location.hash.replace('#', '');
+const detectedTrackNumber = hash ? parseInt(hash, 10) : null;
 
 // Get the config for this album
 const albumConfig = albumConfigs.find(album => album.title === detectedAlbum);

@@ -185,17 +185,12 @@ function loadTrack(i, play=false) {
 }
 
 function updateUrl() {
-  // Get path parts (pathname is already decoded by browser)
-  const pathParts = window.location.pathname.split('/').filter(p => p);
-
-  // First part is the album name (decoded), need to re-encode for URL
-  const albumName = pathParts[0];
   const trackNumber = index + 1;
-
-  // Build URL with properly encoded album name
-  const newUrl = `/${encodeURIComponent(albumName)}/${trackNumber}`;
+  const newHash = `#${trackNumber}`;
 
   if (window.history.replaceState) {
+    // Keep the same path, just update the hash
+    const newUrl = window.location.pathname + newHash;
     window.history.replaceState({}, document.title, newUrl);
   }
 }
@@ -333,6 +328,20 @@ case "M":
   }
 });
 
+// Handle browser back/forward buttons via hash changes
+window.addEventListener('hashchange', () => {
+  const hash = window.location.hash.replace('#', '');
+  const trackNumber = hash ? parseInt(hash, 10) : null;
+
+  if (trackNumber !== null && !isNaN(trackNumber) && trackNumber >= 1 && trackNumber <= tracks.length) {
+    const trackIndex = trackNumber - 1;
+    // Only load if different from current track
+    if (trackIndex !== index) {
+      loadTrack(trackIndex, true);
+    }
+  }
+});
+
 // Initialize player with URL track number if present
 const initialTrack = window.initialTrackIndex;
 if (initialTrack !== null) {
@@ -347,9 +356,9 @@ if (!albums) {
   console.error('ERROR: music not loaded!');
 }
 
-// Get current path and decode URL encoding
-const currentPath = window.location.pathname.replace(/^\/|\/$/g, '');
-const currentAlbum = decodeURIComponent(currentPath);
+// Get current album from path (strip leading/trailing slashes)
+const pathParts = window.location.pathname.split('/').filter(p => p);
+const currentAlbum = pathParts[0] ? decodeURIComponent(pathParts[0]) : '';
 
 const currentIndex = albums.indexOf(currentAlbum);
 
