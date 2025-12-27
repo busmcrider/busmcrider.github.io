@@ -5,11 +5,11 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="dark">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Trip In Progress</title>
+  <title>Loading...</title>
   <link rel="stylesheet" href="../shared/style.css">
 </head>
 
-<body style="background-image: url('Trip In Progress.jpg');">
+<body>
 
   <div class="player">
 
@@ -77,16 +77,8 @@
     </details>
   </div>
 
-  <script>
-    const tracks = [
-      { artwork: "Trip In Progress.jpg", artist: "Charuda", title: "I Don't Know (ft. Eskae)", src: "audio/01 I Don't Know (ft. Eskae).mp3" },
-      { artwork: "Trip In Progress.jpg", artist: "Charuda", title: "Brackets", src: "audio/02 Brackets 1.mp3" },
-      { artwork: "Trip In Progress.jpg", artist: "Charuda", title: "Glimpse", src: "audio/03 Glimpse.mp3" },
-      { artwork: "Trip In Progress.jpg", artist: "Charuda", title: "Afterthought (ft. Isaac Allen)", src: "audio/04 Afterthought (ft. Isaac Allen).mp3" },
-      { artwork: "Trip In Progress.jpg", artist: "Charuda", title: "Lionfish (ft. Isaac Allen)", src: "audio/05 Lionfish (ft. Isaac Allen).mp3" },
-      { artwork: "Trip In Progress.jpg", artist: "Charuda", title: "Reflection", src: "audio/06 Reflection.mp3" }
-    ];
-  </script>
+  <!-- Load album data and player -->
+  <script src="../shared/music.js"></script>
   <script src="../shared/player.js"></script>
 
 </body>
