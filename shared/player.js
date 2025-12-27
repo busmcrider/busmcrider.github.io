@@ -42,21 +42,37 @@ downloadBtn.onclick = () => {
   document.body.removeChild(link);
 };
 
-// Try to restore saved volume
-try {
-  const savedVolume = localStorage.getItem('musicPlayerVolume');
-  if (savedVolume !== null) {
-    const vol = parseFloat(savedVolume);
-    if (!isNaN(vol) && vol >= 0 && vol <= 100) {
-      audio.volume = vol / 100;
-      volumeSlider.value = vol;
-    } else {
-      audio.volume = 1.0;
+// Storage helpers
+const storage = {
+  get(key, defaultValue = null) {
+    try {
+      const value = localStorage.getItem(key);
+      return value !== null ? value : defaultValue;
+    } catch (e) {
+      return defaultValue;
     }
+  },
+  set(key, value) {
+    try {
+      localStorage.setItem(key, value);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+};
+
+// Restore saved volume
+const savedVolume = storage.get('musicPlayerVolume');
+if (savedVolume !== null) {
+  const vol = parseFloat(savedVolume);
+  if (!isNaN(vol) && vol >= 0 && vol <= 100) {
+    audio.volume = vol / 100;
+    volumeSlider.value = vol;
   } else {
     audio.volume = 1.0;
   }
-} catch (e) {
+} else {
   audio.volume = 1.0;
 }
 
@@ -64,11 +80,7 @@ let lastVolume = audio.volume;
 
 volumeSlider.oninput = () => {
   audio.volume = volumeSlider.value / 100;
-  try {
-    localStorage.setItem('musicPlayerVolume', volumeSlider.value);
-  } catch (e) {
-    // localStorage unavailable, ignore
-  }
+  storage.set('musicPlayerVolume', volumeSlider.value);
 };
 
 let index = 0;
@@ -136,31 +148,38 @@ function loadTrack(i, play=false) {
   trackTitleEl.removeAttribute('data-title');
 
   requestAnimationFrame(() => {
-    const textWidth = trackTitleEl.scrollWidth;
-    const elementWidth = trackTitleEl.offsetWidth;
+      const textWidth = trackTitleEl.scrollWidth;
+      const elementWidth = trackTitleEl.offsetWidth;
+      const threshold = 3; // Allow 3px tolerance before scrolling
 
-    if (textWidth > elementWidth + 3) {
-      shouldScroll = true;
-      const scrollDistance = -(textWidth + 50); // Full text width + gap
-      trackTitleEl.style.setProperty('--scroll-distance', `${scrollDistance}px`);
+      if (textWidth > elementWidth + threshold) {
+        shouldScroll = true;
 
-      // Calculate duration for consistent scroll speed (25px/s)
-      const scrollSpeed = 25; // pixels per second
-      const scrollTime = Math.abs(scrollDistance) / scrollSpeed;
-      const totalDuration = scrollTime / 0.9; // 90% is scrolling, 10% is pause
-      const duration = Math.max(8, Math.min(30, totalDuration)); // Clamp between 8-30s
-      trackTitleEl.style.setProperty('--scroll-duration', `${duration}s`);
+        // Use constants from music.js (or define locally if not imported)
+        const scrollGap = typeof SCROLL_GAP_PX !== 'undefined' ? SCROLL_GAP_PX : 50;
+        const scrollSpeed = typeof SCROLL_SPEED_PX_PER_SEC !== 'undefined' ? SCROLL_SPEED_PX_PER_SEC : 25;
+        const minDuration = typeof SCROLL_DURATION_MIN !== 'undefined' ? SCROLL_DURATION_MIN : 8;
+        const maxDuration = typeof SCROLL_DURATION_MAX !== 'undefined' ? SCROLL_DURATION_MAX : 30;
 
-      trackTitleEl.setAttribute('data-title', tracks[i].title);
+        const scrollDistance = -(textWidth + scrollGap);
+        trackTitleEl.style.setProperty('--scroll-distance', `${scrollDistance}px`);
 
-      // Only add .long class if audio is currently playing
-      if (!audio.paused) {
-        trackTitleEl.classList.add('long');
+        // Calculate duration for consistent scroll speed
+        const scrollTime = Math.abs(scrollDistance) / scrollSpeed;
+        const totalDuration = scrollTime / 0.9; // 90% scrolling, 10% pause
+        const duration = Math.max(minDuration, Math.min(maxDuration, totalDuration));
+        trackTitleEl.style.setProperty('--scroll-duration', `${duration}s`);
+
+        trackTitleEl.setAttribute('data-title', tracks[i].title);
+
+        // Only add .long class if audio is currently playing
+        if (!audio.paused) {
+          trackTitleEl.classList.add('long');
+        }
+      } else {
+        shouldScroll = false;
       }
-    } else {
-      shouldScroll = false;
-    }
-  });
+    });
 
   if (play) audio.play();
 }
@@ -275,11 +294,13 @@ document.addEventListener("keydown", e => {
   e.preventDefault();
   audio.volume = Math.min(1, audio.volume + 0.1);
   volumeSlider.value = Math.round(audio.volume * 100);
+  storage.set('musicPlayerVolume', volumeSlider.value);
   break;
 case "ArrowDown":
   e.preventDefault();
   audio.volume = Math.max(0, audio.volume - 0.1);
   volumeSlider.value = Math.round(audio.volume * 100);
+  storage.set('musicPlayerVolume', volumeSlider.value);
   break;
   case "m":
 case "M":
@@ -291,6 +312,7 @@ case "M":
         audio.volume = lastVolume;
     }
     volumeSlider.value = Math.round(audio.volume * 100);
+    storage.set('musicPlayerVolume', volumeSlider.value);
     break;
   }
 });

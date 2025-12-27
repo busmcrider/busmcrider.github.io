@@ -338,6 +338,19 @@ input:focus:not(:focus-visible) {
 
 button:focus-visible,
 input:focus-visible {
+  outline: 3px solid #eee;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Ensure outline is visible over backgrounds */
+button:focus-visible {
+  position: relative;
+  z-index: 10;
+}
+
+/* Special handling for playlist items */
+#playlist li:focus-visible {
   outline: 2px solid #eee;
-  outline-offset: 2px;
+  outline-offset: -2px;
 }
