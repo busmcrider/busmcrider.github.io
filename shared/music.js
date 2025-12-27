@@ -165,7 +165,7 @@ const albumConfigs = [
       { title: "Ass 2", src: "audio/02 Ass 2.mp3" },
       { title: "Nocturnal", src: "audio/03 Nocturnal.mp3" },
       { title: "Going Nowhere", src: "audio/04 Going Nowhere.mp3" },
-      { title: "D. Duchovny Cries Reading The New X-Files Script", src: "audio/05 David Duchovny Cries Reading The New X-Files Script.mp3" },
+      { title: "David Duchovny Cries Reading The New X-Files Script", src: "audio/05 David Duchovny Cries Reading The New X-Files Script.mp3" },
       { title: "Palace With No End", src: "audio/06 Palace With No End.mp3" }
     ]
   },

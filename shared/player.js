@@ -94,6 +94,9 @@ function loadTrack(i, play=false) {
   index = i;
   audio.src = tracks[i].src;
   trackTitleEl.textContent = tracks[i].title;
+    // Enable scrolling for long titles
+  const isLong = trackTitleEl.scrollWidth > trackTitleEl.clientWidth;
+  trackTitleEl.classList.toggle('long', isLong);
   playlistTitle.textContent = tracks[i].title;
 
   [...playlistEl.children].forEach((li, n) =>

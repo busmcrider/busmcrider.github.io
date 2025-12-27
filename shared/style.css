@@ -72,9 +72,18 @@ body::before {
 #track-title {
   display: inline-block;
   min-width: 0;
-  text-overflow: ellipsis;
   overflow: hidden;
-  animation: none;
+  white-space: nowrap;
+  max-width: 250px;
+}
+
+#track-title.long {
+  animation: scroll-text 10s linear infinite;
+}
+
+@keyframes scroll-text {
+  0%, 20% { transform: translateX(0); }
+  80%, 100% { transform: translateX(calc(-100% + 250px)); }
 }
 
 .controls,
