@@ -201,13 +201,13 @@ const albumConfigs = {
 
 // Extract album name from path (first segment after root)
 const pathParts = window.location.pathname.split('/').filter(p => p);
-const currentAlbum = pathParts[0] ? decodeURIComponent(pathParts[0]) : '';
+const detectedAlbum = pathParts[0] ? decodeURIComponent(pathParts[0]) : '';
 
 // Get the config for this album
-const albumConfig = albumConfigs[currentAlbum];
+const albumConfig = albumConfigs[detectedAlbum];
 
 if (!albumConfig) {
-  console.error("Album not found:", currentAlbum);
+  console.error("Album not found:", detectedAlbum);
   document.title = "Album Not Found";
 } else {
   // Set page title
