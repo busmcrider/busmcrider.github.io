@@ -5,11 +5,11 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="dark">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Stars+Dust</title>
+  <title>Loading...</title>
   <link rel="stylesheet" href="../shared/style.css">
 </head>
 
-<body style="background-image: url('Stars+Dust.jpeg');">
+<body>
 
   <div class="player">
 
@@ -77,27 +77,8 @@
     </details>
   </div>
 
-  <!-- Album-specific track list -->
-  <script>
-    const tracks = [
-      { artwork: "Stars+Dust.jpeg", artist: "Bus McRider", title: "Sippin' on Gin", src: "audio/A1 - Sippin' on Gin.mp3" },
-      { artwork: "Stars+Dust.jpeg", artist: "Bus McRider", title: "Captain Save a Hoe", src: "audio/A2 - Captain Save a Hoe.mp3" },
-      { artwork: "Stars+Dust.jpeg", artist: "Bus McRider", title: "Bad Guy", src: "audio/A3 - Bad Guy.mp3" },
-      { artwork: "Stars+Dust.jpeg", artist: "Bus McRider", title: "Master of Strings", src: "audio/A4 - Master of Strings.mp3" },
-      { artwork: "Stars+Dust.jpeg", artist: "Bus McRider", title: "King Kunta", src: "audio/A5 - King Kunta.mp3" },
-      { artwork: "Stars+Dust.jpeg", artist: "Bus McRider", title: "Outlaw's Paradise", src: "audio/A6 - Outlaw's Paradise.mp3" },
-      { artwork: "Stars+Dust.jpeg", artist: "Bus McRider", title: "Regulate", src: "audio/A7 - Regulate.mp3" },
-      { artwork: "Stars+Dust.jpeg", artist: "Bus McRider", title: "Big Iron", src: "audio/B1 - Big Iron.mp3" },
-      { artwork: "Stars+Dust.jpeg", artist: "Bus McRider", title: "Friends in Low Places", src: "audio/B2 - Friends in Low Places.mp3" },
-      { artwork: "Stars+Dust.jpeg", artist: "Bus McRider", title: "Ring of Fire (Slow)", src: "audio/B3 - Ring of Fire (Slow).mp3" },
-      { artwork: "Stars+Dust.jpeg", artist: "Bus McRider", title: "Ring of Fire", src: "audio/B4 - Ring of Fire.mp3" },
-      { artwork: "Stars+Dust.jpeg", artist: "Bus McRider", title: "A Horse with No Name", src: "audio/B5 - A Horse with No Name.mp3" },
-      { artwork: "Stars+Dust.jpeg", artist: "Bus McRider", title: "Walk The Line", src: "audio/B6 - Walk The Line.mp3" },
-      { artwork: "Stars+Dust.jpeg", artist: "Bus McRider", title: "(Ghost)Riders", src: "audio/B7 - (Ghost)Riders.mp3" }
-    ];
-  </script>
-
-  <!-- Shared player logic -->
+  <!-- Load album data and player -->
+  <script src="../shared/music.js"></script>
   <script src="../shared/player.js"></script>
 
 </body>

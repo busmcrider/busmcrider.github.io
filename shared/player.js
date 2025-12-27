@@ -20,6 +20,12 @@ const downloadBtn = document.getElementById("download");
 const trackTitleEl = document.getElementById("track-title");
 const trackTimeEl = document.getElementById("track-time");
 
+// Safety check: warn if tracks not defined anywhere
+if (typeof tracks === 'undefined') {
+  console.error('❌ ERROR: No tracks array found!');
+  console.error('Make sure music.js is loaded OR inline <script> with tracks exists in your HTML.');
+  alert('Music player error: No tracks found. Check console for details.');
+}
 
 downloadBtn.onclick = () => {
   const link = document.createElement("a");
@@ -222,8 +228,8 @@ case "M":
 
 loadTrack(0);
 
-// Album navigation
-const albums = [
+// Use albums from music.js if available, otherwise use local fallback
+const albums = window.albums || [
   "Stars+Dust",
   "Real Fake Protest Songs",
   "Gnosify",
