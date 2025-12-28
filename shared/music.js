@@ -281,21 +281,29 @@ if (!albumConfig) {
     if (albumConfig.background) {
       document.body.style.backgroundImage = `url('${albumConfig.background}')`;
 
-      // Generate favicon from background image (cached via sessionStorage)
-      const cacheKey = `favicon_${albumConfig.title}`;
-      try {
-        const cached = sessionStorage.getItem(cacheKey);
-        if (cached) {
-          setFaviconHref(cached);
-        } else {
-          generateFavicon(albumConfig.background, cacheKey);
+      // Detect mobile for favicon strategy
+      const isMobile = window.matchMedia('(max-width: 600px)').matches ||
+                       window.matchMedia('(hover: none)').matches;
+
+      if (isMobile) {
+        // Mobile: use image directly for better compatibility
+        setFaviconHref(albumConfig.background);
+      } else {
+        // Desktop: generate high-quality favicon (cached via sessionStorage)
+        const cacheKey = `favicon_${albumConfig.title}`;
+        try {
+          const cached = sessionStorage.getItem(cacheKey);
+          if (cached) {
+            setFaviconHref(cached);
+          } else {
+            generateFavicon(albumConfig.background, cacheKey);
+          }
+        } catch (e) {
+          // sessionStorage unavailable, generate without caching
+          generateFavicon(albumConfig.background);
         }
-      } catch (e) {
-        // sessionStorage unavailable, generate without caching
-        generateFavicon(albumConfig.background);
       }
     }
-  }
 
   // Export tracks for player.js
   window.tracks = albumConfig.tracks.map(track => ({
