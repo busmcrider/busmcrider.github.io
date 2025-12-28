@@ -149,17 +149,21 @@ let tabTitleInterval = null;
 let tabTitleBase = '';
 let tabTitleStartTimeout = null;
 
-const TAB_TITLE_MIN_LENGTH = 40;
-const TAB_CHAR_SHIFT_DELAY = 250;  // ms per character (slower = smoother appearance)
+const TAB_TITLE_MIN_LENGTH = 35;
+const TAB_CHAR_SHIFT_DELAY = 300;  // ms per character (slower = smoother appearance)
 const TAB_START_PAUSE = 2000;       // pause before starting scroll
 const TAB_END_PAUSE = 2000;         // pause after full rotation
 
 function startTabTitleScroll(trackTitle) {
   stopTabTitleScroll();
 
-  const albumTitle = document.title.split(' - ')[0];
+  // Extract album title by removing track title from end (handles albums with " - " in name)
+  const suffix = ` - ${trackTitle}`;
+  const albumTitle = document.title.endsWith(suffix)
+    ? document.title.slice(0, -suffix.length)
+    : document.title.split(' - ')[0]; // Fallback to old method
   const fullTitle = `${albumTitle} - ${trackTitle}`;
-
+  
   // Only scroll if title is longer than threshold
   if (fullTitle.length <= TAB_TITLE_MIN_LENGTH) {
     document.title = fullTitle;
