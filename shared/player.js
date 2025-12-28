@@ -149,10 +149,10 @@ let tabTitleInterval = null;
 let tabTitleBase = '';
 let tabTitleStartTimeout = null;
 
-const TAB_TITLE_MIN_LENGTH = 35;
-const TAB_CHAR_SHIFT_DELAY = 300;  // ms per character (slower = smoother appearance)
+const TAB_TITLE_MIN_LENGTH = 30;
+const TAB_CHAR_SHIFT_DELAY = 250;  // ms per character (slower = smoother appearance)
 const TAB_START_PAUSE = 2000;       // pause before starting scroll
-const TAB_END_PAUSE = 2000;         // pause after full rotation
+const TAB_END_PAUSE = 1000;         // pause after full rotation
 
 function startTabTitleScroll(trackTitle) {
   stopTabTitleScroll();
@@ -163,7 +163,7 @@ function startTabTitleScroll(trackTitle) {
     ? document.title.slice(0, -suffix.length)
     : document.title.split(' - ')[0]; // Fallback to old method
   const fullTitle = `${albumTitle} - ${trackTitle}`;
-  
+
   // Only scroll if title is longer than threshold
   if (fullTitle.length <= TAB_TITLE_MIN_LENGTH) {
     document.title = fullTitle;
@@ -276,8 +276,9 @@ function loadTrack(i, play=false) {
     li.classList.toggle("active", n === i)
   );
 
-  // Update page title with track name
-  const baseTitle = document.title.split(' - ')[0];
+  // Update page title with track name (use album title from header element)
+  const albumTitleEl = document.getElementById('album-title');
+  const baseTitle = albumTitleEl ? albumTitleEl.textContent : document.title.split(' - ')[0];
   document.title = `${baseTitle} - ${tracks[i].title}`;
 
   scrollToActive();
