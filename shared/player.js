@@ -174,7 +174,7 @@ function startTabTitleScroll(trackTitle) {
     document.title = rotated;
 
     position = (position + 1) % scrollText.length;
-  }, 30); // 30ms per character shift
+  }, 100); // 100ms per character shift
 }
 
 function stopTabTitleScroll() {
