@@ -221,7 +221,7 @@ function nextTrack() {
     // We're at the end of the playlist, loop is OFF, autoplay is ON
     // Navigate to next album
     const nextIndex = (currentIndex + 1) % albums.length;
-    window.location.href = `/${encodeURIComponent(albums[nextIndex])}/`;
+    window.location.href = `/${encodeURIComponent(albums[nextIndex])}/#1`;
   }
 }
 
@@ -288,9 +288,30 @@ loopBtn.onclick = () => {
 
 // Initialize shortcuts state - inverse of playlist
 const shortcutsEl = document.querySelector('.shortcuts');
+
 if (shortcutsEl && !playlistWrapper.classList.contains("collapsed")) {
   shortcutsEl.removeAttribute('open');
 }
+
+// Sync shortcuts toggle with playlist (maintain switch behavior)
+if (shortcutsEl) {
+  shortcutsEl.addEventListener('toggle', () => {
+    const shortcutsOpen = shortcutsEl.hasAttribute('open');
+    const playlistCollapsed = playlistWrapper.classList.contains('collapsed');
+
+    // Maintain switch: if shortcuts opened, close playlist
+    if (shortcutsOpen && !playlistCollapsed) {
+      playlistWrapper.classList.add('collapsed');
+      playlistChevron.textContent = "▸";
+    }
+    // If shortcuts closed, open playlist
+    else if (!shortcutsOpen && playlistCollapsed) {
+      playlistWrapper.classList.remove('collapsed');
+      playlistChevron.textContent = "▾";
+    }
+  });
+}
+
 
 playlistToggle.onclick = () => {
   playlistWrapper.classList.toggle("collapsed");
@@ -340,7 +361,7 @@ document.addEventListener("keydown", e => {
     case "h":
     case "H":
       e.preventDefault();
-      window.location.href = 'https://busmcrider.github.io';
+      playlistToggle.click();
       break;
     case "l":
     case "L":
@@ -384,7 +405,7 @@ const initialTrack = window.initialTrackIndex;
 if (initialTrack !== null) {
   loadTrack(initialTrack, true);
 } else {
-  loadTrack(0);
+  loadTrack(0, true);
 }
 
 const albums = window.albums;
