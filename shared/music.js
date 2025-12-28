@@ -241,19 +241,14 @@ if (!albumConfig) {
     img.crossOrigin = 'anonymous';
 
     img.onload = function() {
-      // Use smaller size for mobile devices
-      const isMobile = window.matchMedia('(max-width: 600px)').matches ||
-                       window.matchMedia('(hover: none)').matches;
-      const size = isMobile ? 192 : 512;
-
       const canvas = document.createElement('canvas');
-      canvas.width = size;
-      canvas.height = size;
+      canvas.width = 512;
+      canvas.height = 512;
 
       const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, size, size);
+      ctx.drawImage(img, 0, 0, 512, 512);
 
-      const faviconUrl = canvas.toDataURL('image/png', 1.0);
+      const faviconUrl = canvas.toDataURL('image/jpeg', 1.0);
 
       setFaviconHref(faviconUrl);
 
