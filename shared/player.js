@@ -138,6 +138,10 @@ function loadTrack(i, play=false) {
   [...playlistEl.children].forEach((li, n) =>
     li.classList.toggle("active", n === i)
   );
+  
+  // Update page title with track name
+  const baseTitle = document.title.split(' - ')[0];
+  document.title = `${baseTitle} - ${tracks[i].title}`;
 
   scrollToActive();
   updateMediaSession();
