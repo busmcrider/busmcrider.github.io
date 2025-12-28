@@ -150,9 +150,9 @@ let tabTitleBase = '';
 let tabTitleStartTimeout = null;
 
 const TAB_TITLE_MIN_LENGTH = 40;
-const TAB_CHAR_SHIFT_DELAY = 200;  // ms per character (slower = smoother appearance)
+const TAB_CHAR_SHIFT_DELAY = 250;  // ms per character (slower = smoother appearance)
 const TAB_START_PAUSE = 2000;       // pause before starting scroll
-const TAB_END_PAUSE = 1000;         // pause after full rotation
+const TAB_END_PAUSE = 2000;         // pause after full rotation
 
 function startTabTitleScroll(trackTitle) {
   stopTabTitleScroll();
