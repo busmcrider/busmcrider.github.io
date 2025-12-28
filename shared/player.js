@@ -147,6 +147,12 @@ function preloadTracks() {
 // Browser tab title scrolling for long track names
 let tabTitleInterval = null;
 let tabTitleBase = '';
+let tabTitleStartTimeout = null;
+
+const TAB_TITLE_MIN_LENGTH = 40;
+const TAB_CHAR_SHIFT_DELAY = 200;  // ms per character (slower = smoother appearance)
+const TAB_START_PAUSE = 2000;       // pause before starting scroll
+const TAB_END_PAUSE = 1000;         // pause after full rotation
 
 function startTabTitleScroll(trackTitle) {
   stopTabTitleScroll();
@@ -154,30 +160,48 @@ function startTabTitleScroll(trackTitle) {
   const albumTitle = document.title.split(' - ')[0];
   const fullTitle = `${albumTitle} - ${trackTitle}`;
 
-  // Only scroll if title is longer than 30 characters
-  if (fullTitle.length <= 30) {
+  // Only scroll if title is longer than threshold
+  if (fullTitle.length <= TAB_TITLE_MIN_LENGTH) {
     document.title = fullTitle;
     return;
   }
 
   tabTitleBase = fullTitle;
-  const separator = ' • ';
-  const scrollText = fullTitle + separator;
-  let position = 0;
+  document.title = fullTitle; // Show full title first
 
-  // Set initial title
-  document.title = scrollText;
+  // Wait before starting scroll
+  tabTitleStartTimeout = setTimeout(() => {
+    const separator = ' • ';
+    const scrollText = fullTitle + separator;
+    let position = 0;
+    let pauseCounter = 0;
 
-  tabTitleInterval = setInterval(() => {
-    // Rotate string to create scrolling effect
-    const rotated = scrollText.substring(position) + scrollText.substring(0, position);
-    document.title = rotated;
+    tabTitleInterval = setInterval(() => {
+      // Handle pause counter
+      if (pauseCounter > 0) {
+        pauseCounter--;
+        return;
+      }
 
-    position = (position + 1) % scrollText.length;
-  }, 100); // 100ms per character shift
+      // Rotate string
+      const rotated = scrollText.substring(position) + scrollText.substring(0, position);
+      document.title = rotated;
+
+      position = (position + 1) % scrollText.length;
+
+      // Add pause when we complete rotation
+      if (position === 0) {
+        pauseCounter = Math.floor(TAB_END_PAUSE / TAB_CHAR_SHIFT_DELAY);
+      }
+    }, TAB_CHAR_SHIFT_DELAY);
+  }, TAB_START_PAUSE);
 }
 
 function stopTabTitleScroll() {
+  if (tabTitleStartTimeout) {
+    clearTimeout(tabTitleStartTimeout);
+    tabTitleStartTimeout = null;
+  }
   if (tabTitleInterval) {
     clearInterval(tabTitleInterval);
     tabTitleInterval = null;
