@@ -313,7 +313,6 @@ if (!albumConfig) {
     title: track.title,
     src: track.src
   }));
-}
 
 // Export albums list for navigation
 window.albums = albumConfigs.map(album => album.title);
@@ -333,3 +332,4 @@ window.initialTrackIndex = (detectedTrackNumber !== null &&
                             detectedTrackNumber <= albumConfig.tracks.length)
                             ? detectedTrackNumber - 1
                             : null;
+}
