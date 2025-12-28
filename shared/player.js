@@ -89,6 +89,61 @@ let loopMode = 0; // 0 off, 1 track, 2 all
 
 let shouldScroll = false;
 
+// Preloading system for smoother playback transitions
+const preloadAudio = {
+  next: null,
+  prev: null
+};
+
+function preloadTracks() {
+  // Determine which tracks to preload based on current position and loop mode
+  let nextIndex = null;
+  let prevIndex = null;
+
+  if (loopMode === 1) {
+    // Loop one track: no preloading needed (same track replays)
+    return;
+  }
+
+  // Calculate next track index
+  if (index < tracks.length - 1) {
+    nextIndex = index + 1;
+  } else if (loopMode === 2) {
+    nextIndex = 0; // Loop all: wrap to start
+  }
+  // else: end of album with no loop, don't preload (next would be different album)
+
+  // Calculate previous track index
+  if (index > 0) {
+    prevIndex = index - 1;
+  } else if (loopMode === 2) {
+    prevIndex = tracks.length - 1; // Loop all: wrap to end
+  }
+  // else: start of album with no loop, don't preload (prev would be different album)
+
+  // Preload next track
+  if (nextIndex !== null) {
+    if (!preloadAudio.next || preloadAudio.next.src !== tracks[nextIndex].src) {
+      preloadAudio.next = new Audio();
+      preloadAudio.next.preload = 'auto';
+      preloadAudio.next.src = tracks[nextIndex].src;
+    }
+  } else {
+    preloadAudio.next = null;
+  }
+
+  // Preload previous track
+  if (prevIndex !== null) {
+    if (!preloadAudio.prev || preloadAudio.prev.src !== tracks[prevIndex].src) {
+      preloadAudio.prev = new Audio();
+      preloadAudio.prev.preload = 'auto';
+      preloadAudio.prev.src = tracks[prevIndex].src;
+    }
+  } else {
+    preloadAudio.prev = null;
+  }
+}
+
 tracks.forEach((t, i) => {
   const li = document.createElement("li");
   li.textContent = t.title;
@@ -138,7 +193,7 @@ function loadTrack(i, play=false) {
   [...playlistEl.children].forEach((li, n) =>
     li.classList.toggle("active", n === i)
   );
-  
+
   // Update page title with track name
   const baseTitle = document.title.split(' - ')[0];
   document.title = `${baseTitle} - ${tracks[i].title}`;
