@@ -210,8 +210,7 @@ playBtn.onclick = () => {
 };
 
 nextBtn.onclick = () => nextTrack();
-prevBtn.onclick = () =>
-  loadTrack((index - 1 + tracks.length) % tracks.length, true);
+prevBtn.onclick = () => prevTrack();
 
 function nextTrack() {
   if (index < tracks.length - 1) {
@@ -223,6 +222,22 @@ function nextTrack() {
     // Navigate to next album
     const nextIndex = (currentIndex + 1) % albums.length;
     window.location.href = `/${encodeURIComponent(albums[nextIndex])}/`;
+  }
+}
+
+function prevTrack() {
+  if (index > 0) {
+    loadTrack(index - 1, true);
+  } else if (loopMode === 2) {
+    loadTrack(tracks.length - 1, true);
+  } else if (loopMode === 0 && autoplay && currentIndex !== -1) {
+    // We're at the start of the playlist, loop is OFF, autoplay is ON
+    // Navigate to previous album's last track
+    const prevIndex = (currentIndex - 1 + albums.length) % albums.length;
+    const prevAlbumInfo = window.albumInfo[prevIndex];
+    if (prevAlbumInfo) {
+      window.location.href = `/${encodeURIComponent(prevAlbumInfo.title)}/#${prevAlbumInfo.trackCount}`;
+    }
   }
 }
 
@@ -271,10 +286,25 @@ loopBtn.onclick = () => {
     "↻ ALL";
 };
 
+// Initialize shortcuts state - inverse of playlist
+const shortcutsEl = document.querySelector('.shortcuts');
+if (shortcutsEl && !playlistWrapper.classList.contains("collapsed")) {
+  shortcutsEl.removeAttribute('open');
+}
+
 playlistToggle.onclick = () => {
   playlistWrapper.classList.toggle("collapsed");
-  playlistChevron.textContent =
-    playlistWrapper.classList.contains("collapsed") ? "▸" : "▾";
+  const isCollapsed = playlistWrapper.classList.contains("collapsed");
+  playlistChevron.textContent = isCollapsed ? "▸" : "▾";
+
+  // Toggle shortcuts - inverse of playlist
+  if (shortcutsEl) {
+    if (isCollapsed) {
+      shortcutsEl.setAttribute('open', '');
+    } else {
+      shortcutsEl.removeAttribute('open');
+    }
+  }
 };
 
 document.addEventListener("keydown", e => {
@@ -285,11 +315,32 @@ document.addEventListener("keydown", e => {
       e.preventDefault();
       audio.paused ? audio.play() : audio.pause();
       break;
-    case "ArrowRight":
+    case "ArrowUp":
+      e.preventDefault();
+      prevTrack();
+      break;
+    case "ArrowDown":
+      e.preventDefault();
       nextTrack();
       break;
     case "ArrowLeft":
-      prevBtn.click();
+      e.preventDefault();
+      if (currentIndex !== -1) {
+        const prevIndex = (currentIndex - 1 + albums.length) % albums.length;
+        window.location.href = `/${encodeURIComponent(albums[prevIndex])}/`;
+      }
+      break;
+    case "ArrowRight":
+      e.preventDefault();
+      if (currentIndex !== -1) {
+        const nextIndex = (currentIndex + 1) % albums.length;
+        window.location.href = `/${encodeURIComponent(albums[nextIndex])}/`;
+      }
+      break;
+    case "h":
+    case "H":
+      e.preventDefault();
+      window.location.href = 'https://busmcrider.github.io';
       break;
     case "l":
     case "L":
@@ -299,30 +350,18 @@ document.addEventListener("keydown", e => {
     case "A":
       autoplayBtn.click();
       break;
-      case "ArrowUp":
-  e.preventDefault();
-  audio.volume = Math.min(1, audio.volume + 0.1);
-  volumeSlider.value = Math.round(audio.volume * 100);
-  storage.set('musicPlayerVolume', volumeSlider.value);
-  break;
-case "ArrowDown":
-  e.preventDefault();
-  audio.volume = Math.max(0, audio.volume - 0.1);
-  volumeSlider.value = Math.round(audio.volume * 100);
-  storage.set('musicPlayerVolume', volumeSlider.value);
-  break;
-  case "m":
-case "M":
-    e.preventDefault();
-    if (audio.volume > 0) {
+    case "m":
+    case "M":
+      e.preventDefault();
+      if (audio.volume > 0) {
         lastVolume = audio.volume;
         audio.volume = 0;
-    } else {
+      } else {
         audio.volume = lastVolume;
-    }
-    volumeSlider.value = Math.round(audio.volume * 100);
-    storage.set('musicPlayerVolume', volumeSlider.value);
-    break;
+      }
+      volumeSlider.value = Math.round(audio.volume * 100);
+      storage.set('musicPlayerVolume', volumeSlider.value);
+      break;
   }
 });
 

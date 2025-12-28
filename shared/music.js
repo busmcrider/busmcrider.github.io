@@ -309,6 +309,12 @@ if (!albumConfig) {
 // Export albums list for navigation
 window.albums = albumConfigs.map(album => album.title);
 
+// Export album info for navigation (track counts)
+window.albumInfo = albumConfigs.map(album => ({
+  title: album.title,
+  trackCount: album.tracks.length
+}));
+
 // Export detected track index (convert from 1-based URL to 0-based index)
 // URL "/Album/1" = index 0, "/Album/2" = index 1, etc.
 window.initialTrackIndex = (detectedTrackNumber !== null &&
