@@ -63,11 +63,14 @@ body::before {
 .now-playing {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   font-size: 24px;
+  line-height: 1.2;
   margin-bottom: 8px;
   overflow: hidden;
   white-space: nowrap;
   position: relative;
+  height: 1.2em;
 }
 
 .track-title-wrapper {
@@ -76,6 +79,7 @@ body::before {
   margin-right: 16px;
   overflow: hidden;
   position: relative;
+  height: 100%;
 }
 
 #track-title {
@@ -210,6 +214,15 @@ input[type="range"] {
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
+}
+
+#playlist-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-right: 8px;
 }
 
 .playlist-wrapper.collapsed #playlist {
