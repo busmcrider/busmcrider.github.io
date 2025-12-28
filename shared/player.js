@@ -89,6 +89,9 @@ let loopMode = 0; // 0 off, 1 track, 2 all
 
 let shouldScroll = false;
 
+// Store the base album title once (before track name is appended)
+const albumBaseTitle = document.title;
+
 // Preloading system for smoother playback transitions
 const preloadAudio = {
   next: null,
@@ -194,10 +197,8 @@ function loadTrack(i, play=false) {
     li.classList.toggle("active", n === i)
   );
 
-  // Update page title with track name (use album title from header element)
-  const albumTitleEl = document.getElementById('album-title');
-  const baseTitle = albumTitleEl ? albumTitleEl.textContent : document.title.split(' - ')[0];
-  document.title = `${baseTitle} - ${tracks[i].title}`;
+  // Update page title with track name
+  document.title = `${albumBaseTitle} - ${tracks[i].title}`;
 
   scrollToActive();
   updateMediaSession();
