@@ -289,10 +289,10 @@ if (!albumConfig) {
         // Mobile: use image directly for better compatibility
         setFaviconHref(albumConfig.background);
       } else {
-        // Desktop: generate high-quality favicon (cached via sessionStorage)
+        // Desktop: generate high-quality favicon (cached via localStorage)
         const cacheKey = `favicon_${albumConfig.title}`;
         try {
-          const cached = sessionStorage.getItem(cacheKey);
+          const cached = localStorage.getItem(cacheKey);
           if (cached) {
             setFaviconHref(cached);
           } else {
