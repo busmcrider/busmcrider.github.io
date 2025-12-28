@@ -144,88 +144,6 @@ function preloadTracks() {
   }
 }
 
-// Browser tab title scrolling for long track names
-let tabTitleInterval = null;
-let tabTitleBase = '';
-let tabTitleStartTimeout = null;
-
-const TAB_TITLE_MIN_LENGTH = 30;
-const TAB_CHAR_SHIFT_DELAY = 250;  // ms per character (slower = smoother appearance)
-const TAB_START_PAUSE = 2000;       // pause before starting scroll
-const TAB_END_PAUSE = 1000;         // pause after full rotation
-
-function startTabTitleScroll(trackTitle) {
-  stopTabTitleScroll();
-
-  // Extract album title by removing track title from end (handles albums with " - " in name)
-  const suffix = ` - ${trackTitle}`;
-  const albumTitle = document.title.endsWith(suffix)
-    ? document.title.slice(0, -suffix.length)
-    : document.title.split(' - ')[0]; // Fallback to old method
-  const fullTitle = `${albumTitle} - ${trackTitle}`;
-
-  // Only scroll if title is longer than threshold
-  if (fullTitle.length <= TAB_TITLE_MIN_LENGTH) {
-    document.title = fullTitle;
-    return;
-  }
-
-  tabTitleBase = fullTitle;
-  document.title = fullTitle; // Show full title first
-
-  // Wait before starting scroll
-  tabTitleStartTimeout = setTimeout(() => {
-    const separator = ' • ';
-    const scrollText = fullTitle + separator;
-    let position = 0;
-    let pauseCounter = 0;
-
-    tabTitleInterval = setInterval(() => {
-      // Handle pause counter
-      if (pauseCounter > 0) {
-        pauseCounter--;
-        return;
-      }
-
-      // Rotate string
-      const rotated = scrollText.substring(position) + scrollText.substring(0, position);
-      document.title = rotated;
-
-      position = (position + 1) % scrollText.length;
-
-      // Add pause when we complete rotation
-      if (position === 0) {
-        pauseCounter = Math.floor(TAB_END_PAUSE / TAB_CHAR_SHIFT_DELAY);
-      }
-    }, TAB_CHAR_SHIFT_DELAY);
-  }, TAB_START_PAUSE);
-}
-
-function stopTabTitleScroll() {
-  if (tabTitleStartTimeout) {
-    clearTimeout(tabTitleStartTimeout);
-    tabTitleStartTimeout = null;
-  }
-  if (tabTitleInterval) {
-    clearInterval(tabTitleInterval);
-    tabTitleInterval = null;
-  }
-  if (tabTitleBase) {
-    document.title = tabTitleBase;
-  }
-}
-
-// Stop scrolling when page is hidden (tab switched away)
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden) {
-    stopTabTitleScroll();
-  } else if (tabTitleBase && !audio.paused) {
-    // Resume scrolling when tab becomes visible again
-    const currentTrackTitle = tracks[index].title;
-    startTabTitleScroll(currentTrackTitle);
-  }
-});
-
 tracks.forEach((t, i) => {
   const li = document.createElement("li");
   li.textContent = t.title;
@@ -287,11 +205,6 @@ function loadTrack(i, play=false) {
 
   // Preload adjacent tracks for smoother transitions
   preloadTracks();
-
-  // Start tab title scrolling if currently playing
-  if (!audio.paused) {
-    startTabTitleScroll(tracks[i].title);
-  }
 
   // Enable scrolling for long titles
   trackTitleEl.classList.remove('long');
@@ -409,9 +322,6 @@ audio.onplay = () => {
   if (shouldScroll) {
     trackTitleEl.classList.add('long');
   }
-
-  // Start browser tab title scrolling
-  startTabTitleScroll(tracks[index].title);
 };
 
 audio.onpause = () => {
@@ -419,9 +329,6 @@ audio.onpause = () => {
 
   // Remove scrolling animation when paused, show ellipsis instead
   trackTitleEl.classList.remove('long');
-
-  // Stop browser tab title scrolling
-  stopTabTitleScroll();
 };
 
 audio.onended = () => {
