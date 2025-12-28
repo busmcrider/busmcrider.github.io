@@ -144,6 +144,60 @@ function preloadTracks() {
   }
 }
 
+// Browser tab title scrolling for long track names
+let tabTitleInterval = null;
+let tabTitleBase = '';
+
+function startTabTitleScroll(trackTitle) {
+  stopTabTitleScroll();
+
+  const albumTitle = document.title.split(' - ')[0];
+  const fullTitle = `${albumTitle} - ${trackTitle}`;
+
+  // Only scroll if title is longer than 50 characters
+  if (fullTitle.length <= 50) {
+    document.title = fullTitle;
+    return;
+  }
+
+  tabTitleBase = fullTitle;
+  const separator = ' • ';
+  const scrollText = fullTitle + separator;
+  let position = 0;
+
+  // Set initial title
+  document.title = scrollText;
+
+  tabTitleInterval = setInterval(() => {
+    // Rotate string to create scrolling effect
+    const rotated = scrollText.substring(position) + scrollText.substring(0, position);
+    document.title = rotated;
+
+    position = (position + 1) % scrollText.length;
+  }, 300); // 300ms per character shift
+}
+
+function stopTabTitleScroll() {
+  if (tabTitleInterval) {
+    clearInterval(tabTitleInterval);
+    tabTitleInterval = null;
+  }
+  if (tabTitleBase) {
+    document.title = tabTitleBase;
+  }
+}
+
+// Stop scrolling when page is hidden (tab switched away)
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    stopTabTitleScroll();
+  } else if (tabTitleBase && !audio.paused) {
+    // Resume scrolling when tab becomes visible again
+    const currentTrackTitle = tracks[index].title;
+    startTabTitleScroll(currentTrackTitle);
+  }
+});
+
 tracks.forEach((t, i) => {
   const li = document.createElement("li");
   li.textContent = t.title;
@@ -201,6 +255,14 @@ function loadTrack(i, play=false) {
   scrollToActive();
   updateMediaSession();
   updateUrl();
+
+  // Preload adjacent tracks for smoother transitions
+  preloadTracks();
+
+  // Start tab title scrolling if currently playing
+  if (!audio.paused) {
+    startTabTitleScroll(tracks[i].title);
+  }
 
   // Enable scrolling for long titles
   trackTitleEl.classList.remove('long');
@@ -318,6 +380,9 @@ audio.onplay = () => {
   if (shouldScroll) {
     trackTitleEl.classList.add('long');
   }
+
+  // Start browser tab title scrolling
+  startTabTitleScroll(tracks[index].title);
 };
 
 audio.onpause = () => {
@@ -325,6 +390,9 @@ audio.onpause = () => {
 
   // Remove scrolling animation when paused, show ellipsis instead
   trackTitleEl.classList.remove('long');
+
+  // Stop browser tab title scrolling
+  stopTabTitleScroll();
 };
 
 audio.onended = () => {
@@ -475,6 +543,10 @@ if (initialTrack !== null) {
   loadTrack(initialTrack, true);
 } else {
   loadTrack(0, true);
+  // Set URL hash for consistency with navigation links
+  if (!window.location.hash) {
+    window.location.hash = '1';
+  }
 }
 
 const albums = window.albums;
