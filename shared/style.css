@@ -296,12 +296,6 @@ input[type="range"]::-moz-range-thumb {
   }
 }
 
-@media (hover: none), (max-width: 600px) {
-  .shortcuts {
-    display: none !important;
-  }
-}
-
 @media (min-width: 801px) {
   body {
     background-attachment: fixed;

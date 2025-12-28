@@ -139,6 +139,10 @@ function loadTrack(i, play=false) {
     li.classList.toggle("active", n === i)
   );
 
+  // Update page title with track name
+  const albumTitle = document.getElementById('album-title')?.textContent || document.title.split(' - ')[0];
+  document.title = `${albumTitle} - ${tracks[i].title}`;
+
   scrollToActive();
   updateMediaSession();
   updateUrl();
@@ -289,8 +293,35 @@ loopBtn.onclick = () => {
 // Initialize shortcuts state - inverse of playlist
 const shortcutsEl = document.querySelector('.shortcuts');
 
-if (shortcutsEl && !playlistWrapper.classList.contains("collapsed")) {
-  shortcutsEl.removeAttribute('open');
+// Detect mobile and populate shortcuts dynamically
+const isMobileView = window.matchMedia('(max-width: 600px)').matches ||
+                     window.matchMedia('(hover: none)').matches;
+
+if (shortcutsEl) {
+  const summary = shortcutsEl.querySelector('summary');
+  const ul = shortcutsEl.querySelector('ul');
+
+  if (isMobileView) {
+    // Mobile: show gesture controls
+    summary.textContent = 'Gesture controls:';
+    ul.innerHTML = `
+      <li>Swipe up — Previous track</li>
+      <li>Swipe down — Next track</li>
+      <li>Swipe right — Last album</li>
+      <li>Swipe left — Next album</li>
+    `;
+
+    // Mobile default: shortcuts open, playlist collapsed
+    playlistWrapper.classList.add('collapsed');
+    playlistChevron.textContent = "▸";
+    shortcutsEl.setAttribute('open', '');
+  } else {
+    // Desktop: show keyboard shortcuts (already in HTML)
+    // Desktop default: playlist open, shortcuts closed
+    if (!playlistWrapper.classList.contains("collapsed")) {
+      shortcutsEl.removeAttribute('open');
+    }
+  }
 }
 
 // Sync shortcuts toggle with playlist (maintain switch behavior)
@@ -386,6 +417,76 @@ document.addEventListener("keydown", e => {
   }
 });
 
+// Mobile gesture controls
+if (window.matchMedia('(hover: none)').matches || window.matchMedia('(max-width: 600px)').matches) {
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchEndX = 0;
+  let touchEndY = 0;
+
+  const minSwipeDistance = 50;
+
+  document.addEventListener('touchstart', e => {
+    // Don't interfere with range sliders, playlist, or controls
+    if (e.target.type === 'range') return;
+    if (e.target.closest('#playlist')) return;
+    if (e.target.closest('#playlist-toggle')) return;
+    if (e.target.closest('button')) return;
+
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', e => {
+    // Don't interfere with range sliders, playlist, or controls
+    if (e.target.type === 'range') return;
+    if (e.target.closest('#playlist')) return;
+    if (e.target.closest('#playlist-toggle')) return;
+    if (e.target.closest('button')) return;
+
+    touchEndX = e.changedTouches[0].screenX;
+    touchEndY = e.changedTouches[0].screenY;
+
+    handleGesture();
+  }, { passive: true });
+
+  function handleGesture() {
+    const diffX = touchEndX - touchStartX;
+    const diffY = touchEndY - touchStartY;
+
+    // Determine if swipe is more horizontal or vertical
+    if (Math.abs(diffX) > Math.abs(diffY)) {
+      // Horizontal swipe
+      if (Math.abs(diffX) > minSwipeDistance) {
+        if (diffX > 0) {
+          // Swipe right - previous album (last)
+          if (currentIndex !== -1) {
+            const prevIndex = (currentIndex - 1 + albums.length) % albums.length;
+            window.location.href = `/${encodeURIComponent(albums[prevIndex])}/`;
+          }
+        } else {
+          // Swipe left - next album
+          if (currentIndex !== -1) {
+            const nextIndex = (currentIndex + 1) % albums.length;
+            window.location.href = `/${encodeURIComponent(albums[nextIndex])}/`;
+          }
+        }
+      }
+    } else {
+      // Vertical swipe
+      if (Math.abs(diffY) > minSwipeDistance) {
+        if (diffY > 0) {
+          // Swipe down - next track
+          nextTrack();
+        } else {
+          // Swipe up - previous track
+          prevTrack();
+        }
+      }
+    }
+  }
+}
+
 // Handle browser back/forward buttons via hash changes
 window.addEventListener('hashchange', () => {
   const hash = window.location.hash.replace('#', '');
@@ -402,10 +503,31 @@ window.addEventListener('hashchange', () => {
 
 // Initialize player with URL track number if present
 const initialTrack = window.initialTrackIndex;
+const isMobileDevice = window.matchMedia('(max-width: 600px)').matches ||
+                       window.matchMedia('(hover: none)').matches;
+
 if (initialTrack !== null) {
-  loadTrack(initialTrack, true);
+  loadTrack(initialTrack, false);
 } else {
-  loadTrack(0, true);
+  loadTrack(0, false);
+}
+
+// Attempt autoplay - handle mobile restrictions
+if (isMobileDevice) {
+  // Mobile: try autoplay, fall back to first interaction
+  audio.play().catch(() => {
+    // Autoplay blocked - wait for first user interaction
+    const startPlayback = () => {
+      audio.play();
+      document.removeEventListener('touchstart', startPlayback);
+      document.removeEventListener('click', startPlayback);
+    };
+    document.addEventListener('touchstart', startPlayback, { once: true });
+    document.addEventListener('click', startPlayback, { once: true });
+  });
+} else {
+  // Desktop: autoplay should work
+  audio.play();
 }
 
 const albums = window.albums;
