@@ -213,26 +213,36 @@ nextBtn.onclick = () => nextTrack();
 prevBtn.onclick = () => prevTrack();
 
 function nextTrack() {
+  // When looping one track, restart current track
+  if (loopMode === 1) {
+    audio.currentTime = 0;
+    audio.play();
+    return;
+  }
+
   if (index < tracks.length - 1) {
     loadTrack(index + 1, true);
   } else if (loopMode === 2) {
     loadTrack(0, true);
   } else if (loopMode === 0 && autoplay && currentIndex !== -1) {
-    // We're at the end of the playlist, loop is OFF, autoplay is ON
-    // Navigate to next album
     const nextIndex = (currentIndex + 1) % albums.length;
     window.location.href = `/${encodeURIComponent(albums[nextIndex])}/#1`;
   }
 }
 
 function prevTrack() {
+  // When looping one track, restart current track
+  if (loopMode === 1) {
+    audio.currentTime = 0;
+    audio.play();
+    return;
+  }
+
   if (index > 0) {
     loadTrack(index - 1, true);
   } else if (loopMode === 2) {
     loadTrack(tracks.length - 1, true);
   } else if (loopMode === 0 && autoplay && currentIndex !== -1) {
-    // We're at the start of the playlist, loop is OFF, autoplay is ON
-    // Navigate to previous album's last track
     const prevIndex = (currentIndex - 1 + albums.length) % albums.length;
     const prevAlbumInfo = window.albumInfo[prevIndex];
     if (prevAlbumInfo) {
