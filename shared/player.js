@@ -154,8 +154,8 @@ function startTabTitleScroll(trackTitle) {
   const albumTitle = document.title.split(' - ')[0];
   const fullTitle = `${albumTitle} - ${trackTitle}`;
 
-  // Only scroll if title is longer than 50 characters
-  if (fullTitle.length <= 50) {
+  // Only scroll if title is longer than 30 characters
+  if (fullTitle.length <= 30) {
     document.title = fullTitle;
     return;
   }
@@ -174,7 +174,7 @@ function startTabTitleScroll(trackTitle) {
     document.title = rotated;
 
     position = (position + 1) % scrollText.length;
-  }, 300); // 300ms per character shift
+  }, 30); // 30ms per character shift
 }
 
 function stopTabTitleScroll() {
