@@ -304,6 +304,7 @@ if (!albumConfig) {
         }
       }
     }
+  }
 
   // Export tracks for player.js
   window.tracks = albumConfig.tracks.map(track => ({
