@@ -287,8 +287,10 @@ if (!albumConfig) {
     if (albumTitle) albumTitle.textContent = albumConfig.title;
     if (albumArtist) albumArtist.textContent = albumConfig.artist;
 
-    // Generate favicon from album background
+    // Set background image
     if (albumConfig.background) {
+      document.body.style.backgroundImage = `url('${albumConfig.background}')`;
+
       // Detect mobile for favicon strategy
       const isMobile = window.matchMedia('(max-width: 600px)').matches ||
                        window.matchMedia('(hover: none)').matches;
@@ -362,17 +364,4 @@ window.initialTrackIndex = (detectedTrackNumber !== null &&
                             detectedTrackNumber <= albumConfig.tracks.length)
                             ? detectedTrackNumber - 1
                             : null;
-}
-
-// Remove blur effect when background image loads
-const bgImage = document.getElementById('bg-image');
-if (bgImage) {
-  bgImage.addEventListener('load', function() {
-    this.classList.remove('bg-loading');
-  });
-
-  // If image already loaded (cached), remove blur immediately
-  if (bgImage.complete) {
-    bgImage.classList.remove('bg-loading');
-  }
 }

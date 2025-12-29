@@ -13,7 +13,8 @@ body {
   flex-direction: column;
   font-family: system-ui, sans-serif;
   color: #eee;
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  background: no-repeat center center;
+  background-size: cover;
 }
 
 body::before {
@@ -22,24 +23,6 @@ body::before {
   inset: 0;
   background: rgba(0,0,0,0.5);
   z-index: -1;
-}
-
-/* Background image with blur-up effect */
-#bg-image {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -2;
-  pointer-events: none;
-  transition: filter 0.3s ease-out, opacity 0.3s ease-out;
-}
-
-#bg-image.bg-loading {
-  filter: blur(20px);
-  opacity: 0.7;
-  transform: scale(1.1);
 }
 
 .player {
@@ -316,6 +299,12 @@ input[type="range"]::-moz-range-thumb {
 @media (hover: none), (max-width: 600px) {
   .shortcuts {
     display: none !important;
+  }
+}
+
+@media (min-width: 801px) {
+  body {
+    background-attachment: fixed;
   }
 }
 

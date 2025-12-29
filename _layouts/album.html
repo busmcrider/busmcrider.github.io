@@ -8,15 +8,13 @@
   <title>Loading...</title>
   <link rel="stylesheet" href="../shared/style.css">
   {% assign album_name = page.url | remove_first: '/' | remove_last: '/' | url_decode %}
-  <link rel="preload" as="image" href="{{ album_name }}.jpeg" fetchpriority="high">
-  <link rel="preload" as="image" href="{{ album_name }}.jpg" fetchpriority="high">
+  <link rel="preload" as="image" href="{{ album_name }}.jpeg">
+  <link rel="preload" as="image" href="{{ album_name }}.jpg">
 </head>
 
-  <body>
+<body>
 
-    <img id="bg-image" class="bg-loading" src="{{ album_name }}.jpeg" alt="" onerror="this.src='{{ album_name }}.jpg'">
-
-    <div class="player">
+  <div class="player">
 
     <div class="album-header">
       <h1 class="album-title" id="album-title">Album Title</h1>
