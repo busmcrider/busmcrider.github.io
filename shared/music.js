@@ -236,6 +236,16 @@ if (!albumConfig) {
     favicon.href = dataUrl;
   }
 
+  function setAppleTouchIcon(dataUrl) {
+    let icon = document.querySelector("link[rel='apple-touch-icon']");
+    if (!icon) {
+      icon = document.createElement('link');
+      icon.rel = 'apple-touch-icon';
+      document.head.appendChild(icon);
+    }
+    icon.href = dataUrl;
+  }
+
   function generateFavicon(imageUrl, cacheKey = null) {
     const img = new Image();
     img.crossOrigin = 'anonymous';
@@ -286,8 +296,30 @@ if (!albumConfig) {
                        window.matchMedia('(hover: none)').matches;
 
       if (isMobile) {
-        // Mobile: use image directly for better compatibility
-        setFaviconHref(albumConfig.background);
+        // Mobile: generate PNG data URI for Chrome compatibility and home screen icons
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          canvas.width = 180;
+          canvas.height = 180;
+
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, 180, 180);
+
+          const faviconUrl = canvas.toDataURL('image/png');
+
+          // Set both regular favicon (for browser tabs) and apple-touch-icon (for home screen)
+          setFaviconHref(faviconUrl);
+          setAppleTouchIcon(faviconUrl);
+        };
+
+        img.onerror = function() {
+          console.warn('Could not load image for mobile favicon:', albumConfig.background);
+        };
+
+        img.src = albumConfig.background;
       } else {
         // Desktop: generate high-quality favicon (cached via localStorage)
         const cacheKey = `favicon_${albumConfig.title}`;
