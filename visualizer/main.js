@@ -37,7 +37,7 @@ function createWorld() {
   };
 }
 
-export function updateWorld(world, audio) {
+function updateWorld(world, audio) {
   world.scrollY += 0.5 + audio.bass * 2;
   world.cooldown--;
 
