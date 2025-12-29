@@ -1,13 +1,5 @@
 # Keep existing URL structure
 permalink: pretty
-
-# Collections configuration to serve albums from _music/ folder
-collections:
-  music:
-    output: true
-    permalink: /:title/
-
 exclude:
   - .gitignore
   - .git
-  
