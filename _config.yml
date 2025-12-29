@@ -1,0 +1,7 @@
+# Keep existing URL structure
+permalink: pretty
+
+exclude:
+  - README.md
+  - .gitignore
+  - .git
