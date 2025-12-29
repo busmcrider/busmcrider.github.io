@@ -287,9 +287,8 @@ if (!albumConfig) {
     if (albumTitle) albumTitle.textContent = albumConfig.title;
     if (albumArtist) albumArtist.textContent = albumConfig.artist;
 
-    // Set background image
+    // Set favicon image
     if (albumConfig.background) {
-      document.body.style.backgroundImage = `url('${albumConfig.background}')`;
 
       // Detect mobile for favicon strategy
       const isMobile = window.matchMedia('(max-width: 600px)').matches ||

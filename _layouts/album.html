@@ -7,15 +7,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Loading...</title>
   <link rel="stylesheet" href="../shared/style.css">
-  {% assign album_name = page.url | remove_first: '/' | remove_last: '/' | url_decode %}
-  <link rel="preload" as="image" href="{{ album_name }}.jpeg">
-  <link rel="preload" as="image" href="{{ album_name }}.jpg">
 </head>
 
-<body>
+<body{% if page.background %} style="background-image: url('{{ page.background }}')"{% endif %}>
 
   <div class="player">
-
     <div class="album-header">
       <h1 class="album-title" id="album-title">Album Title</h1>
       <p class="album-artist" id="album-artist">Artist Name</p>
