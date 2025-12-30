@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Audio Visualizer - Neural Network</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <div class="controls">
+    <button id="startBtn">Start Visualizer</button>
+
+    <div class="track-controls">
+      <button id="prevBtn">◀</button>
+      <div id="trackTitle">The Cosmic Groove Chronicles</div>
+      <button id="nextBtn">▶</button>
+    </div>
+
+    <button id="symmetryBtn">Symmetry: None</button>
+    <button id="colorBtn">Color: Monochrome</button>
+    <button id="nodeCountBtn">Nodes: 16</button>
+    <button id="arrangementBtn">Layout: Circle</button>
+    <div class="slider-control">
+      <label for="correlationSlider">
+        Correlation: <span id="correlationValue">0.66</span>
+      </label>
+      <input type="range" id="correlationSlider" min="0" max="1" step="0.01" value="0.66">
+    </div>
+    <div class="info">
+      <span id="status">Click Start to begin</span>
+    </div>
+  </div>
+
+  <audio id="audio" preload="auto">
+  </audio>
+
+  <script src="symmetry.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

@@ -356,6 +356,8 @@ function setupCanvas() {
   canvas.height = rect.height * dpr;
 
   ctx.scale(dpr, dpr);
+  canvas.style.width = rect.width + 'px';
+  canvas.style.height = rect.height + 'px';
 }
 
 function setupNodes() {

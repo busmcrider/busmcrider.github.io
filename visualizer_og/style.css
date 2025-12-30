@@ -1,0 +1,152 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #111;
+  font-family: system-ui, sans-serif;
+  color: #eee;
+}
+
+#canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.controls {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+button {
+  background: #222;
+  border: 1px solid #444;
+  color: #eee;
+  padding: 12px 24px;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: system-ui, sans-serif;
+}
+
+button:hover {
+  background: #333;
+  border-color: #666;
+}
+
+button:active {
+  background: #444;
+}
+
+.track-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #222;
+  border: 1px solid #444;
+  padding: 8px 12px;
+}
+
+.track-controls button {
+  padding: 8px 12px;
+  min-width: 40px;
+  font-size: 16px;
+}
+
+#trackTitle {
+  flex: 1;
+  text-align: center;
+  font-size: 14px;
+  color: #4a9eff;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.slider-control {
+  background: #222;
+  border: 1px solid #444;
+  padding: 12px;
+  font-size: 14px;
+}
+
+.slider-control label {
+  display: block;
+  margin-bottom: 8px;
+  color: #eee;
+}
+
+#correlationValue {
+  color: #4a9eff;
+  font-weight: 600;
+}
+
+input[type="range"] {
+  width: 100%;
+  height: 4px;
+  background: #444;
+  outline: none;
+  border-radius: 2px;
+  -webkit-appearance: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #4a9eff;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: #4a9eff;
+  cursor: pointer;
+  border-radius: 50%;
+  border: none;
+}
+
+input[type="range"]:hover::-webkit-slider-thumb {
+  background: #6bb0ff;
+}
+
+input[type="range"]:hover::-moz-range-thumb {
+  background: #6bb0ff;
+}
+
+.info {
+  background: rgba(0, 0, 0, 0.7);
+  padding: 8px 12px;
+  font-size: 12px;
+  border: 1px solid #333;
+}
+
+#status {
+  opacity: 0.8;
+}
+
+@media (max-width: 600px) {
+  .controls {
+    top: 10px;
+    left: 10px;
+  }
+
+  button {
+    padding: 10px 18px;
+    font-size: 13px;
+  }
+}
