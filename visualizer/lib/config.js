@@ -1,14 +1,15 @@
 export const AUDIO_CONFIG = {
   fftSize: 2048,
-  smoothing: 0.82,
+  smoothing: 0.8,
   minFrameTime: 1000 / 120,
 };
 
 export const VISUAL_CONFIG = {
-  nodeRadius: { min: 2, max: 14 },
-  ringRadius: 0.38,
-  connectionWidth: { min: 0.5, max: 3 },
+  nodeRadius: { min: 2.5, max: 16 },
+  ringRadius: 0.35,
+  connectionWidth: { min: 0.5, max: 3.6 },
   historyDepth: 30,
+  historyRange: { min: 6, max: 60 },
 };
 
 export const FREQUENCY_BANDS = [

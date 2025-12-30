@@ -8,7 +8,7 @@ import {
 } from './lib/config.js';
 import { assignSymmetry, getNextSymmetryMode, getSymmetryLabel, SYMMETRY_MODES } from './lib/symmetry.js';
 import { layoutNode, resizeCanvas } from './lib/geometry.js';
-import { calculateBandAmplitudes, connectionStrength, smoothBands } from './lib/correlation.js';
+import { appendHistory, calculateBandAmplitudes, correlationMatrix } from './lib/correlation.js';
 import { connectionColor, nodeColors } from './lib/colors.js';
 
 const canvas = document.getElementById('canvas');
@@ -25,6 +25,8 @@ const nodeCountBtn = document.getElementById('nodeCountBtn');
 const arrangementBtn = document.getElementById('arrangementBtn');
 const correlationSlider = document.getElementById('correlationSlider');
 const correlationValue = document.getElementById('correlationValue');
+const historySlider = document.getElementById('historySlider');
+const historyValue = document.getElementById('historyValue');
 const trackTitle = document.getElementById('trackTitle');
 const status = document.getElementById('status');
 const trackListEl = document.getElementById('trackList');
@@ -32,6 +34,8 @@ const playlistWrapper = document.querySelector('.playlist-wrapper');
 const playlistToggle = document.getElementById('playlist-toggle');
 const playlistChevron = document.getElementById('playlist-chevron');
 const playlistTitle = document.getElementById('playlist-title');
+const controls = document.querySelector('.controls');
+const controlsToggle = document.getElementById('controlsToggle');
 
 function getAlbumConfigs() {
   if (Array.isArray(window.albumConfigs)) return window.albumConfigs;
@@ -48,6 +52,7 @@ const state = {
   colorMode: COLOR_MODES[0],
   symmetry: SYMMETRY_MODES.NONE,
   correlationThreshold: parseFloat(correlationSlider.value),
+  historyDepth: VISUAL_CONFIG.historyDepth,
   isRunning: false,
   lastFrame: 0,
   nodes: [],
@@ -71,6 +76,7 @@ function init() {
   populateAlbumSelect();
   setAlbum(state.albumIndex, false);
   updateCorrelationThreshold(state.correlationThreshold);
+  updateHistoryDepth(state.historyDepth);
 
   resizeCanvas(canvas, ctx);
   buildNodes();
@@ -122,6 +128,8 @@ function setAlbum(index, continuePlayback) {
     title: track.title,
     src: albumAssetPath(album, track.src),
   }));
+
+  state.frequencyHistory = [];
 
   albumSelect.value = String(state.albumIndex);
   updateBackground(album);
@@ -227,6 +235,7 @@ function updateTrackUI() {
 function toggleRunState() {
   if (!state.isRunning) {
     setupAudio();
+    state.audio.ctx.resume();
     audioEl.play();
     state.isRunning = true;
     startBtn.textContent = 'Pause Visualizer';
@@ -271,6 +280,15 @@ function updateCorrelationThreshold(value) {
   correlationValue.textContent = value.toFixed(2);
 }
 
+function updateHistoryDepth(value) {
+  state.historyDepth = value;
+  historyValue.textContent = `${value} frames`;
+  if (historySlider) historySlider.value = String(value);
+  if (state.frequencyHistory.length > value) {
+    state.frequencyHistory = state.frequencyHistory.slice(-value);
+  }
+}
+
 function draw() {
   const now = performance.now();
   if (now - state.lastFrame < AUDIO_CONFIG.minFrameTime) {
@@ -284,11 +302,12 @@ function draw() {
   state.audio.analyser.getByteFrequencyData(state.audio.dataArray);
   const nyquist = state.audio.ctx.sampleRate / 2;
   const bandValues = calculateBandAmplitudes(state.audio.dataArray, FREQUENCY_BANDS, nyquist);
-  const { smoothed, nextHistory } = smoothBands(state.frequencyHistory, bandValues, VISUAL_CONFIG.historyDepth);
-  state.frequencyHistory = nextHistory;
+  state.frequencyHistory = appendHistory(state.frequencyHistory, bandValues, state.historyDepth);
 
-  updateNodes(smoothed);
-  drawConnections();
+  const correlations = correlationMatrix(state.frequencyHistory, state.nodes);
+
+  updateNodes(bandValues);
+  drawConnections(correlations);
   drawNodes();
 
   state.animationId = requestAnimationFrame(draw);
@@ -297,8 +316,9 @@ function draw() {
 function updateNodes(bandValues) {
   state.nodes.forEach(node => {
     const bandValue = bandValues[node.bandIndex];
-    node.target = bandValue / 255;
-    node.amplitude += (node.target - node.amplitude) * 0.22;
+    const normalized = Math.pow(bandValue, 1.05);
+    node.target = normalized;
+    node.amplitude += (node.target - node.amplitude) * 0.2;
   });
 }
 
@@ -317,17 +337,19 @@ function drawNodes() {
   }
 }
 
-function drawConnections() {
+function drawConnections(correlations) {
+  if (!correlations) return;
   ctx.lineCap = 'round';
 
   for (let i = 0; i < state.nodes.length; i++) {
     for (let j = i + 1; j < state.nodes.length; j++) {
       const a = state.nodes[i];
       const b = state.nodes[j];
-      const correlation = connectionStrength(a.amplitude, b.amplitude);
+      const correlation = Math.abs(correlations[i][j]);
       if (correlation < state.correlationThreshold) continue;
 
-      const width = VISUAL_CONFIG.connectionWidth.min + correlation * (VISUAL_CONFIG.connectionWidth.max - VISUAL_CONFIG.connectionWidth.min);
+      const normalizedCorr = (correlation - state.correlationThreshold) / (1 - state.correlationThreshold);
+      const width = VISUAL_CONFIG.connectionWidth.min + normalizedCorr * (VISUAL_CONFIG.connectionWidth.max - VISUAL_CONFIG.connectionWidth.min);
       ctx.lineWidth = width;
 
       const bandIndexAverage = (a.bandIndex + b.bandIndex) / 2;
@@ -360,9 +382,17 @@ function bindControls() {
   nodeCountBtn.addEventListener('click', cycleNodeCount);
   arrangementBtn.addEventListener('click', cycleArrangement);
   correlationSlider.addEventListener('input', () => updateCorrelationThreshold(parseFloat(correlationSlider.value)));
+  historySlider.addEventListener('input', () => updateHistoryDepth(parseInt(historySlider.value, 10)));
   albumSelect.addEventListener('change', (event) => {
     const nextAlbumIndex = Number(event.target.value);
     setAlbum(nextAlbumIndex, state.isRunning);
+  });
+
+  controlsToggle?.addEventListener('click', () => {
+    controls.classList.toggle('collapsed');
+    const collapsed = controls.classList.contains('collapsed');
+    controlsToggle.textContent = collapsed ? 'Show controls' : 'Hide controls';
+    controlsToggle.setAttribute('aria-pressed', String(collapsed));
   });
 }
 

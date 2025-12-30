@@ -8,23 +8,24 @@
 
 body {
   margin: 0;
-  padding: 24px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 24px 40px 96px;
   color: #eee;
   font-family: system-ui, -apple-system, sans-serif;
-  background: #060808 no-repeat center center;
+  background: no-repeat center center;
   background-size: cover;
+  position: relative;
 }
 
 body::before {
-  content: "";
+  content: '';
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  z-index: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: -1;
 }
 
 canvas {
@@ -32,53 +33,104 @@ canvas {
   inset: 0;
   width: 100vw;
   height: 100vh;
-  background: radial-gradient(circle at 25% 30%, #0f1520, #05070b 65%);
+  background: radial-gradient(circle at 30% 30%, #0c1017, #030509 65%);
   display: block;
-  z-index: -1;
+  z-index: 0;
   pointer-events: none;
+}
+
+.controls-toggle {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 3;
+  border-radius: 999px;
+  padding: 10px 14px;
+  background: #0f1116;
+  border: 1px solid #3a414f;
+  color: #eee;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
 }
 
 .controls {
   position: relative;
   z-index: 1;
-  width: min(760px, 100%);
-  margin-top: 12px;
-  padding: 20px 20px 24px;
-  background: rgba(12, 12, 12, 0.82);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(8px);
+  width: min(780px, 100%);
+  margin-top: 20px;
+  padding: 18px 20px 22px;
+  background: rgba(10, 12, 16, 0.88);
+  border: 1px solid #2f3543;
+  border-radius: 16px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
 }
 
+.controls select,
 .controls button,
-.controls select {
-  background: rgba(20, 20, 20, 0.85);
-  color: #f0f4ff;
-  border: 1px solid #3b4658;
-  border-radius: 10px;
-  padding: 10px 12px;
-  cursor: pointer;
-  transition: border-color 0.15s ease, transform 0.08s ease;
+.controls input,
+.controls label {
+  font: inherit;
 }
 
-.controls button:hover,
-.controls select:hover {
-  border-color: #7ea8ff;
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.eyebrow {
+  margin: 0 0 2px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 12px;
+  color: #9fb6ff;
+}
+
+.panel-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.controls button {
+  background: #0f1116;
+  border: 1px solid #3a414f;
+  color: inherit;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.controls button:hover {
+  border-color: #4f5a70;
+  transform: translateY(-1px);
 }
 
 .controls button:active {
-  transform: translateY(1px);
+  transform: translateY(0);
+}
+
+.controls button.primary {
+  background: linear-gradient(135deg, #3a6ff8, #2748b8);
+  border-color: #3a6ff8;
 }
 
 .controls select {
   width: 100%;
+  background: #0f1116;
+  color: inherit;
+  border-radius: 10px;
+  padding: 10px 12px;
+  border: 1px solid #3a414f;
 }
 
 .control-top {
   display: flex;
   gap: 12px;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
   margin-bottom: 14px;
 }
@@ -95,6 +147,15 @@ canvas {
   align-items: center;
   gap: 10px;
   margin-bottom: 12px;
+  background: rgba(14, 16, 22, 0.8);
+  border: 1px solid #2f3543;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.track-controls button {
+  padding: 8px 12px;
+  font-size: 15px;
 }
 
 .track-title {
@@ -105,10 +166,10 @@ canvas {
 
 .playlist-wrapper {
   margin-bottom: 14px;
-  border: 1px solid #2c3340;
-  border-radius: 10px;
+  border: 1px solid #2f3543;
+  border-radius: 12px;
   overflow: hidden;
-  background: rgba(15, 17, 22, 0.9);
+  background: rgba(12, 14, 20, 0.9);
 }
 
 .playlist-header {
@@ -117,10 +178,11 @@ canvas {
   align-items: center;
   justify-content: space-between;
   padding: 10px 12px;
-  background: rgba(255, 255, 255, 0.04);
+  background: #0f1116;
   border: none;
-  border-bottom: 1px solid #2c3340;
+  border-bottom: 1px solid #2f3543;
   color: inherit;
+  cursor: pointer;
 }
 
 #trackList,
@@ -134,6 +196,7 @@ canvas {
   margin: 0;
   max-height: 260px;
   overflow-y: auto;
+  scroll-behavior: smooth;
 }
 
 .playlist-wrapper.collapsed #trackList {
@@ -144,28 +207,44 @@ canvas {
 #trackList li {
   padding: 10px 12px;
   cursor: pointer;
-  border-bottom: 1px solid #1b2230;
+  border-bottom: 1px solid #1f1f1f;
+  transition: background 0.12s ease;
 }
 
 #trackList li:last-child {
   border-bottom: none;
 }
 
+#trackList li:hover {
+  background: #1d2330;
+}
+
 #trackList li.active {
-  background: rgba(88, 137, 255, 0.12);
+  background: #2f3a50;
 }
 
 .action-buttons {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 10px;
-  margin: 12px 0;
+  margin: 12px 0 6px;
+}
+
+.slider-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 8px;
 }
 
 .slider-control {
   display: grid;
   gap: 6px;
-  margin-bottom: 12px;
+  padding: 10px 12px;
+  background: rgba(14, 16, 22, 0.8);
+  border: 1px solid #2f3543;
+  border-radius: 10px;
+  font-size: 14px;
 }
 
 .slider-control input[type="range"] {
@@ -176,11 +255,35 @@ canvas {
   color: #d8e4ff;
   font-size: 14px;
   line-height: 1.4;
+  background: rgba(14, 16, 22, 0.8);
+  border: 1px solid #2f3543;
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-top: 10px;
 }
 
-@media (max-width: 640px) {
+.controls.collapsed {
+  padding: 16px;
+  width: auto;
+}
+
+.controls.collapsed .controls-body {
+  display: none;
+}
+
+.controls.collapsed::after {
+  content: 'Controls hidden';
+  color: #bbb;
+  font-size: 14px;
+}
+
+.controls.collapsed ~ .controls-toggle {
+  opacity: 0.95;
+}
+
+@media (max-width: 720px) {
   body {
-    padding: 14px;
+    padding: 18px 16px 80px;
   }
 
   .controls {
@@ -190,5 +293,10 @@ canvas {
   .control-top {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .panel-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
