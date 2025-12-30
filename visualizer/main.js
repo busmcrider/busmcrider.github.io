@@ -1,11 +1,11 @@
 // Configuration
-let nodeCount = 24;
+let nodeCount = 16;
 const HISTORY_DEPTH = 30; // Frames to keep for correlation (~0.5s at 60fps)
-let correlationThreshold = 0.3; // Min correlation to draw connection
+let correlationThreshold = 0.66; // Min correlation to draw connection
 
 const config = {
   // Visual parameters (easy to adjust)
-  nodeRadius: { min: 8, max: 32 },
+  nodeRadius: { min: 0, max: 16 },
   nodeColor: '#eee',
   nodeGlowColor: '#eee',
   connectionColor: '#eee',
@@ -24,7 +24,7 @@ const config = {
 
 // Color system configuration
 const colorConfig = {
-  mode: 'frequency', // 'monochrome' | 'frequency'
+  mode: 'monochrome', // 'monochrome' | 'frequency'
 
   // Frequency color mode settings
   frequencyHueRange: [0, 270], // Red (bass) to purple (treble)
@@ -120,61 +120,90 @@ let animationId = null;
 let lastFrameTime = 0;
 let isRunning = false;
 let currentSymmetryMode = SYMMETRY_MODES.NONE;
-let currentArrangement = 'circle'; // 'circle' | 'edge' | 'spiral' | 'fibonacci'
+let currentArrangement = 'circle';
+
+// Track management
+let trackIndex = 0;
+const gnosifyTracks = [
+  { title: "The Cosmic Groove Chronicles", src: "../Gnosify/audio/1 - The Cosmic Groove Chronicles.mp3" },
+  { title: "War of Troy", src: "../Gnosify/audio/2 - War of Troy.mp3" },
+  { title: "Shadows on the Wall", src: "../Gnosify/audio/3 - Shadows on the Wall.mp3" },
+  { title: "Cosmic Blueprints", src: "../Gnosify/audio/4 - Cosmic Blueprints.mp3" },
+  { title: "Enoch 2", src: "../Gnosify/audio/5 - Enoch 2.mp3" },
+  { title: "Trojan Odyssey", src: "../Gnosify/audio/6 - Trojan Odyssey.mp3" },
+  { title: "The Apocryphon Flow", src: "../Gnosify/audio/7 - The Apocryphon Flow.mp3" }
+];
 
 // Arrangement calculation functions
 function getNodePosition(index, total, rect) {
   const centerX = rect.width / 2;
   const centerY = rect.height / 2;
-  const radius = Math.min(rect.width, rect.height) * config.ringRadius;
 
   switch (currentArrangement) {
     case 'circle':
-      // Original: circle at center
+      // Circle touches viewport edges
+      const padding = 30; // Space for max node size + buffer
+      const circleRadius = (Math.min(rect.width, rect.height) / 2) - padding;
       const angleCircle = (index / total) * Math.PI * 2 - Math.PI / 2;
       return {
-        x: centerX + Math.cos(angleCircle) * radius,
-        y: centerY + Math.sin(angleCircle) * radius
+        x: centerX + Math.cos(angleCircle) * circleRadius,
+        y: centerY + Math.sin(angleCircle) * circleRadius
       };
 
     case 'edge':
       // Around viewport perimeter with padding
-      const padding = 20;
-      const w = rect.width - padding * 2;
-      const h = rect.height - padding * 2;
+      const edgePadding = 30;
+      const w = rect.width - edgePadding * 2;
+      const h = rect.height - edgePadding * 2;
       const perimeter = (w + h) * 2;
       const segmentLength = perimeter / total;
       const distance = index * segmentLength;
 
       // Travel around rectangle: top → right → bottom → left
       if (distance < w) {
-        // Top edge
-        return { x: padding + distance, y: padding };
+        return { x: edgePadding + distance, y: edgePadding };
       } else if (distance < w + h) {
-        // Right edge
-        return { x: padding + w, y: padding + (distance - w) };
+        return { x: edgePadding + w, y: edgePadding + (distance - w) };
       } else if (distance < w * 2 + h) {
-        // Bottom edge
-        return { x: padding + w - (distance - w - h), y: padding + h };
+        return { x: edgePadding + w - (distance - w - h), y: edgePadding + h };
       } else {
-        // Left edge
-        return { x: padding, y: padding + h - (distance - w * 2 - h) };
+        return { x: edgePadding, y: edgePadding + h - (distance - w * 2 - h) };
       }
 
-    case 'spiral':
-      // Spiral outward clockwise from center
-      const angleSpiral = (index / total) * Math.PI * 4; // 2 full rotations
-      const spiralRadius = (index / total) * radius * 1.5;
+    case 'grid':
+      // Aspect-ratio aware grid layout
+      const gridPadding = 40;
+      const viewportRatio = rect.width / rect.height;
+      let cols, rows;
+
+      if (viewportRatio > 1) {
+        // Landscape - more columns
+        cols = Math.ceil(Math.sqrt(total * viewportRatio));
+        rows = Math.ceil(total / cols);
+      } else {
+        // Portrait - more rows
+        rows = Math.ceil(Math.sqrt(total / viewportRatio));
+        cols = Math.ceil(total / rows);
+      }
+
+      const col = index % cols;
+      const row = Math.floor(index / cols);
+
+      const cellWidth = (rect.width - gridPadding * 2) / cols;
+      const cellHeight = (rect.height - gridPadding * 2) / rows;
+
       return {
-        x: centerX + Math.cos(angleSpiral) * spiralRadius,
-        y: centerY + Math.sin(angleSpiral) * spiralRadius
+        x: gridPadding + cellWidth * (col + 0.5),
+        y: gridPadding + cellHeight * (row + 0.5)
       };
 
     case 'fibonacci':
-      // Fibonacci/golden spiral (counterclockwise)
+      // Fibonacci/golden spiral (counterclockwise) with boundary check
+      const fibPadding = 30;
+      const maxFibRadius = (Math.min(rect.width, rect.height) / 2) - fibPadding;
       const goldenAngle = Math.PI * (3 - Math.sqrt(5)); // ~137.5 degrees
       const angleFib = -index * goldenAngle; // Negative for counterclockwise
-      const fibRadius = Math.sqrt(index / total) * radius * 1.8; // Square root for smooth distribution
+      const fibRadius = Math.sqrt(index / total) * maxFibRadius;
       return {
         x: centerX + Math.cos(angleFib) * fibRadius,
         y: centerY + Math.sin(angleFib) * fibRadius
@@ -183,6 +212,125 @@ function getNodePosition(index, total, rect) {
     default:
       return { x: centerX, y: centerY };
   }
+}
+
+// Position-based symmetry assignment
+function assignSymmetryBands(nodes, mode, rect) {
+  const centerX = rect.width / 2;
+  const centerY = rect.height / 2;
+
+  if (mode === SYMMETRY_MODES.NONE) {
+    // Sequential assignment
+    nodes.forEach((node, i) => {
+      node.bandIndex = i % frequencyBands.length;
+    });
+    return;
+  }
+
+  if (mode === SYMMETRY_MODES.HORIZONTAL) {
+    // Mirror left/right based on x-coordinate
+    const sortedByX = [...nodes].sort((a, b) => {
+      const distA = Math.abs(a.x - centerX);
+      const distB = Math.abs(b.x - centerX);
+      return distA - distB;
+    });
+
+    const bandMap = new Map();
+    sortedByX.forEach((node, i) => {
+      const mirrorIndex = Math.floor(i / 2);
+      const bandIndex = mirrorIndex % frequencyBands.length;
+      bandMap.set(node, bandIndex);
+    });
+
+    nodes.forEach(node => {
+      node.bandIndex = bandMap.get(node);
+    });
+    return;
+  }
+
+  if (mode === SYMMETRY_MODES.VERTICAL) {
+    // Mirror top/bottom based on y-coordinate
+    const sortedByY = [...nodes].sort((a, b) => {
+      const distA = Math.abs(a.y - centerY);
+      const distB = Math.abs(b.y - centerY);
+      return distA - distB;
+    });
+
+    const bandMap = new Map();
+    sortedByY.forEach((node, i) => {
+      const mirrorIndex = Math.floor(i / 2);
+      const bandIndex = mirrorIndex % frequencyBands.length;
+      bandMap.set(node, bandIndex);
+    });
+
+    nodes.forEach(node => {
+      node.bandIndex = bandMap.get(node);
+    });
+    return;
+  }
+
+  if (mode === SYMMETRY_MODES.QUAD) {
+    // 4-way symmetry: group by quadrant proximity
+    const bandMap = new Map();
+    const processed = new Set();
+
+    nodes.forEach(node => {
+      if (processed.has(node)) return;
+
+      // Find nodes in similar positions across all quadrants
+      const dx = node.x - centerX;
+      const dy = node.y - centerY;
+
+      const mirrorNodes = [node];
+      nodes.forEach(other => {
+        if (other === node || processed.has(other)) return;
+        const odx = other.x - centerX;
+        const ody = other.y - centerY;
+
+        // Check if node is a mirror across axes
+        if ((Math.abs(Math.abs(dx) - Math.abs(odx)) < 10) &&
+            (Math.abs(Math.abs(dy) - Math.abs(ody)) < 10)) {
+          mirrorNodes.push(other);
+        }
+      });
+
+      // Assign same band to all mirror nodes
+      const bandIndex = (bandMap.size) % frequencyBands.length;
+      mirrorNodes.forEach(n => {
+        bandMap.set(n, bandIndex);
+        processed.add(n);
+      });
+    });
+
+    nodes.forEach(node => {
+      node.bandIndex = bandMap.get(node) || 0;
+    });
+    return;
+  }
+
+  if (mode === SYMMETRY_MODES.RADIAL) {
+    // Concentric rings: group by distance from center
+    const nodesWithDist = nodes.map(node => {
+      const dx = node.x - centerX;
+      const dy = node.y - centerY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      return { node, dist };
+    });
+
+    nodesWithDist.sort((a, b) => a.dist - b.dist);
+
+    const nodesPerBand = Math.ceil(nodes.length / frequencyBands.length);
+    nodesWithDist.forEach((item, i) => {
+      const bandIndex = Math.floor(i / nodesPerBand) % frequencyBands.length;
+      item.node.bandIndex = bandIndex;
+    });
+    return;
+  }
+
+  // Fallback
+  nodes.forEach((node, i) => {
+    node.bandIndex = i % frequencyBands.length;
+  });
 }
 
 // Initialize
@@ -217,26 +365,50 @@ function setupNodes() {
 
   nodes = [];
 
+  // First, position all nodes
   for (let i = 0; i < nodeCount; i++) {
-    // Get position based on current arrangement
     const pos = getNodePosition(i, nodeCount, rect);
-
-    // Get band index based on current symmetry mode
-    const bandIndex = getSymmetryBandIndex(
-      i,
-      nodeCount,
-      frequencyBands.length,
-      currentSymmetryMode
-    );
 
     nodes.push({
       x: pos.x,
       y: pos.y,
       amplitude: 0,
       targetAmplitude: 0,
-      bandIndex: bandIndex
+      bandIndex: 0 // Will be assigned by symmetry function
     });
   }
+
+  // Then assign bands based on positions and symmetry mode
+  assignSymmetryBands(nodes, currentSymmetryMode, rect);
+}
+
+function loadTrack(index) {
+  trackIndex = index;
+  audio.src = gnosifyTracks[index].src;
+  updateTrackDisplay();
+
+  // If visualizer is running, keep it running
+  if (isRunning) {
+    audio.play();
+  }
+}
+
+function nextTrack() {
+  const nextIndex = (trackIndex + 1) % gnosifyTracks.length;
+  loadTrack(nextIndex);
+}
+
+function prevTrack() {
+  const prevIndex = (trackIndex - 1 + gnosifyTracks.length) % gnosifyTracks.length;
+  loadTrack(prevIndex);
+}
+
+function updateTrackDisplay() {
+  const track = gnosifyTracks[trackIndex];
+  document.getElementById('trackTitle').textContent = track.title;
+  document.getElementById('status').textContent = isRunning
+    ? `Visualizing: ${track.title}`
+    : 'Paused';
 }
 
 function setupAudio() {
@@ -252,6 +424,14 @@ function setupAudio() {
 
   const bufferLength = analyser.frequencyBinCount;
   dataArray = new Uint8Array(bufferLength);
+
+  // Auto-advance to next track when current ends
+  audio.addEventListener('ended', () => {
+    nextTrack();
+  });
+
+  // Load first track
+  loadTrack(0);
 }
 
 function getFrequencyBandData() {
@@ -485,7 +665,7 @@ function start() {
 
   audio.play();
   isRunning = true;
-  document.getElementById('status').textContent = 'Visualizing: Cosmic Blueprints';
+  updateTrackDisplay();
   document.getElementById('startBtn').textContent = 'Stop';
 
   animate(0);
@@ -496,7 +676,7 @@ function stop() {
 
   audio.pause();
   isRunning = false;
-  document.getElementById('status').textContent = 'Paused';
+  updateTrackDisplay();
   document.getElementById('startBtn').textContent = 'Start Visualizer';
 
   if (animationId) {
@@ -512,6 +692,14 @@ document.getElementById('startBtn').addEventListener('click', () => {
   } else {
     start();
   }
+});
+
+document.getElementById('prevBtn').addEventListener('click', () => {
+  prevTrack();
+});
+
+document.getElementById('nextBtn').addEventListener('click', () => {
+  nextTrack();
 });
 
 document.getElementById('symmetryBtn').addEventListener('click', () => {
@@ -550,12 +738,12 @@ document.getElementById('nodeCountBtn').addEventListener('click', () => {
 });
 
 document.getElementById('arrangementBtn').addEventListener('click', () => {
-  // Cycle through arrangements: circle → edge → spiral → fibonacci → circle
-  const arrangements = ['circle', 'edge', 'spiral', 'fibonacci'];
+  // Cycle through arrangements: circle → edge → grid → fibonacci → circle
+  const arrangements = ['circle', 'edge', 'grid', 'fibonacci'];
   const labels = {
     circle: 'Circle',
     edge: 'Edge',
-    spiral: 'Spiral ↻',
+    grid: 'Grid',
     fibonacci: 'Fibonacci ↺'
   };
 
