@@ -1,5 +1,5 @@
 // Configuration
-const NODE_COUNT = 8; // Easy to adjust - try 16 for denser web
+const NODE_COUNT = 24;
 const HISTORY_DEPTH = 30; // Frames to keep for correlation (~0.5s at 60fps)
 const CORRELATION_THRESHOLD = 0.3; // Min correlation to draw connection
 
@@ -22,6 +22,21 @@ const config = {
   minFrameTime: 1000 / 120 // Cap at 120fps
 };
 
+// Color system configuration
+const colorConfig = {
+  mode: 'frequency', // 'monochrome' | 'frequency'
+
+  // Frequency color mode settings
+  frequencyHueRange: [0, 270], // Red (bass) to purple (treble)
+  baseLightness: 70, // Constant brightness (good visibility on dark bg)
+  minSaturation: 0, // At amplitude 0 (white/desaturated)
+  maxSaturation: 100, // At amplitude 1 (full color)
+
+  // Glow settings
+  glowSaturation: 80, // Slightly less saturated than core
+  glowLightness: 60,
+};
+
 // Utility: Expand shorthand hex colors (#eee -> #eeeeee)
 function expandHexColor(hex) {
   hex = hex.replace('#', '');
@@ -29,6 +44,60 @@ function expandHexColor(hex) {
     hex = hex.split('').map(c => c + c).join('');
   }
   return '#' + hex;
+}
+
+// Color utilities
+function hslToString(h, s, l, a = 1) {
+  if (a < 1) {
+    return `hsla(${h}, ${s}%, ${l}%, ${a})`;
+  }
+  return `hsl(${h}, ${s}%, ${l}%)`;
+}
+
+function parseHSL(hslString) {
+  // Parse 'hsl(120, 100%, 50%)' or 'hsla(120, 100%, 50%, 0.5)'
+  const match = hslString.match(/hsla?\(([^,]+),\s*([^,]+)%?,\s*([^,]+)%?(?:,\s*([^)]+))?\)/);
+  if (!match) return { h: 0, s: 0, l: 0, a: 1 };
+
+  return {
+    h: parseFloat(match[1]),
+    s: parseFloat(match[2]),
+    l: parseFloat(match[3]),
+    a: match[4] ? parseFloat(match[4]) : 1
+  };
+}
+
+function getNodeColor(node, forGlow = false) {
+  if (colorConfig.mode === 'monochrome') {
+    return forGlow ? config.nodeGlowColor : config.nodeColor;
+  }
+
+  if (colorConfig.mode === 'frequency') {
+    const band = frequencyBands[node.bandIndex];
+    const avgFreq = (band.min + band.max) / 2;
+
+    // Map frequency to hue using logarithmic scale (musical)
+    const freqLog = Math.log10(avgFreq);
+    const minLog = Math.log10(20);
+    const maxLog = Math.log10(20000);
+    const hueT = (freqLog - minLog) / (maxLog - minLog);
+    const hue = colorConfig.frequencyHueRange[0] +
+                (colorConfig.frequencyHueRange[1] - colorConfig.frequencyHueRange[0]) * hueT;
+
+    // Map amplitude to saturation (fades to white at low amplitude)
+    const sat = colorConfig.minSaturation +
+                (colorConfig.maxSaturation - colorConfig.minSaturation) * node.amplitude;
+
+    if (forGlow) {
+      // Glow is slightly less saturated and darker
+      const glowSat = Math.min(sat, colorConfig.glowSaturation);
+      return hslToString(hue, glowSat, colorConfig.glowLightness);
+    }
+
+    return hslToString(hue, sat, colorConfig.baseLightness);
+  }
+
+  return '#eee'; // Fallback
 }
 
 // Frequency bands (Hz ranges)
@@ -85,14 +154,21 @@ function setupNodes() {
   const radius = Math.min(rect.width, rect.height) * config.ringRadius;
 
   nodes = [];
+  const nodesPerBand = Math.ceil(NODE_COUNT / frequencyBands.length);
+
   for (let i = 0; i < NODE_COUNT; i++) {
     const angle = (i / NODE_COUNT) * Math.PI * 2 - Math.PI / 2; // Start at top
+
+    // Assign bands to create radial symmetry
+    // Nodes are distributed evenly, each band gets multiple nodes
+    const bandIndex = Math.floor(i / nodesPerBand) % frequencyBands.length;
+
     nodes.push({
       x: centerX + Math.cos(angle) * radius,
       y: centerY + Math.sin(angle) * radius,
       amplitude: 0,
       targetAmplitude: 0,
-      bandIndex: i % frequencyBands.length
+      bandIndex: bandIndex
     });
   }
 }
@@ -198,11 +274,13 @@ function updateNodes(bandData) {
 }
 
 function drawNodes() {
-  const baseColor = expandHexColor(config.nodeGlowColor);
-
   nodes.forEach(node => {
     const radius = config.nodeRadius.min +
                    (config.nodeRadius.max - config.nodeRadius.min) * node.amplitude;
+
+    // Get colors for this node
+    const coreColor = getNodeColor(node, false);
+    const glowColor = getNodeColor(node, true);
 
     // Glow effect
     const glowRadius = radius + 8 * node.amplitude;
@@ -210,9 +288,20 @@ function drawNodes() {
       node.x, node.y, radius * 0.5,
       node.x, node.y, glowRadius
     );
-    gradient.addColorStop(0, baseColor);
-    gradient.addColorStop(0.4, baseColor + '40'); // 25% opacity
-    gradient.addColorStop(1, baseColor + '00'); // transparent
+
+    // Use dynamic colors with alpha
+    if (colorConfig.mode === 'monochrome') {
+      const baseColor = expandHexColor(glowColor);
+      gradient.addColorStop(0, baseColor);
+      gradient.addColorStop(0.4, baseColor + '40');
+      gradient.addColorStop(1, baseColor + '00');
+    } else {
+      // Frequency mode - parse HSL and add alpha
+      const hsl = parseHSL(glowColor);
+      gradient.addColorStop(0, hslToString(hsl.h, hsl.s, hsl.l, 1));
+      gradient.addColorStop(0.4, hslToString(hsl.h, hsl.s, hsl.l, 0.25));
+      gradient.addColorStop(1, hslToString(hsl.h, hsl.s, hsl.l, 0));
+    }
 
     ctx.fillStyle = gradient;
     ctx.beginPath();
@@ -220,7 +309,7 @@ function drawNodes() {
     ctx.fill();
 
     // Node core
-    ctx.fillStyle = config.nodeColor;
+    ctx.fillStyle = coreColor;
     ctx.beginPath();
     ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
     ctx.fill();
@@ -228,8 +317,6 @@ function drawNodes() {
 }
 
 function drawConnections(correlations) {
-  const baseColor = expandHexColor(config.connectionColor);
-
   for (let i = 0; i < nodes.length; i++) {
     for (let j = i + 1; j < nodes.length; j++) {
       const correlation = Math.abs(correlations[i][j]);
@@ -249,9 +336,38 @@ function drawConnections(correlations) {
         const ampFactor = (nodeI.amplitude + nodeJ.amplitude) / 2;
         const finalOpacity = opacity * (0.3 + 0.7 * ampFactor);
 
-        const opacityHex = Math.floor(finalOpacity * 255).toString(16).padStart(2, '0');
-        ctx.strokeStyle = baseColor + opacityHex;
         ctx.lineWidth = width;
+
+        if (colorConfig.mode === 'monochrome') {
+          // Monochrome mode - solid color with opacity
+          const baseColor = expandHexColor(config.connectionColor);
+          const opacityHex = Math.floor(finalOpacity * 255).toString(16).padStart(2, '0');
+          ctx.strokeStyle = baseColor + opacityHex;
+        } else {
+          // Frequency mode - gradient from node A to node B
+          const gradient = ctx.createLinearGradient(
+            nodeI.x, nodeI.y,
+            nodeJ.x, nodeJ.y
+          );
+
+          const colorA = getNodeColor(nodeI, false);
+          const colorB = getNodeColor(nodeJ, false);
+          const hslA = parseHSL(colorA);
+          const hslB = parseHSL(colorB);
+
+          // Gradient: node A color -> blended middle -> node B color
+          gradient.addColorStop(0, hslToString(hslA.h, hslA.s, hslA.l, finalOpacity));
+          gradient.addColorStop(0.5, hslToString(
+            (hslA.h + hslB.h) / 2,
+            (hslA.s + hslB.s) / 2,
+            (hslA.l + hslB.l) / 2,
+            finalOpacity
+          ));
+          gradient.addColorStop(1, hslToString(hslB.h, hslB.s, hslB.l, finalOpacity));
+
+          ctx.strokeStyle = gradient;
+        }
+
         ctx.beginPath();
         ctx.moveTo(nodeI.x, nodeI.y);
         ctx.lineTo(nodeJ.x, nodeJ.y);
