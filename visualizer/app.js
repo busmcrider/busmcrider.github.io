@@ -33,8 +33,14 @@ const playlistToggle = document.getElementById('playlist-toggle');
 const playlistChevron = document.getElementById('playlist-chevron');
 const playlistTitle = document.getElementById('playlist-title');
 
+function getAlbumConfigs() {
+  if (Array.isArray(window.albumConfigs)) return window.albumConfigs;
+  if (typeof albumConfigs !== 'undefined' && Array.isArray(albumConfigs)) return albumConfigs;
+  return [];
+}
+
 const state = {
-  albums: Array.isArray(window.albumConfigs) ? window.albumConfigs : [],
+  albums: getAlbumConfigs(),
   albumIndex: 0,
   trackIndex: 0,
   arrangement: ARRANGEMENTS[0],
@@ -64,6 +70,7 @@ function init() {
   state.albumIndex = Math.max(state.albums.findIndex(album => album.title === 'Gnosify'), 0);
   populateAlbumSelect();
   setAlbum(state.albumIndex, false);
+  updateCorrelationThreshold(state.correlationThreshold);
 
   resizeCanvas(canvas, ctx);
   buildNodes();

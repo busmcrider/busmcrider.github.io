@@ -8,21 +8,22 @@
 
 body {
   margin: 0;
+  padding: 24px;
   min-height: 100vh;
-  display: grid;
-  grid-template-rows: auto;
-  background: #0b0d10;
-  color: #e7ecf3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #eee;
   font-family: system-ui, -apple-system, sans-serif;
-  padding: 0;
+  background: #060808 no-repeat center center;
+  background-size: cover;
 }
 
 body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  pointer-events: none;
+  background: rgba(0, 0, 0, 0.6);
   z-index: 0;
 }
 
@@ -31,37 +32,43 @@ canvas {
   inset: 0;
   width: 100vw;
   height: 100vh;
-  background: radial-gradient(circle at 30% 30%, #18202c, #06080d 60%);
+  background: radial-gradient(circle at 25% 30%, #0f1520, #05070b 65%);
   display: block;
-  z-index: 0;
+  z-index: -1;
+  pointer-events: none;
 }
 
 .controls {
   position: relative;
   z-index: 1;
-  max-width: 520px;
-  margin: 20px auto;
+  width: min(760px, 100%);
+  margin-top: 12px;
   padding: 20px 20px 24px;
-  background: rgba(10, 12, 18, 0.85);
+  background: rgba(12, 12, 12, 0.82);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 14px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px);
 }
 
 .controls button,
 .controls select {
-  background: #11171f;
-  color: #e7ecf3;
-  border: 1px solid #2d3745;
-  border-radius: 8px;
+  background: rgba(20, 20, 20, 0.85);
+  color: #f0f4ff;
+  border: 1px solid #3b4658;
+  border-radius: 10px;
   padding: 10px 12px;
   cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.08s ease;
 }
 
 .controls button:hover,
 .controls select:hover {
-  border-color: #4a6077;
+  border-color: #7ea8ff;
+}
+
+.controls button:active {
+  transform: translateY(1px);
 }
 
 .controls select {
@@ -98,6 +105,22 @@ canvas {
 
 .playlist-wrapper {
   margin-bottom: 14px;
+  border: 1px solid #2c3340;
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(15, 17, 22, 0.9);
+}
+
+.playlist-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: none;
+  border-bottom: 1px solid #2c3340;
+  color: inherit;
 }
 
 #trackList,
@@ -109,7 +132,7 @@ canvas {
   list-style: none;
   padding: 0;
   margin: 0;
-  max-height: 240px;
+  max-height: 260px;
   overflow-y: auto;
 }
 
@@ -119,18 +142,22 @@ canvas {
 }
 
 #trackList li {
-  padding: 10px 8px;
+  padding: 10px 12px;
   cursor: pointer;
-  border-bottom: 1px solid #1d2734;
+  border-bottom: 1px solid #1b2230;
+}
+
+#trackList li:last-child {
+  border-bottom: none;
 }
 
 #trackList li.active {
-  background: #1b2635;
+  background: rgba(88, 137, 255, 0.12);
 }
 
 .action-buttons {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 10px;
   margin: 12px 0;
 }
@@ -146,13 +173,17 @@ canvas {
 }
 
 .info {
-  color: #c9d6ec;
+  color: #d8e4ff;
   font-size: 14px;
+  line-height: 1.4;
 }
 
 @media (max-width: 640px) {
+  body {
+    padding: 14px;
+  }
+
   .controls {
-    margin: 12px;
     padding: 16px;
   }
 
