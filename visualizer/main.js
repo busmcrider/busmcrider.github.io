@@ -1,7 +1,7 @@
 // Configuration
-const NODE_COUNT = 24;
+let nodeCount = 24;
 const HISTORY_DEPTH = 30; // Frames to keep for correlation (~0.5s at 60fps)
-const CORRELATION_THRESHOLD = 0.3; // Min correlation to draw connection
+let correlationThreshold = 0.3; // Min correlation to draw connection
 
 const config = {
   // Visual parameters (easy to adjust)
@@ -120,6 +120,70 @@ let animationId = null;
 let lastFrameTime = 0;
 let isRunning = false;
 let currentSymmetryMode = SYMMETRY_MODES.NONE;
+let currentArrangement = 'circle'; // 'circle' | 'edge' | 'spiral' | 'fibonacci'
+
+// Arrangement calculation functions
+function getNodePosition(index, total, rect) {
+  const centerX = rect.width / 2;
+  const centerY = rect.height / 2;
+  const radius = Math.min(rect.width, rect.height) * config.ringRadius;
+
+  switch (currentArrangement) {
+    case 'circle':
+      // Original: circle at center
+      const angleCircle = (index / total) * Math.PI * 2 - Math.PI / 2;
+      return {
+        x: centerX + Math.cos(angleCircle) * radius,
+        y: centerY + Math.sin(angleCircle) * radius
+      };
+
+    case 'edge':
+      // Around viewport perimeter with padding
+      const padding = 20;
+      const w = rect.width - padding * 2;
+      const h = rect.height - padding * 2;
+      const perimeter = (w + h) * 2;
+      const segmentLength = perimeter / total;
+      const distance = index * segmentLength;
+
+      // Travel around rectangle: top → right → bottom → left
+      if (distance < w) {
+        // Top edge
+        return { x: padding + distance, y: padding };
+      } else if (distance < w + h) {
+        // Right edge
+        return { x: padding + w, y: padding + (distance - w) };
+      } else if (distance < w * 2 + h) {
+        // Bottom edge
+        return { x: padding + w - (distance - w - h), y: padding + h };
+      } else {
+        // Left edge
+        return { x: padding, y: padding + h - (distance - w * 2 - h) };
+      }
+
+    case 'spiral':
+      // Spiral outward clockwise from center
+      const angleSpiral = (index / total) * Math.PI * 4; // 2 full rotations
+      const spiralRadius = (index / total) * radius * 1.5;
+      return {
+        x: centerX + Math.cos(angleSpiral) * spiralRadius,
+        y: centerY + Math.sin(angleSpiral) * spiralRadius
+      };
+
+    case 'fibonacci':
+      // Fibonacci/golden spiral (counterclockwise)
+      const goldenAngle = Math.PI * (3 - Math.sqrt(5)); // ~137.5 degrees
+      const angleFib = -index * goldenAngle; // Negative for counterclockwise
+      const fibRadius = Math.sqrt(index / total) * radius * 1.8; // Square root for smooth distribution
+      return {
+        x: centerX + Math.cos(angleFib) * fibRadius,
+        y: centerY + Math.sin(angleFib) * fibRadius
+      };
+
+    default:
+      return { x: centerX, y: centerY };
+  }
+}
 
 // Initialize
 function init() {
@@ -150,26 +214,24 @@ function setupCanvas() {
 
 function setupNodes() {
   const rect = canvas.getBoundingClientRect();
-  const centerX = rect.width / 2;
-  const centerY = rect.height / 2;
-  const radius = Math.min(rect.width, rect.height) * config.ringRadius;
 
   nodes = [];
 
-  for (let i = 0; i < NODE_COUNT; i++) {
-    const angle = (i / NODE_COUNT) * Math.PI * 2 - Math.PI / 2; // Start at top
+  for (let i = 0; i < nodeCount; i++) {
+    // Get position based on current arrangement
+    const pos = getNodePosition(i, nodeCount, rect);
 
     // Get band index based on current symmetry mode
     const bandIndex = getSymmetryBandIndex(
       i,
-      NODE_COUNT,
+      nodeCount,
       frequencyBands.length,
       currentSymmetryMode
     );
 
     nodes.push({
-      x: centerX + Math.cos(angle) * radius,
-      y: centerY + Math.sin(angle) * radius,
+      x: pos.x,
+      y: pos.y,
       amplitude: 0,
       targetAmplitude: 0,
       bandIndex: bandIndex
@@ -227,17 +289,17 @@ function calculateCorrelations(bandData) {
 
   // Need enough history for meaningful correlation
   if (frequencyHistory.length < 10) {
-    return Array(NODE_COUNT).fill(null).map(() => Array(NODE_COUNT).fill(0));
+    return Array(nodeCount).fill(null).map(() => Array(nodeCount).fill(0));
   }
 
   const correlations = [];
 
   // Calculate Pearson correlation between each pair of bands
-  for (let i = 0; i < NODE_COUNT; i++) {
+  for (let i = 0; i < nodeCount; i++) {
     correlations[i] = [];
     const bandI = nodes[i].bandIndex;
 
-    for (let j = 0; j < NODE_COUNT; j++) {
+    for (let j = 0; j < nodeCount; j++) {
       if (i === j) {
         correlations[i][j] = 0;
         continue;
@@ -325,13 +387,13 @@ function drawConnections(correlations) {
     for (let j = i + 1; j < nodes.length; j++) {
       const correlation = Math.abs(correlations[i][j]);
 
-      if (correlation > CORRELATION_THRESHOLD) {
+      if (correlation > correlationThreshold) {
         const nodeI = nodes[i];
         const nodeJ = nodes[j];
 
         // Line width and opacity based on correlation strength
-        const normalizedCorr = (correlation - CORRELATION_THRESHOLD) /
-                               (1 - CORRELATION_THRESHOLD);
+        const normalizedCorr = (correlation - correlationThreshold) /
+                               (1 - correlationThreshold);
         const width = config.connectionWidth.min +
                      (config.connectionWidth.max - config.connectionWidth.min) * normalizedCorr;
         const opacity = 0.2 + 0.6 * normalizedCorr;
@@ -471,6 +533,46 @@ document.getElementById('colorBtn').addEventListener('click', () => {
   // Update button label
   const label = colorConfig.mode === 'monochrome' ? 'Monochrome' : 'Frequency';
   document.getElementById('colorBtn').textContent = `Color: ${label}`;
+});
+
+document.getElementById('nodeCountBtn').addEventListener('click', () => {
+  // Cycle through node counts: 8 → 16 → 24 → 32 → 8
+  const counts = [8, 16, 24, 32];
+  const currentIndex = counts.indexOf(nodeCount);
+  const nextIndex = (currentIndex + 1) % counts.length;
+  nodeCount = counts[nextIndex];
+
+  // Update button label
+  document.getElementById('nodeCountBtn').textContent = `Nodes: ${nodeCount}`;
+
+  // Rebuild nodes
+  setupNodes();
+});
+
+document.getElementById('arrangementBtn').addEventListener('click', () => {
+  // Cycle through arrangements: circle → edge → spiral → fibonacci → circle
+  const arrangements = ['circle', 'edge', 'spiral', 'fibonacci'];
+  const labels = {
+    circle: 'Circle',
+    edge: 'Edge',
+    spiral: 'Spiral ↻',
+    fibonacci: 'Fibonacci ↺'
+  };
+
+  const currentIndex = arrangements.indexOf(currentArrangement);
+  const nextIndex = (currentIndex + 1) % arrangements.length;
+  currentArrangement = arrangements[nextIndex];
+
+  // Update button label
+  document.getElementById('arrangementBtn').textContent = `Layout: ${labels[currentArrangement]}`;
+
+  // Rebuild nodes
+  setupNodes();
+});
+
+document.getElementById('correlationSlider').addEventListener('input', (e) => {
+  correlationThreshold = parseFloat(e.target.value);
+  document.getElementById('correlationValue').textContent = correlationThreshold.toFixed(2);
 });
 
 // Initialize on load

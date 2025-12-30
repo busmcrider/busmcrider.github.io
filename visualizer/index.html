@@ -11,13 +11,21 @@
   <canvas id="canvas"></canvas>
 
   <div class="controls">
-    <button id="startBtn">Start Visualizer</button>
-    <button id="symmetryBtn">Symmetry: None</button>
-    <button id="colorBtn">Color: Frequency</button>
-    <div class="info">
-      <span id="status">Click Start to begin</span>
+      <button id="startBtn">Start Visualizer</button>
+      <button id="symmetryBtn">Symmetry: None</button>
+      <button id="colorBtn">Color: Frequency</button>
+      <button id="nodeCountBtn">Nodes: 24</button>
+      <button id="arrangementBtn">Layout: Circle</button>
+      <div class="slider-control">
+        <label for="correlationSlider">
+          Correlation: <span id="correlationValue">0.30</span>
+        </label>
+        <input type="range" id="correlationSlider" min="0" max="1" step="0.01" value="0.3">
+      </div>
+      <div class="info">
+        <span id="status">Click Start to begin</span>
+      </div>
     </div>
-  </div>
 
   <audio id="audio" preload="auto" loop>
     <source src="4 - Cosmic Blueprints.mp3" type="audio/mpeg">
