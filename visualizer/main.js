@@ -235,7 +235,7 @@ function calculateCorrelations(bandData) {
   // Calculate Pearson correlation between each pair of bands
   for (let i = 0; i < NODE_COUNT; i++) {
     correlations[i] = [];
-    const bandI = i % frequencyBands.length;
+    const bandI = nodes[i].bandIndex;
 
     for (let j = 0; j < NODE_COUNT; j++) {
       if (i === j) {
@@ -243,7 +243,7 @@ function calculateCorrelations(bandData) {
         continue;
       }
 
-      const bandJ = j % frequencyBands.length;
+      const bandJ = nodes[j].bandIndex;
 
       // Get history for both bands
       const seriesA = frequencyHistory.map(frame => frame[bandI]);
@@ -269,8 +269,8 @@ function calculateCorrelations(bandData) {
 
 function updateNodes(bandData) {
   nodes.forEach((node, i) => {
-    const bandIndex = i % frequencyBands.length;
-    node.targetAmplitude = bandData[bandIndex];
+    // Use the bandIndex assigned by symmetry system
+    node.targetAmplitude = bandData[node.bandIndex];
 
     // Smooth interpolation
     node.amplitude += (node.targetAmplitude - node.amplitude) * 0.2;
@@ -462,6 +462,15 @@ document.getElementById('symmetryBtn').addEventListener('click', () => {
 
   // Rebuild nodes with new symmetry
   setupNodes();
+});
+
+document.getElementById('colorBtn').addEventListener('click', () => {
+  // Toggle color mode
+  colorConfig.mode = colorConfig.mode === 'monochrome' ? 'frequency' : 'monochrome';
+
+  // Update button label
+  const label = colorConfig.mode === 'monochrome' ? 'Monochrome' : 'Frequency';
+  document.getElementById('colorBtn').textContent = `Color: ${label}`;
 });
 
 // Initialize on load
