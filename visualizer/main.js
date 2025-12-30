@@ -119,6 +119,7 @@ let frequencyHistory = [];
 let animationId = null;
 let lastFrameTime = 0;
 let isRunning = false;
+let currentSymmetryMode = SYMMETRY_MODES.NONE;
 
 // Initialize
 function init() {
@@ -154,14 +155,17 @@ function setupNodes() {
   const radius = Math.min(rect.width, rect.height) * config.ringRadius;
 
   nodes = [];
-  const nodesPerBand = Math.ceil(NODE_COUNT / frequencyBands.length);
 
   for (let i = 0; i < NODE_COUNT; i++) {
     const angle = (i / NODE_COUNT) * Math.PI * 2 - Math.PI / 2; // Start at top
 
-    // Assign bands to create radial symmetry
-    // Nodes are distributed evenly, each band gets multiple nodes
-    const bandIndex = Math.floor(i / nodesPerBand) % frequencyBands.length;
+    // Get band index based on current symmetry mode
+    const bandIndex = getSymmetryBandIndex(
+      i,
+      NODE_COUNT,
+      frequencyBands.length,
+      currentSymmetryMode
+    );
 
     nodes.push({
       x: centerX + Math.cos(angle) * radius,
@@ -446,6 +450,18 @@ document.getElementById('startBtn').addEventListener('click', () => {
   } else {
     start();
   }
+});
+
+document.getElementById('symmetryBtn').addEventListener('click', () => {
+  // Cycle to next symmetry mode
+  currentSymmetryMode = getNextSymmetryMode(currentSymmetryMode);
+
+  // Update button label
+  const label = getSymmetryLabel(currentSymmetryMode);
+  document.getElementById('symmetryBtn').textContent = `Symmetry: ${label.replace(' Symmetry', '')}`;
+
+  // Rebuild nodes with new symmetry
+  setupNodes();
 });
 
 // Initialize on load
