@@ -4,40 +4,75 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
-  <title>Audio Visualizer - Neural Network</title>
+  <title>Audio Visualizer</title>
+  <link rel="stylesheet" href="../shared/style.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <canvas id="canvas"></canvas>
+  <canvas id="canvas" aria-label="Audio visualizer canvas"></canvas>
 
-  <div class="controls">
-    <button id="startBtn">Start Visualizer</button>
+  <button id="controlsToggle" class="controls-toggle" type="button" aria-pressed="false">Hide controls</button>
 
-    <div class="track-controls">
-      <button id="prevBtn">◀</button>
-      <div id="trackTitle">The Cosmic Groove Chronicles</div>
-      <button id="nextBtn">▶</button>
+  <section class="controls" aria-label="Visualizer controls">
+    <div class="controls-body">
+      <header class="panel-header">
+        <div>
+          <p class="eyebrow">Visualizer</p>
+          <h1 class="panel-title">Album Lab</h1>
+        </div>
+        <button id="startBtn" type="button" class="primary">Start Visualizer</button>
+      </header>
+
+      <div class="control-top">
+        <div class="album-picker">
+          <label for="albumSelect">Album</label>
+          <select id="albumSelect" aria-label="Select album"></select>
+        </div>
+      </div>
+
+      <div class="control-row track-controls">
+        <button id="prevBtn" type="button" aria-label="Previous track">◀</button>
+        <div class="track-title" aria-live="polite">
+          <span id="trackTitle"></span>
+        </div>
+        <button id="nextBtn" type="button" aria-label="Next track">▶</button>
+      </div>
+
+      <div class="playlist-wrapper" aria-label="Album playlist">
+        <button class="playlist-header" id="playlist-toggle" type="button">
+          <span id="playlist-title">Tracklist</span>
+          <span id="playlist-chevron">▾</span>
+        </button>
+        <ul id="trackList"></ul>
+      </div>
+
+      <div class="control-row action-buttons">
+        <button id="symmetryBtn" type="button">Symmetry: None</button>
+        <button id="colorBtn" type="button">Color: Monochrome</button>
+        <button id="nodeCountBtn" type="button">Nodes: 16</button>
+        <button id="arrangementBtn" type="button">Layout: Circle</button>
+      </div>
+
+      <div class="slider-row">
+        <label class="slider-control" for="correlationSlider">
+          Link threshold <span id="correlationValue">0.66</span>
+          <input type="range" id="correlationSlider" min="0" max="1" step="0.01" value="0.66">
+        </label>
+        <label class="slider-control" for="historySlider">
+          History depth <span id="historyValue">30 frames</span>
+          <input type="range" id="historySlider" min="6" max="60" step="1" value="30">
+        </label>
+      </div>
+
+      <div class="info" aria-live="polite">
+        <span id="status">Click Start to begin</span>
+      </div>
     </div>
+  </section>
 
-    <button id="symmetryBtn">Symmetry: None</button>
-    <button id="colorBtn">Color: Monochrome</button>
-    <button id="nodeCountBtn">Nodes: 16</button>
-    <button id="arrangementBtn">Layout: Circle</button>
-    <div class="slider-control">
-      <label for="correlationSlider">
-        Correlation: <span id="correlationValue">0.66</span>
-      </label>
-      <input type="range" id="correlationSlider" min="0" max="1" step="0.01" value="0.66">
-    </div>
-    <div class="info">
-      <span id="status">Click Start to begin</span>
-    </div>
-  </div>
+  <audio id="audio" preload="auto"></audio>
 
-  <audio id="audio" preload="auto">
-  </audio>
-
-  <script src="symmetry.js"></script>
-  <script src="main.js"></script>
+  <script src="../shared/music.js"></script>
+  <script type="module" src="app.js"></script>
 </body>
 </html>
