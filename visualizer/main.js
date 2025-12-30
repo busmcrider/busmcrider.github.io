@@ -22,6 +22,15 @@ const config = {
   minFrameTime: 1000 / 120 // Cap at 120fps
 };
 
+// Utility: Expand shorthand hex colors (#eee -> #eeeeee)
+function expandHexColor(hex) {
+  hex = hex.replace('#', '');
+  if (hex.length === 3) {
+    hex = hex.split('').map(c => c + c).join('');
+  }
+  return '#' + hex;
+}
+
 // Frequency bands (Hz ranges)
 const frequencyBands = [
   { name: 'Sub-Bass', min: 20, max: 60 },
@@ -189,6 +198,8 @@ function updateNodes(bandData) {
 }
 
 function drawNodes() {
+  const baseColor = expandHexColor(config.nodeGlowColor);
+
   nodes.forEach(node => {
     const radius = config.nodeRadius.min +
                    (config.nodeRadius.max - config.nodeRadius.min) * node.amplitude;
@@ -199,9 +210,9 @@ function drawNodes() {
       node.x, node.y, radius * 0.5,
       node.x, node.y, glowRadius
     );
-    gradient.addColorStop(0, config.nodeGlowColor);
-    gradient.addColorStop(0.4, config.nodeGlowColor + '40'); // 25% opacity
-    gradient.addColorStop(1, config.nodeGlowColor + '00'); // transparent
+    gradient.addColorStop(0, baseColor);
+    gradient.addColorStop(0.4, baseColor + '40'); // 25% opacity
+    gradient.addColorStop(1, baseColor + '00'); // transparent
 
     ctx.fillStyle = gradient;
     ctx.beginPath();
@@ -217,6 +228,8 @@ function drawNodes() {
 }
 
 function drawConnections(correlations) {
+  const baseColor = expandHexColor(config.connectionColor);
+
   for (let i = 0; i < nodes.length; i++) {
     for (let j = i + 1; j < nodes.length; j++) {
       const correlation = Math.abs(correlations[i][j]);
@@ -236,7 +249,8 @@ function drawConnections(correlations) {
         const ampFactor = (nodeI.amplitude + nodeJ.amplitude) / 2;
         const finalOpacity = opacity * (0.3 + 0.7 * ampFactor);
 
-        ctx.strokeStyle = config.connectionColor + Math.floor(finalOpacity * 255).toString(16).padStart(2, '0');
+        const opacityHex = Math.floor(finalOpacity * 255).toString(16).padStart(2, '0');
+        ctx.strokeStyle = baseColor + opacityHex;
         ctx.lineWidth = width;
         ctx.beginPath();
         ctx.moveTo(nodeI.x, nodeI.y);
