@@ -141,6 +141,10 @@ class TestController {
 
       const bins = MusicState.instantaneous.spectrum ? MusicState.instantaneous.spectrum.length : 0;
       document.getElementById('bins').textContent = bins;
+
+      const beatConf = MusicState.features.beat ? MusicState.features.beat.confidence : 0;
+      document.getElementById('beatConf').textContent = beatConf.toFixed(2);
+
     }, 100); // Update 10 times per second
   }
 }

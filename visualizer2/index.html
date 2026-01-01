@@ -84,6 +84,12 @@
       min-width: 220px;
     }
 
+    .debug-section {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #333;
+    }
+
     .debug-label {
       color: #888;
     }
@@ -111,6 +117,11 @@
     <div><span class="debug-label">FPS:</span> <span class="debug-value" id="fps">0</span></div>
     <div><span class="debug-label">Amplitude:</span> <span class="debug-value" id="amp">0.00</span></div>
     <div><span class="debug-label">Bins:</span> <span class="debug-value" id="bins">0</span></div>
+
+    <div class="debug-section">
+      <div><span class="debug-label">Beat Confidence:</span> <span class="debug-value" id="beatConf">0.00</span></div>
+      <div><span class="debug-label">BPM:</span> <span class="debug-value" id="bpm">Detecting...</span></div>
+    </div>
   </div>
 
   <!-- Load scripts in dependency order -->
