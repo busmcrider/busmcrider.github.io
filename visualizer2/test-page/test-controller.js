@@ -4,6 +4,9 @@ class TestController {
     this.audioManager = new AudioContextManager();
     this.analyzer = null;
     this.renderer = null;
+    this.config = new ConfigManager();
+    this.beatDetector = null;
+    this.mappingEngine = null;
 
     this.setupUI();
     this.setupCanvas();
@@ -54,6 +57,17 @@ class TestController {
       const analyser = this.audioManager.getAnalyser();
       this.analyzer = new InstantaneousAnalyzer(analyser);
 
+      // Setup beat detector
+      this.beatDetector = new BeatDetector(this.config);
+
+      // Setup mapping engine
+      this.mappingEngine = new MappingEngine(this.config);
+
+      // Setup global animations
+      const canvas = document.getElementById('canvas');
+      const globalAnimations = new GlobalAnimations(canvas, this.renderer.ctx);
+      this.renderer.setGlobalAnimations(globalAnimations);
+
       // Setup visualizers
       this.renderer.clearVisualizers();
       const spectrumBars = new SpectrumBars(
@@ -85,12 +99,32 @@ class TestController {
   analysisLoop() {
     if (!this.audioManager.isPlaying) return;
 
-    // Get current time
     const currentTime = this.audioManager.getCurrentTime();
 
     // Run analysis
     if (this.analyzer) {
       this.analyzer.analyze(currentTime);
+    }
+
+    // Run beat detection
+    if (this.beatDetector) {
+      this.beatDetector.detect(currentTime);
+    }
+
+    // Process mappings
+    if (this.mappingEngine) {
+      const commands = this.mappingEngine.process();
+
+      // Execute visual commands
+      for (const command of commands) {
+        if (command.type === 'globalAnimation') {
+          this.renderer.globalAnimations.trigger(command);
+        } else if (command.type === 'setGlobalScale') {
+          this.renderer.globalAnimations.setGlobalScale(command.value);
+        }
+      }
+
+      this.mappingEngine.clearCommands();
     }
 
     // Continue loop

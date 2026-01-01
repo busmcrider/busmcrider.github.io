@@ -4,6 +4,7 @@ class CanvasRenderer {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.visualizers = [];
+    this.globalAnimations = null;
     this.isRunning = false;
     this.lastFrameTime = 0;
     this.fps = 0;
@@ -29,6 +30,12 @@ class CanvasRenderer {
   // Clear all visualizers
   clearVisualizers() {
     this.visualizers = [];
+  }
+
+  // Set global animations
+  setGlobalAnimations(globalAnimations) {
+    this.globalAnimations = globalAnimations;
+    console.log('[Renderer] Global animations set');
   }
 
   // Start the render loop
@@ -60,9 +67,20 @@ class CanvasRenderer {
     this.ctx.fillStyle = '#000';
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
+    // Update and apply global animations
+    if (this.globalAnimations) {
+      this.globalAnimations.update();
+      this.globalAnimations.applyPreRender();
+    }
+
     // Render all visualizers
     for (const visualizer of this.visualizers) {
       visualizer.render();
+    }
+
+    // Restore after global animations
+    if (this.globalAnimations) {
+      this.globalAnimations.applyPostRender();
     }
 
     // Continue loop

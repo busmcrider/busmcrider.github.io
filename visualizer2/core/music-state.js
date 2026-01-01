@@ -15,7 +15,16 @@ const MusicState = {
 
   // Features (will be populated in later stages)
   features: {
-    beat: null,
+    beat: {
+      detected: false,
+      confidence: 0,
+      lastBeatTime: 0,
+      timeSinceLastBeat: 0,
+      strength: 0,
+      currentFlux: 0,
+      avgFlux: 0,
+      threshold: 0
+    },
     tempo: null,
     key: null,
     harmonic: null
