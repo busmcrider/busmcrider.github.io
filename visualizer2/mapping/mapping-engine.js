@@ -2,8 +2,9 @@
 import { MusicState } from '../core/music-state.js';
 
 export class MappingEngine {
-  constructor(config) {
+  constructor(config, lifecycleManager) {
     this.config = config;
+    this.lifecycleManager = lifecycleManager;
 
     // Visual commands to be executed this frame
     this.commands = [];
@@ -37,6 +38,13 @@ export class MappingEngine {
 
     // Trigger each configured animation
     for (const anim of beatMapping.animations) {
+      // Get BPM-aware duration if lifecycle manager available
+      let duration = anim.duration;
+      if (this.lifecycleManager) {
+        const beatType = anim.type === 'radialPump' ? 'beatPump' : 'beatFlash';
+        duration = this.lifecycleManager.getAnimationDuration(beatType);
+      }
+
       this.commands.push({
         type: 'globalAnimation',
         animation: anim.type,

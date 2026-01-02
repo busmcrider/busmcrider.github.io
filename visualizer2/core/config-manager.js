@@ -37,6 +37,14 @@ export class ConfigManager {
           minTimeBetweenBeats: 300,   // ms, prevents double-triggers
           energyThreshold: 1.3,       // multiplier above average
           historySize: 43             // ~1 second at 43 fps
+        },
+
+        tempo: {
+          enabled: true,
+          minBPM: 60,
+          maxBPM: 180,
+          analysisWindow: 2000,       // ms between analyses
+          confidenceThreshold: 0.7
         }
       },
 
@@ -60,6 +68,13 @@ export class ConfigManager {
           ]
         },
 
+        tempo: {
+          enabled: true,
+          target: 'animation.globalSpeed',
+          multiplier: 1.0,
+          minConfidence: 0.7
+        },
+
         amplitude: {
           enabled: true,
           target: 'scale',
@@ -69,6 +84,24 @@ export class ConfigManager {
         }
       },
 
+      // ===== LIFECYCLE SETTINGS =====
+      lifecycle: {
+        useBPMTiming: true,
+        fallbackDurations: {
+          fadeIn: 1000,
+          fadeOut: 2000,
+          hold: 4000,
+          beatPump: 200,
+          beatFlash: 100
+        },
+
+        keyTransition: {
+          oldKeyFadeBeats: 4,
+          overlapBeats: 2,
+          newKeyFadeBeats: 4
+        }
+      },
+      
       // ===== PERFORMANCE =====
       performance: {
         targetFPS: 60,

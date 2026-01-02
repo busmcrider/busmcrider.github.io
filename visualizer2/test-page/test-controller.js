@@ -8,6 +8,7 @@ import { MappingEngine } from '../mapping/mapping-engine.js';
 import { CanvasRenderer } from '../visual/canvas-renderer.js';
 import { GlobalAnimations } from '../visual/global-animations.js';
 import { SpectrumBars } from '../visual/visualizers/spectrum-bars.js';
+import { LifecycleManager } from '../core/lifecycle-manager.js';
 
 export class TestController {
   constructor() {
@@ -17,6 +18,9 @@ export class TestController {
     this.config = new ConfigManager();
     this.beatDetector = null;
     this.mappingEngine = null;
+    this.lifecycleManager = null;
+    this.worker = null;
+    this.workerAudioBuffer = [];
 
     this.setupUI();
     this.setupCanvas();
@@ -52,6 +56,36 @@ export class TestController {
     this.renderer = new CanvasRenderer(canvas);
   }
 
+  setupWorker() {
+      // Create worker
+      this.worker = new Worker('./core/analysis-worker.js', { type: 'module' });
+
+      // Handle messages from worker
+      this.worker.onmessage = (e) => {
+        const { type, data } = e.data;
+
+        if (type === 'tempoUpdate') {
+          // Update state with tempo data
+          MusicState.features.tempo = {
+            bpm: data.bpm,
+            confidence: data.confidence,
+            stable: data.stable,
+            lastUpdated: data.timestamp
+          };
+
+          console.log(`[Controller] Tempo updated: ${data.bpm.toFixed(1)} BPM`);
+        }
+      };
+
+      // Initialize worker with config
+      this.worker.postMessage({
+        type: 'init',
+        data: { config: this.config.config }
+      });
+
+      console.log('[Controller] Worker initialized');
+    }
+
   async loadAudio(file) {
     try {
       document.getElementById('status').textContent = 'Loading...';
@@ -67,11 +101,22 @@ export class TestController {
       const analyser = this.audioManager.getAnalyser();
       this.analyzer = new InstantaneousAnalyzer(analyser);
 
+      // Setup worker if not already done
+      if (!this.worker) {
+        this.setupWorker();
+      }
+
+      // Reset worker audio buffer
+      this.workerAudioBuffer = [];
+
       // Setup beat detector
       this.beatDetector = new BeatDetector(this.config);
 
       // Setup mapping engine
-      this.mappingEngine = new MappingEngine(this.config);
+      this.mappingEngine = new MappingEngine(this.config, this.lifecycleManager);
+
+      // Setup lifecycle manager
+      this.lifecycleManager = new LifecycleManager(this.config);
 
       // Setup global animations
       const canvas = document.getElementById('canvas');
@@ -116,6 +161,25 @@ export class TestController {
       this.analyzer.analyze(currentTime);
     }
 
+    // Send audio data to worker for tempo analysis
+    if (this.worker && MusicState.instantaneous.spectrum) {
+      // Collect audio samples
+      this.workerAudioBuffer.push(...Array.from(MusicState.instantaneous.spectrum));
+
+      // Send to worker every 100ms worth of samples (~4-5 frames)
+      if (this.workerAudioBuffer.length >= 500) {
+        this.worker.postMessage({
+          type: 'analyzeAudio',
+          data: {
+            audioData: this.workerAudioBuffer,
+            sampleRate: 44100, // Approximate
+            currentTime: currentTime
+          }
+        });
+        this.workerAudioBuffer = [];
+      }
+    }
+
     // Run beat detection
     if (this.beatDetector) {
       this.beatDetector.detect(currentTime);
@@ -154,6 +218,13 @@ export class TestController {
 
       const beatConf = MusicState.features.beat ? MusicState.features.beat.confidence : 0;
       document.getElementById('beatConf').textContent = beatConf.toFixed(2);
+
+      // Update BPM display
+      const tempo = MusicState.features.tempo;
+      if (tempo && tempo.bpm) {
+        const bpmText = `${tempo.bpm.toFixed(1)} (${(tempo.confidence * 100).toFixed(0)}%)`;
+        document.getElementById('bpm').textContent = bpmText;
+      }
 
     }, 100); // Update 10 times per second
   }

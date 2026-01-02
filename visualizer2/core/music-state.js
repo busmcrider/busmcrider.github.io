@@ -25,7 +25,12 @@ export const MusicState = {
       avgFlux: 0,
       threshold: 0
     },
-    tempo: null,
+    tempo: {
+          bpm: null,
+          confidence: 0,
+          stable: false,
+          lastUpdated: 0
+    },
     key: null,
     harmonic: null
   },
