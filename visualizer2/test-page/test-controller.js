@@ -65,13 +65,32 @@ export class TestController {
         const { type, data } = e.data;
 
         if (type === 'tempoUpdate') {
-          // Update state with tempo data
-          MusicState.features.tempo = {
+          // Initialize tempo structure if needed
+          if (!MusicState.features.tempo) {
+            MusicState.features.tempo = {
+              fast: null,
+              slow: null,
+              current: null
+            };
+          }
+
+          // Update slow (accurate) tempo from worker
+          MusicState.features.tempo.slow = {
             bpm: data.bpm,
             confidence: data.confidence,
             stable: data.stable,
+            source: 'autocorrelation',
             lastUpdated: data.timestamp
           };
+
+          // Use slow tempo as current if it's reliable
+          if (data.confidence > 0.7) {
+            MusicState.features.tempo.current = {
+              bpm: data.bpm,
+              confidence: data.confidence,
+              stable: data.stable
+            };
+          }
 
           console.log(`[Controller] Tempo updated: ${data.bpm.toFixed(1)} BPM`);
         }
@@ -162,9 +181,14 @@ export class TestController {
     }
 
     // Send audio data to worker for tempo analysis
-    if (this.worker && MusicState.instantaneous.spectrum) {
-      // Collect audio samples
-      this.workerAudioBuffer.push(...Array.from(MusicState.instantaneous.spectrum));
+    if (this.worker) {
+      // Get time-domain data for tempo analysis
+      const analyser = this.audioManager.getAnalyser();
+      const timeDomainData = new Uint8Array(analyser.fftSize);
+      analyser.getByteTimeDomainData(timeDomainData);
+
+      // Collect audio samples (time-domain, not frequency)
+      this.workerAudioBuffer.push(...Array.from(timeDomainData));
 
       // Send to worker every 100ms worth of samples (~4-5 frames)
       if (this.workerAudioBuffer.length >= 500) {
@@ -207,25 +231,37 @@ export class TestController {
 
   startDebugLoop() {
     setInterval(() => {
-      // Update debug panel
+      // Update FPS
       document.getElementById('fps').textContent = this.renderer ? this.renderer.getFPS() : 0;
-
+      
+      // Update amplitude
       const amp = MusicState.instantaneous.amplitude;
       document.getElementById('amp').textContent = amp.toFixed(2);
-
-      const bins = MusicState.instantaneous.spectrum ? MusicState.instantaneous.spectrum.length : 0;
-      document.getElementById('bins').textContent = bins;
-
-      const beatConf = MusicState.features.beat ? MusicState.features.beat.confidence : 0;
-      document.getElementById('beatConf').textContent = beatConf.toFixed(2);
-
-      // Update BPM display
-      const tempo = MusicState.features.tempo;
-      if (tempo && tempo.bpm) {
-        const bpmText = `${tempo.bpm.toFixed(1)} (${(tempo.confidence * 100).toFixed(0)}%)`;
-        document.getElementById('bpm').textContent = bpmText;
+      
+      // Update beat indicator and confidence
+      const beat = MusicState.features.beat;
+      if (beat) {
+        const indicator = document.getElementById('beatIndicator');
+        if (beat.detected) {
+          indicator.classList.add('active');
+        } else {
+          indicator.classList.remove('active');
+        }
+        document.getElementById('beatConf').textContent = beat.confidence.toFixed(2);
       }
-
+      
+      // Update BPM display (show current tempo)
+      const tempo = MusicState.features.tempo;
+      if (tempo && tempo.current && tempo.current.bpm) {
+        const bpmText = `${tempo.current.bpm.toFixed(1)} BPM`;
+        document.getElementById('bpm').textContent = bpmText;
+      } else {
+        document.getElementById('bpm').textContent = '--';
+      }
+      
+      // Update worker status
+      const workerActive = this.worker !== null;
+      document.getElementById('workerStatus').textContent = workerActive ? 'Active' : 'Inactive';
     }, 100); // Update 10 times per second
   }
 }

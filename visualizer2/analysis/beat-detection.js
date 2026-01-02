@@ -13,6 +13,9 @@ export class BeatDetector {
     // Beat state
     this.lastBeatTime = 0;
     this.beatConfidence = 0;
+    this.consecutiveBeats = 0;
+    this.targetBeatsForConfidence = 10; // Need 10 good beats for 1.0 confidence
+    this.expectedBeatInterval = 0;
 
     // Previous frame data for flux calculation
     this.previousSpectrum = null;
@@ -69,15 +72,67 @@ export class BeatDetector {
 
     if (flux > threshold && timeSinceLastBeat > beatConfig.minTimeBetweenBeats) {
       beatDetected = true;
-      // Calculate strength (how much above threshold)
       beatStrength = Math.min((flux - threshold) / threshold, 1.0);
-      this.lastBeatTime = currentTime;
 
-      // Update confidence (increases with consistent detection)
-      this.beatConfidence = Math.min(this.beatConfidence + 0.1, 1.0);
+      // Check if this beat is consistent with previous timing
+      const isConsistent = this.expectedBeatInterval === 0 ||
+                          Math.abs(timeSinceLastBeat - this.expectedBeatInterval) < 100;
+
+      if (isConsistent) {
+        this.consecutiveBeats++;
+        this.beatConfidence = Math.min(this.consecutiveBeats / this.targetBeatsForConfidence, 1.0);
+      } else {
+        // Reset on timing inconsistency
+        this.consecutiveBeats = 1;
+        this.beatConfidence = 0.1;
+      }
+
+      // Update expected interval (running average)
+      if (this.expectedBeatInterval === 0) {
+        this.expectedBeatInterval = timeSinceLastBeat;
+      } else {
+        this.expectedBeatInterval = this.expectedBeatInterval * 0.9 + timeSinceLastBeat * 0.1;
+      }
+
+      this.lastBeatTime = currentTime;
     } else {
-      // Decay confidence slowly
-      this.beatConfidence = Math.max(this.beatConfidence - 0.01, 0);
+      // Decay confidence when beats are missed
+      const expectedNextBeat = (currentTime - this.lastBeatTime) * 1000;
+      if (this.expectedBeatInterval > 0 && expectedNextBeat > this.expectedBeatInterval * 1.5) {
+        // We missed an expected beat
+        this.consecutiveBeats = Math.max(0, this.consecutiveBeats - 1);
+        this.beatConfidence = Math.max(this.consecutiveBeats / this.targetBeatsForConfidence, 0);
+      }
+    }
+
+    // Calculate fast tempo from beat intervals
+    if (beatDetected && this.consecutiveBeats >= 2) {
+      const bpm = 60000 / this.expectedBeatInterval; // Convert ms to BPM
+
+      // Update state with fast tempo
+      if (!MusicState.features.tempo) {
+        MusicState.features.tempo = {
+          fast: null,
+          slow: null,
+          current: null
+        };
+      }
+
+      MusicState.features.tempo.fast = {
+        bpm: bpm,
+        confidence: this.beatConfidence,
+        source: 'beat_intervals',
+        lastUpdated: currentTime
+      };
+
+      // Use fast tempo as current if slow isn't available or reliable
+      if (!MusicState.features.tempo.slow || MusicState.features.tempo.slow.confidence < 0.7) {
+        MusicState.features.tempo.current = {
+          bpm: bpm,
+          confidence: this.beatConfidence,
+          stable: this.beatConfidence > 0.7
+        };
+      }
     }
 
     // Update state

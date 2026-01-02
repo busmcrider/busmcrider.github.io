@@ -26,11 +26,10 @@ export const MusicState = {
       threshold: 0
     },
     tempo: {
-          bpm: null,
-          confidence: 0,
-          stable: false,
-          lastUpdated: 0
-    },
+          fast: null,      // From beat intervals (immediate)
+          slow: null,      // From autocorrelation (accurate)
+          current: null    // Best available tempo
+        },
     key: null,
     harmonic: null
   },
