@@ -1,5 +1,5 @@
 // Configuration manager - holds all settings with defaults
-class ConfigManager {
+export class ConfigManager {
   constructor() {
     this.config = this.getDefaults();
   }

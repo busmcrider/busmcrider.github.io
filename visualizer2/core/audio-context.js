@@ -1,5 +1,5 @@
 // Manages Web Audio API setup and audio file loading
-class AudioContextManager {
+export class AudioContextManager {
   constructor() {
     this.audioContext = null;
     this.analyser = null;

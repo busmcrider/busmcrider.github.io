@@ -1,5 +1,5 @@
 // Global animations - effects that apply to the entire visualization
-class GlobalAnimations {
+export class GlobalAnimations {
   constructor(canvas, ctx) {
     this.canvas = canvas;
     this.ctx = ctx;

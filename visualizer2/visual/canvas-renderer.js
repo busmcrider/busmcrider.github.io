@@ -1,5 +1,5 @@
 // Manages the canvas rendering pipeline
-class CanvasRenderer {
+export class CanvasRenderer {
   constructor(canvas) {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');

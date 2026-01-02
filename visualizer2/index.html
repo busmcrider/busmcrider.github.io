@@ -124,16 +124,7 @@
     </div>
   </div>
 
-  <!-- Load scripts in dependency order -->
-  <script src="core/music-state.js"></script>
-  <script src="core/audio-context.js"></script>
-  <script src="analysis/instantaneous.js"></script>
-  <script src="visual/visualizers/spectrum-bars.js"></script>
-  <script src="visual/canvas-renderer.js"></script>
-  <script src="core/config-manager.js"></script>
-  <script src="analysis/beat-detection.js"></script>
-  <script src="mapping/mapping-engine.js"></script>
-  <script src="visual/global-animations.js"></script>
-  <script src="test-page/test-controller.js"></script>
+  <!-- Single entry point -->
+  <script type="module" src="main.js"></script>
 </body>
 </html>

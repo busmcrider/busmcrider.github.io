@@ -1,6 +1,8 @@
 // Performs instantaneous analysis (every frame)
 // Extracts FFT spectrum, amplitude, and basic spectral features
-class InstantaneousAnalyzer {
+import { MusicState } from '../core/music-state.js';
+
+export class InstantaneousAnalyzer {
   constructor(analyser) {
     this.analyser = analyser;
     this.bufferLength = analyser.frequencyBinCount;

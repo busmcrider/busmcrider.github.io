@@ -1,5 +1,15 @@
 // Main controller - wires everything together
-class TestController {
+import { AudioContextManager } from '../core/audio-context.js';
+import { ConfigManager } from '../core/config-manager.js';
+import { MusicState } from '../core/music-state.js';
+import { InstantaneousAnalyzer } from '../analysis/instantaneous.js';
+import { BeatDetector } from '../analysis/beat-detection.js';
+import { MappingEngine } from '../mapping/mapping-engine.js';
+import { CanvasRenderer } from '../visual/canvas-renderer.js';
+import { GlobalAnimations } from '../visual/global-animations.js';
+import { SpectrumBars } from '../visual/visualizers/spectrum-bars.js';
+
+export class TestController {
   constructor() {
     this.audioManager = new AudioContextManager();
     this.analyzer = null;
@@ -148,11 +158,3 @@ class TestController {
     }, 100); // Update 10 times per second
   }
 }
-
-// Initialize when page loads
-window.addEventListener('DOMContentLoaded', () => {
-  console.log('=== Music Visualizer - Stage 0 ===');
-  console.log('Initializing...');
-  const controller = new TestController();
-  console.log('Ready! Load an audio file to begin.');
-});

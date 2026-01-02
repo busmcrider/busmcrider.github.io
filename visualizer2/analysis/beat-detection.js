@@ -1,6 +1,8 @@
 // Beat detection using onset detection algorithm
 // Tracks energy spikes in the audio signal
-class BeatDetector {
+import { MusicState } from '../core/music-state.js';
+
+export class BeatDetector {
   constructor(config) {
     this.config = config;
 

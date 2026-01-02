@@ -1,5 +1,7 @@
 // Simple frequency spectrum bars visualizer
-class SpectrumBars {
+import { MusicState } from '../../core/music-state.js';
+
+export class SpectrumBars {
   constructor(canvas, ctx) {
     this.canvas = canvas;
     this.ctx = ctx;

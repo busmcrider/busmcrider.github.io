@@ -2,7 +2,7 @@
 // This is the single source of truth that gets updated by analyzers
 // and read by visualizers
 
-const MusicState = {
+export const MusicState = {
   // Instantaneous data (updated every frame)
   instantaneous: {
     timestamp: 0,              // Current audio time in seconds

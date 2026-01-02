@@ -1,5 +1,7 @@
 // Mapping engine - translates musical features to visual commands
-class MappingEngine {
+import { MusicState } from '../core/music-state.js';
+
+export class MappingEngine {
   constructor(config) {
     this.config = config;
 
