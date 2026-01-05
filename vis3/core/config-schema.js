@@ -100,4 +100,21 @@ export const ConfigSchema = {
   },
 
   // Spectrum bars visualizer
-  'visualizers.spectrumBars.ena
+  'visualizers.spectrumBars.enabled': {
+    type: 'checkbox',
+    label: 'Enable Spectrum Bars'
+  },
+  'visualizers.spectrumBars.numBars': {
+    type: 'slider',
+    min: 32,
+    max: 256,
+    step: 16,
+    label: 'Number of Bars',
+    description: 'More bars = finer detail'
+  },
+  'visualizers.spectrumBars.colorScheme': {
+    type: 'select',
+    options: ['rainbow', 'blue', 'green', 'red', 'purple'],
+    label: 'Color Scheme'
+  }
+};
