@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music Visualizer - Test Page</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0a0a0a;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    #controls {
+      padding: 20px;
+      background: #1a1a1a;
+      border-bottom: 1px solid #333;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    button {
+      background: #2a2a2a;
+      color: #ffffff;
+      border: 1px solid #444;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: #3a3a3a;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    button:disabled:hover {
+      background: #2a2a2a;
+    }
+
+    #fileInput {
+      display: none;
+    }
+
+    #canvasContainer {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #visualizerCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    #debugOverlay {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 15px;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      min-width: 200px;
+      backdrop-filter: blur(10px);
+    }
+
+    #debugOverlay .label {
+      color: #888;
+      margin-bottom: 5px;
+    }
+
+    #debugOverlay .value {
+      color: #4af;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .control-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .separator {
+      width: 1px;
+      height: 30px;
+      background: #444;
+      margin: 0 10px;
+    }
+
+    #fileName {
+      color: #888;
+      font-size: 14px;
+      max-width: 300px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <div id="controls">
+    <div class="control-group">
+      <input type="file" id="fileInput" accept="audio/*">
+      <button id="loadBtn">Load Audio File</button>
+      <span id="fileName"></span>
+    </div>
+
+    <div class="separator"></div>
+
+    <div class="control-group">
+      <button id="playBtn" disabled>Play</button>
+      <button id="pauseBtn" disabled>Pause</button>
+    </div>
+  </div>
+
+  <div id="canvasContainer">
+    <canvas id="visualizerCanvas"></canvas>
+  </div>
+
+  <div id="debugOverlay">
+    <div class="label">FPS</div>
+    <div class="value" id="fpsValue">0</div>
+  </div>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>
