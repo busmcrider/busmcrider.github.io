@@ -1,0 +1,506 @@
+/* ui/test-page.css */
+/* Dark theme styling for test page */
+
+:root {
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #1a1a1a;
+  --bg-tertiary: #2a2a2a;
+  --bg-hover: #3a3a3a;
+  --border-color: #333;
+  --text-primary: #ffffff;
+  --text-secondary: #888;
+  --accent-color: #4af;
+  --accent-hover: #6cf;
+  --danger-color: #f44;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Main Layout */
+#app {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+}
+
+#controls {
+  padding: 20px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  z-index: 10;
+}
+
+#mainContent {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+#configPanel {
+  width: 320px;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#canvasContainer {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Buttons */
+button {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+button:hover {
+  background: var(--bg-hover);
+  border-color: #444;
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button:disabled:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--border-color);
+  transform: none;
+}
+
+button.primary {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  color: #000;
+}
+
+button.primary:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+button.danger {
+  background: var(--danger-color);
+  border-color: var(--danger-color);
+}
+
+button.danger:hover {
+  background: #f66;
+  border-color: #f66;
+}
+
+/* Control Groups */
+.control-group {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.separator {
+  width: 1px;
+  height: 30px;
+  background: var(--border-color);
+  margin: 0 10px;
+}
+
+#fileName {
+  color: var(--text-secondary);
+  font-size: 14px;
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#fileInput {
+  display: none;
+}
+
+/* Config Panel */
+.config-section {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.config-section-header {
+  padding: 15px 20px;
+  background: var(--bg-tertiary);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  user-select: none;
+  transition: background 0.2s;
+  position: relative;
+}
+
+.config-section-header:hover {
+  background: var(--bg-hover);
+}
+
+.config-section-header::after {
+  content: '▼';
+  position: absolute;
+  right: 20px;
+  transition: transform 0.2s;
+  font-size: 10px;
+}
+
+.config-section-header.collapsed::after {
+  transform: rotate(-90deg);
+}
+
+.config-section-content {
+  padding: 10px 20px 20px;
+}
+
+.config-control {
+  margin-bottom: 20px;
+}
+
+.config-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.config-value {
+  float: right;
+  color: var(--accent-color);
+  font-size: 12px;
+  font-weight: 600;
+  min-width: 50px;
+  text-align: right;
+}
+
+.config-description {
+  margin-top: 5px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* Slider */
+.config-slider {
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--bg-tertiary);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+.config-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.config-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.config-slider::-webkit-slider-thumb:hover {
+  background: var(--accent-hover);
+  transform: scale(1.1);
+}
+
+.config-slider::-moz-range-thumb:hover {
+  background: var(--accent-hover);
+  transform: scale(1.1);
+}
+
+/* Checkbox */
+.config-checkbox-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.config-checkbox {
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
+  cursor: pointer;
+  accent-color: var(--accent-color);
+}
+
+/* Select */
+.config-select {
+  width: 100%;
+  padding: 8px 12px;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.config-select:hover {
+  background: var(--bg-hover);
+  border-color: #444;
+}
+
+.config-select:focus {
+  border-color: var(--accent-color);
+}
+
+/* Number Input */
+.config-number {
+  width: 100%;
+  padding: 8px 12px;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 13px;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.config-number:hover {
+  background: var(--bg-hover);
+  border-color: #444;
+}
+
+.config-number:focus {
+  border-color: var(--accent-color);
+}
+
+/* Color Picker */
+.config-color {
+  width: 100%;
+  height: 40px;
+  padding: 4px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.config-color:hover {
+  border-color: #444;
+}
+
+/* Preset Management */
+#presetSection {
+  padding: 20px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+
+#presetSection h3 {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 15px;
+  color: var(--text-secondary);
+}
+
+.preset-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.preset-row {
+  display: flex;
+  gap: 10px;
+}
+
+.preset-row input {
+  flex: 1;
+  padding: 8px 12px;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 13px;
+  outline: none;
+}
+
+.preset-row input:focus {
+  border-color: var(--accent-color);
+}
+
+.preset-row button {
+  padding: 8px 16px;
+  font-size: 13px;
+}
+
+#presetList {
+  max-height: 150px;
+  overflow-y: auto;
+  margin-top: 10px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+.preset-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-color);
+  transition: background 0.2s;
+}
+
+.preset-item:last-child {
+  border-bottom: none;
+}
+
+.preset-item:hover {
+  background: var(--bg-tertiary);
+}
+
+.preset-item-name {
+  font-size: 13px;
+  cursor: pointer;
+  flex: 1;
+}
+
+.preset-item-delete {
+  padding: 4px 8px;
+  font-size: 11px;
+  background: transparent;
+  border: none;
+  color: var(--danger-color);
+  cursor: pointer;
+}
+
+.preset-item-delete:hover {
+  color: #f66;
+}
+
+/* Canvas */
+#visualizerCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Debug Overlay */
+#debugOverlay {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.85);
+  padding: 15px 20px;
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  min-width: 120px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#debugOverlay .label {
+  color: var(--text-secondary);
+  margin-bottom: 5px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+#debugOverlay .value {
+  color: var(--accent-color);
+  font-size: 32px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+/* Scrollbar Styling */
+#configPanel::-webkit-scrollbar,
+#presetList::-webkit-scrollbar {
+  width: 8px;
+}
+
+#configPanel::-webkit-scrollbar-track,
+#presetList::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+#configPanel::-webkit-scrollbar-thumb,
+#presetList::-webkit-scrollbar-thumb {
+  background: var(--bg-tertiary);
+  border-radius: 4px;
+}
+
+#configPanel::-webkit-scrollbar-thumb:hover,
+#presetList::-webkit-scrollbar-thumb:hover {
+  background: var(--bg-hover);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  #mainContent {
+    flex-direction: column;
+  }
+
+  #configPanel {
+    width: 100%;
+    height: 300px;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  #debugOverlay {
+    top: auto;
+    bottom: 20px;
+    right: 20px;
+  }
+}
