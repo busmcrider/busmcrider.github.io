@@ -113,8 +113,36 @@ export const ConfigSchema = {
     description: 'More bars = finer detail'
   },
   'visualizers.spectrumBars.colorScheme': {
-    type: 'select',
-    options: ['rainbow', 'blue', 'green', 'red', 'purple'],
-    label: 'Color Scheme'
+      type: 'select',
+      options: ['rainbow', 'blue', 'green', 'red', 'purple'],
+      label: 'Color Scheme'
+  },
+
+  // Key detection
+  'analysis.key.enabled': {
+    type: 'checkbox',
+    label: 'Enable Key Detection'
+  },
+  'analysis.key.confidenceThreshold': {
+    type: 'slider',
+    min: 0,
+    max: 1,
+    step: 0.05,
+    label: 'Key Confidence Threshold',
+    description: 'Minimum confidence to report detected key'
+  },
+
+  // Voice detection
+  'analysis.voice.enabled': {
+    type: 'checkbox',
+    label: 'Enable Voice Detection'
+  },
+  'analysis.voice.confidenceThreshold': {
+    type: 'slider',
+    min: 0,
+    max: 1,
+    step: 0.05,
+    label: 'Voice Confidence Threshold',
+    description: 'Minimum confidence to report voice presence'
   }
 };

@@ -8,8 +8,13 @@ import { AnalysisCoordinator } from './core/analysis-coordinator.js';
 import { DataBridge } from './core/data-bridge.js';
 import { VisualizerCore } from './core/visualizer-core.js';
 import { InstantaneousAnalyzer } from './analysis/instantaneous.js';
+import { BeatDetector } from './analysis/beat-detector.js';
+import { PitchDetector } from './analysis/pitch-detector.js';
+import { KeyDetector } from './analysis/key-detector.js';
+import { VoiceDetector } from './analysis/voice-detector.js';
 import { SpectrumBarsVisualizer } from './visual/visualizers/spectrum-bars.js';
 import { ConfigPanel } from './ui/config-panel.js';
+import { LifecycleManager } from './core/lifecycle-manager.js';
 import { savePreset, loadPreset, listPresets, deletePreset } from './utils/storage.js';
 import { handleError } from './utils/error-handler.js';
 
@@ -22,6 +27,9 @@ class MusicVisualizerApp {
     this.dataBridge = new DataBridge();
     this.visualizerCore = null;
     this.configPanel = null;
+    this.lifecycleManager = null;
+    this.tempoWorker = null;
+    this.keyDetector = null;  // Store reference for pitch feeding
 
     // UI elements
     this.elements = {
@@ -113,28 +121,62 @@ class MusicVisualizerApp {
   }
 
   setupAnalysisSystem() {
-    const analyser = this.audioManager.getAnalyser();
+      const analyser = this.audioManager.getAnalyser();
 
-    // Create analysis coordinator
-    this.analysisCoordinator = new AnalysisCoordinator(this.audioManager, this.config);
+      // Create lifecycle manager
+      this.lifecycleManager = new LifecycleManager(this.config);
 
-    // Create and register instantaneous analyzer
-    const instantaneousAnalyzer = new InstantaneousAnalyzer(analyser, this.config);
-    this.analysisCoordinator.registerAnalyzer('instantaneous', instantaneousAnalyzer);
+      // Create analysis coordinator
+      this.analysisCoordinator = new AnalysisCoordinator(this.audioManager, this.config);
 
-    // Create and add spectrum bars visualizer
-    const spectrumBarsVisualizer = new SpectrumBarsVisualizer(
-      this.elements.canvas,
-      this.elements.canvas.getContext('2d'),
-      this.config
-    );
-    this.visualizerCore.addVisualizer('spectrumBars', spectrumBarsVisualizer);
+      // Create and register instantaneous analyzer
+      const instantaneousAnalyzer = new InstantaneousAnalyzer(analyser, this.config);
+      this.analysisCoordinator.registerAnalyzer('instantaneous', instantaneousAnalyzer);
 
-    // Set up pairing: instantaneous analyzer -> spectrum bars visualizer
-    this.dataBridge.pair('instantaneous', 'spectrumBars');
+      // Create and register beat detector
+      const beatDetector = new BeatDetector(analyser, this.config);
+      this.analysisCoordinator.registerAnalyzer('beat', beatDetector);
 
-    console.log('Analysis system initialized');
-  }
+      // Create and register pitch detector
+      const pitchDetector = new PitchDetector(analyser, this.config);
+      this.analysisCoordinator.registerAnalyzer('pitch', pitchDetector);
+
+      // Create and register key detector
+      this.keyDetector = new KeyDetector(analyser, this.config);
+      this.analysisCoordinator.registerAnalyzer('key', this.keyDetector);
+
+      // Create and register voice detector
+      const voiceDetector = new VoiceDetector(analyser, this.config);
+      this.analysisCoordinator.registerAnalyzer('voice', voiceDetector);
+
+      // Initialize tempo worker
+      this.tempoWorker = new Worker('core/workers/tempo-worker.js');
+      this.tempoWorker.onmessage = (e) => {
+        if (e.data.type === 'result') {
+          this.lifecycleManager.updateBPM(e.data.bpm, e.data.confidence);
+        }
+      };
+      this.tempoWorker.postMessage({
+        type: 'init',
+        data: {
+          minBPM: this.config.get('analysis.tempo.minBPM'),
+          maxBPM: this.config.get('analysis.tempo.maxBPM')
+        }
+      });
+
+      // Create and add spectrum bars visualizer
+      const spectrumBarsVisualizer = new SpectrumBarsVisualizer(
+        this.elements.canvas,
+        this.elements.canvas.getContext('2d'),
+        this.config
+      );
+      this.visualizerCore.addVisualizer('spectrumBars', spectrumBarsVisualizer);
+
+      // Set up pairing: instantaneous analyzer -> spectrum bars visualizer
+      this.dataBridge.pair('instantaneous', 'spectrumBars');
+
+      console.log('Analysis system initialized');
+    }
 
   play() {
     this.audioManager.play();
@@ -155,25 +197,38 @@ class MusicVisualizerApp {
   }
 
   startAnalysisLoop() {
-    const loop = () => {
-      if (this.audioManager.isAudioPlaying()) {
-        // Run analysis
-        const currentTime = this.audioManager.getCurrentTime();
-        const analysisResults = this.analysisCoordinator.runAnalysis(currentTime);
+      const loop = () => {
+        if (this.audioManager.isAudioPlaying()) {
+          // Run analysis
+          const currentTime = this.audioManager.getCurrentTime();
+          const analysisResults = this.analysisCoordinator.runAnalysis(currentTime);
 
-        // Route data to visualizers
-        this.dataBridge.route(analysisResults, this.visualizerCore.getAllVisualizers());
+          // Feed pitch data to key detector
+          if (analysisResults.pitch && analysisResults.pitch.note) {
+            this.keyDetector.updatePitch(analysisResults.pitch.note, analysisResults.pitch.confidence);
+          }
 
-        // Update FPS display
-        this.elements.fpsValue.textContent = this.visualizerCore.getFPS();
+          // Send beat detections to tempo worker
+          if (analysisResults.beat && analysisResults.beat.detected) {
+            this.tempoWorker.postMessage({
+              type: 'beatDetected',
+              data: { timestamp: currentTime * 1000 }  // Convert to ms
+            });
+          }
 
-        // Continue loop
-        this.animationLoopId = requestAnimationFrame(loop);
-      }
-    };
+          // Route data to visualizers
+          this.dataBridge.route(analysisResults, this.visualizerCore.getAllVisualizers());
 
-    loop();
-  }
+          // Update debug display
+          this.updateDebugDisplay(analysisResults);
+
+          // Continue loop
+          this.animationLoopId = requestAnimationFrame(loop);
+        }
+      };
+
+      loop();
+    }
 
   stopAnalysisLoop() {
       if (this.animationLoopId) {
@@ -278,6 +333,43 @@ class MusicVisualizerApp {
         item.appendChild(deleteBtn);
         this.elements.presetList.appendChild(item);
       }
+    }
+
+    updateDebugDisplay(analysisResults) {
+      // Update FPS
+      this.elements.fpsValue.textContent = this.visualizerCore.getFPS();
+      
+      // Create debug info string
+      let debugInfo = `FPS: ${this.visualizerCore.getFPS()}`;
+      
+      // Add BPM if available
+      const bpm = this.lifecycleManager.getCurrentBPM();
+      if (bpm) {
+        debugInfo += `\nBPM: ${Math.round(bpm)}`;
+      }
+      
+      // Add beat indicator
+      if (analysisResults.beat && analysisResults.beat.detected) {
+        debugInfo += '\n🔴 BEAT';
+      }
+      
+      // Add pitch if available
+      if (analysisResults.pitch && analysisResults.pitch.note) {
+        debugInfo += `\nPitch: ${analysisResults.pitch.note}`;
+      }
+      
+      // Add key if available
+      if (analysisResults.key && analysisResults.key.key) {
+        debugInfo += `\nKey: ${analysisResults.key.key} ${analysisResults.key.mode}`;
+      }
+      
+      // Add voice indicator
+      if (analysisResults.voice && analysisResults.voice.voicePresent) {
+        debugInfo += '\n🎤 Voice';
+      }
+      
+      // Update display (for now just FPS, expand debug overlay in Phase 4)
+      this.elements.fpsValue.textContent = this.visualizerCore.getFPS();
     }
 
     handleConfigChange(path, value) {
