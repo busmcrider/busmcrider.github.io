@@ -339,37 +339,39 @@ class MusicVisualizerApp {
       // Update FPS
       this.elements.fpsValue.textContent = this.visualizerCore.getFPS();
       
-      // Create debug info string
-      let debugInfo = `FPS: ${this.visualizerCore.getFPS()}`;
-      
-      // Add BPM if available
+      // Update BPM
       const bpm = this.lifecycleManager.getCurrentBPM();
-      if (bpm) {
-        debugInfo += `\nBPM: ${Math.round(bpm)}`;
+      const bpmElement = document.getElementById('bpmValue');
+      if (bpmElement) {
+        bpmElement.textContent = bpm ? Math.round(bpm) : '--';
       }
       
-      // Add beat indicator
-      if (analysisResults.beat && analysisResults.beat.detected) {
-        debugInfo += '\n🔴 BEAT';
+      // Update beat indicator (flash on beat)
+      const beatFlash = document.querySelector('.beat-flash');
+      if (beatFlash && analysisResults.beat && analysisResults.beat.detected) {
+        beatFlash.classList.add('active');
+        setTimeout(() => beatFlash.classList.remove('active'), 100);
       }
       
-      // Add pitch if available
-      if (analysisResults.pitch && analysisResults.pitch.note) {
-        debugInfo += `\nPitch: ${analysisResults.pitch.note}`;
+      // Update pitch
+      const pitchElement = document.getElementById('pitchValue');
+      if (pitchElement && analysisResults.pitch) {
+        pitchElement.textContent = analysisResults.pitch.note || '--';
       }
       
-      // Add key if available
-      if (analysisResults.key && analysisResults.key.key) {
-        debugInfo += `\nKey: ${analysisResults.key.key} ${analysisResults.key.mode}`;
+      // Update key
+      const keyElement = document.getElementById('keyValue');
+      if (keyElement && analysisResults.key && analysisResults.key.key) {
+        keyElement.textContent = `${analysisResults.key.key} ${analysisResults.key.mode}`;
+      } else if (keyElement) {
+        keyElement.textContent = '--';
       }
       
-      // Add voice indicator
-      if (analysisResults.voice && analysisResults.voice.voicePresent) {
-        debugInfo += '\n🎤 Voice';
+      // Update voice
+      const voiceElement = document.getElementById('voiceValue');
+      if (voiceElement && analysisResults.voice) {
+        voiceElement.textContent = analysisResults.voice.voicePresent ? '🎤 Active' : '--';
       }
-      
-      // Update display (for now just FPS, expand debug overlay in Phase 4)
-      this.elements.fpsValue.textContent = this.visualizerCore.getFPS();
     }
 
     handleConfigChange(path, value) {

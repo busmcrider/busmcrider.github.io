@@ -448,6 +448,18 @@ button.danger:hover {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+#debugOverlay .debug-item {
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#debugOverlay .debug-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
 #debugOverlay .label {
   color: var(--text-secondary);
   margin-bottom: 5px;
@@ -461,6 +473,29 @@ button.danger:hover {
   font-size: 32px;
   font-weight: bold;
   line-height: 1;
+}
+
+#debugOverlay .value.small {
+  font-size: 18px;
+}
+
+#beatIndicator {
+  text-align: center;
+  border: none !important;
+  padding: 0 !important;
+  margin: 10px 0 !important;
+}
+
+.beat-flash {
+  font-size: 48px;
+  color: #ff4444;
+  opacity: 0;
+  transition: opacity 0.1s;
+  line-height: 1;
+}
+
+.beat-flash.active {
+  opacity: 1;
 }
 
 /* Scrollbar Styling */

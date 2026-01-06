@@ -51,10 +51,31 @@
     </div>
 
     <div id="debugOverlay">
-      <div class="label">FPS</div>
-      <div class="value" id="fpsValue">0</div>
+        <div class="debug-item">
+          <div class="label">FPS</div>
+          <div class="value" id="fpsValue">0</div>
+        </div>
+        <div class="debug-item">
+          <div class="label">BPM</div>
+          <div class="value" id="bpmValue">--</div>
+        </div>
+        <div class="debug-item" id="beatIndicator">
+          <div class="beat-flash">●</div>
+        </div>
+        <div class="debug-item">
+          <div class="label">Pitch</div>
+          <div class="value small" id="pitchValue">--</div>
+        </div>
+        <div class="debug-item">
+          <div class="label">Key</div>
+          <div class="value small" id="keyValue">--</div>
+        </div>
+        <div class="debug-item">
+          <div class="label">Voice</div>
+          <div class="value small" id="voiceValue">--</div>
+        </div>
+      </div>
     </div>
-  </div>
 
   <script type="module" src="main.js"></script>
 </body>

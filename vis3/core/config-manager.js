@@ -13,26 +13,26 @@ export class ConfigManager {
           enabled: true
         },
         beat: {
-          enabled: false,
+          enabled: true,
           sensitivity: 0.7,
           minTimeBetweenBeats: 300
         },
         pitch: {
-          enabled: false,
+          enabled: true,
           minFrequency: 80,
           maxFrequency: 1000
         },
         tempo: {
-          enabled: false,
+          enabled: true,
           minBPM: 60,
           maxBPM: 180
         },
         key: {
-          enabled: false,
+          enabled: true,
           confidenceThreshold: 0.7
         },
         voice: {
-          enabled: false,
+          enabled: true,
           confidenceThreshold: 0.6
         }
       },
