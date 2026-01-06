@@ -14,26 +14,26 @@ export class ConfigManager {
         },
         beat: {
           enabled: true,
-          sensitivity: 0.7,
-          minTimeBetweenBeats: 300
+          sensitivity: 1.5,  // Higher = more sensitive (research: 1.5-2.0 typical)
+          minTimeBetweenBeats: 200  // Faster for uptempo music (300ms = max 200 BPM)
         },
         pitch: {
           enabled: true,
-          minFrequency: 80,
-          maxFrequency: 1000
+          minFrequency: 80,     // Low male voice fundamental
+          maxFrequency: 2000    // Covers most musical instruments (was 1000, too narrow)
         },
         tempo: {
           enabled: true,
           minBPM: 60,
-          maxBPM: 180
+          maxBPM: 200  // Increased from 180 to cover faster genres
         },
         key: {
           enabled: true,
-          confidenceThreshold: 0.7
+          confidenceThreshold: 0.5  // Lowered from 0.7 (more lenient)
         },
         voice: {
           enabled: true,
-          confidenceThreshold: 0.6
+          confidenceThreshold: 0.7  // Increased from 0.6 (more strict)
         }
       },
       visual: {

@@ -45,7 +45,9 @@ class MusicVisualizerApp {
       savePresetBtn: document.getElementById('savePresetBtn'),
       exportConfigBtn: document.getElementById('exportConfigBtn'),
       importConfigBtn: document.getElementById('importConfigBtn'),
-      presetList: document.getElementById('presetList')
+      presetList: document.getElementById('presetList'),
+      toggleConfigBtn: document.getElementById('toggleConfigBtn'),
+      configPanel: document.getElementById('configPanel')
     };
 
     // State
@@ -88,6 +90,11 @@ class MusicVisualizerApp {
 
     this.elements.pauseBtn.addEventListener('click', () => {
       this.pause();
+    });
+
+    // Wire up config panel toggle
+    this.elements.toggleConfigBtn.addEventListener('click', () => {
+      this.elements.configPanel.classList.toggle('hidden');
     });
 
     // Initialize visualizer core
@@ -338,27 +345,27 @@ class MusicVisualizerApp {
     updateDebugDisplay(analysisResults) {
       // Update FPS
       this.elements.fpsValue.textContent = this.visualizerCore.getFPS();
-      
+
       // Update BPM
       const bpm = this.lifecycleManager.getCurrentBPM();
       const bpmElement = document.getElementById('bpmValue');
       if (bpmElement) {
         bpmElement.textContent = bpm ? Math.round(bpm) : '--';
       }
-      
+
       // Update beat indicator (flash on beat)
       const beatFlash = document.querySelector('.beat-flash');
       if (beatFlash && analysisResults.beat && analysisResults.beat.detected) {
         beatFlash.classList.add('active');
         setTimeout(() => beatFlash.classList.remove('active'), 100);
       }
-      
+
       // Update pitch
       const pitchElement = document.getElementById('pitchValue');
       if (pitchElement && analysisResults.pitch) {
         pitchElement.textContent = analysisResults.pitch.note || '--';
       }
-      
+
       // Update key
       const keyElement = document.getElementById('keyValue');
       if (keyElement && analysisResults.key && analysisResults.key.key) {
@@ -366,7 +373,7 @@ class MusicVisualizerApp {
       } else if (keyElement) {
         keyElement.textContent = '--';
       }
-      
+
       // Update voice
       const voiceElement = document.getElementById('voiceValue');
       if (voiceElement && analysisResults.voice) {

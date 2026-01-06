@@ -31,11 +31,11 @@ export const ConfigSchema = {
   },
   'analysis.beat.sensitivity': {
     type: 'slider',
-    min: 0,
-    max: 1,
-    step: 0.05,
+    min: 0.5,
+    max: 3,
+    step: 0.1,
     label: 'Beat Sensitivity',
-    description: 'Higher = detects weaker beats'
+    description: 'Higher = detects weaker beats (1.5-2.0 typical)'
   },
   'analysis.beat.minTimeBetweenBeats': {
     type: 'number',
@@ -63,7 +63,8 @@ export const ConfigSchema = {
     min: 500,
     max: 4000,
     step: 100,
-    label: 'Max Frequency (Hz)'
+    label: 'Max Frequency (Hz)',
+    description: '2000Hz covers most instruments'
   },
 
   // Tempo detection
@@ -83,7 +84,8 @@ export const ConfigSchema = {
     min: 120,
     max: 240,
     step: 10,
-    label: 'Max BPM'
+    label: 'Max BPM',
+    description: '200 BPM covers most genres'
   },
 
   // Visual settings

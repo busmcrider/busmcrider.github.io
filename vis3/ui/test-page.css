@@ -60,6 +60,13 @@ body {
   border-right: 1px solid var(--border-color);
   overflow-y: auto;
   overflow-x: hidden;
+  transition: transform 0.3s ease;
+}
+
+#configPanel.hidden {
+  transform: translateX(-100%);
+  position: absolute;
+  z-index: 5;
 }
 
 #canvasContainer {
@@ -524,18 +531,69 @@ button.danger:hover {
 @media (max-width: 768px) {
   #mainContent {
     flex-direction: column;
+    position: relative;
   }
 
   #configPanel {
-    width: 100%;
-    height: 300px;
-    border-right: none;
-    border-bottom: 1px solid var(--border-color);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 90%;
+    max-width: 320px;
+    height: 100%;
+    border-right: 1px solid var(--border-color);
+    border-bottom: none;
+    z-index: 10;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
+  }
+
+  #configPanel.hidden {
+    transform: translateX(-100%);
   }
 
   #debugOverlay {
     top: auto;
     bottom: 20px;
     right: 20px;
+    font-size: 11px;
+    padding: 10px 15px;
+  }
+
+  #debugOverlay .value {
+    font-size: 24px;
+  }
+
+  #debugOverlay .value.small {
+    font-size: 14px;
+  }
+
+  .beat-flash {
+    font-size: 36px;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+  #controls {
+    padding: 15px;
+  }
+
+  button {
+    padding: 8px 15px;
+    font-size: 13px;
+  }
+
+  #configPanel {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .config-section-content {
+    padding: 10px 15px 15px;
+  }
+
+  #debugOverlay {
+    right: 10px;
+    bottom: 10px;
   }
 }

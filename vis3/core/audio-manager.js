@@ -13,6 +13,9 @@ export class AudioManager {
 
   async loadFile(file) {
     try {
+      // Clean up existing audio
+      this.cleanup();
+
       // Create audio element from file
       const url = URL.createObjectURL(file);
       this.audioElement = new Audio(url);
@@ -79,6 +82,23 @@ export class AudioManager {
   getDuration() {
     return this.audioElement ? this.audioElement.duration : 0;
   }
+
+  cleanup() {
+      // Stop and cleanup existing audio
+      if (this.audioElement) {
+        this.audioElement.pause();
+        this.audioElement.src = '';
+        this.audioElement = null;
+      }
+
+      // Disconnect source node
+      if (this.sourceNode) {
+        this.sourceNode.disconnect();
+        this.sourceNode = null;
+      }
+
+      this.isPlaying = false;
+    }
 
   isAudioPlaying() {
     return this.isPlaying;
