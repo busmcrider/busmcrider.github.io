@@ -29,6 +29,7 @@ class MusicVisualizerApp {
     this.configPanel = null;
     this.lifecycleManager = null;
     this.tempoWorker = null;
+    this.pitchWorker = null;
     this.keyDetector = null;  // Store reference for pitch feeding
 
     // UI elements
@@ -106,15 +107,21 @@ class MusicVisualizerApp {
     if (!file) return;
 
     try {
+      // Stop playback if running
+      if (this.audioManager.isAudioPlaying()) {
+        this.pause();
+      }
+
+      // Cleanup existing workers and audio
+      this.cleanup();
+
       // Load audio file
       const metadata = await this.audioManager.loadFile(file);
       this.elements.fileName.textContent = metadata.name;
 
-      // Initialize analysis system
-      if (!this.isInitialized) {
-        this.setupAnalysisSystem();
-        this.isInitialized = true;
-      }
+      // Always reinitialize analysis system for new file
+      this.setupAnalysisSystem();
+      this.isInitialized = true;
 
       // Enable playback controls
       this.elements.playBtn.disabled = false;
@@ -130,9 +137,23 @@ class MusicVisualizerApp {
   setupAnalysisSystem() {
       const analyser = this.audioManager.getAnalyser();
 
-      // Create lifecycle manager
+      // Reset lifecycle manager
+      if (this.lifecycleManager) {
+        this.lifecycleManager.reset();
+      }
       this.lifecycleManager = new LifecycleManager(this.config);
 
+      // Clear existing coordinator if present
+      if (this.analysisCoordinator) {
+        // Reset all analyzers
+        for (const name of this.analysisCoordinator.getAllAnalyzers()) {
+          const analyzer = this.analysisCoordinator.getAnalyzer(name);
+          if (analyzer && analyzer.reset) {
+            analyzer.reset();
+          }
+        }
+      }
+      
       // Create analysis coordinator
       this.analysisCoordinator = new AnalysisCoordinator(this.audioManager, this.config);
 
@@ -144,8 +165,10 @@ class MusicVisualizerApp {
       const beatDetector = new BeatDetector(analyser, this.config);
       this.analysisCoordinator.registerAnalyzer('beat', beatDetector);
 
-      // Create and register pitch detector
+      // Create and register pitch detector with worker
       const pitchDetector = new PitchDetector(analyser, this.config);
+      this.pitchWorker = new Worker('core/workers/pitch-worker.js');
+      pitchDetector.setWorker(this.pitchWorker);
       this.analysisCoordinator.registerAnalyzer('pitch', pitchDetector);
 
       // Create and register key detector
@@ -201,6 +224,18 @@ class MusicVisualizerApp {
     this.audioManager.pause();
     this.stopAnalysisLoop();
     console.log('Playback paused');
+  }
+
+  cleanup() {
+    // Terminate workers
+    if (this.tempoWorker) {
+      this.tempoWorker.terminate();
+      this.tempoWorker = null;
+    }
+    if (this.pitchWorker) {
+      this.pitchWorker.terminate();
+      this.pitchWorker = null;
+    }
   }
 
   startAnalysisLoop() {
@@ -389,6 +424,15 @@ class MusicVisualizerApp {
           this.audioManager.analyser.fftSize = this.config.get('audio.fftSize');
           this.audioManager.analyser.smoothingTimeConstant = this.config.get('audio.smoothingTimeConstant');
           console.log(`Audio setting updated: ${path} = ${value}`);
+        }
+      }
+
+      // Update pitch worker config if pitch parameters change
+      if (path === 'analysis.pitch.minFrequency' || path === 'analysis.pitch.maxFrequency') {
+        const pitchAnalyzer = this.analysisCoordinator.getAnalyzer('pitch');
+        if (pitchAnalyzer && pitchAnalyzer.updateConfig) {
+          pitchAnalyzer.updateConfig();
+          console.log(`Pitch config updated: ${path} = ${value}`);
         }
       }
 
