@@ -31,6 +31,7 @@ class MusicVisualizerApp {
     this.tempoWorker = null;
     this.pitchWorker = null;
     this.keyDetector = null;  // Store reference for pitch feeding
+    this.voiceDetector = null;  // Store reference for config updates
 
     // UI elements
     this.elements = {
@@ -153,7 +154,7 @@ class MusicVisualizerApp {
           }
         }
       }
-      
+
       // Create analysis coordinator
       this.analysisCoordinator = new AnalysisCoordinator(this.audioManager, this.config);
 
@@ -175,9 +176,11 @@ class MusicVisualizerApp {
       this.keyDetector = new KeyDetector(analyser, this.config);
       this.analysisCoordinator.registerAnalyzer('key', this.keyDetector);
 
-      // Create and register voice detector
-      const voiceDetector = new VoiceDetector(analyser, this.config);
-      this.analysisCoordinator.registerAnalyzer('voice', voiceDetector);
+      // Create and register voice detector with worker
+      this.voiceDetector = new VoiceDetector(analyser, this.config);
+      this.voiceWorker = new Worker('core/workers/voice-worker.js');
+      this.voiceDetector.setWorker(this.voiceWorker);
+      this.analysisCoordinator.registerAnalyzer('voice', this.voiceDetector);
 
       // Initialize tempo worker
       this.tempoWorker = new Worker('core/workers/tempo-worker.js');
@@ -236,6 +239,32 @@ class MusicVisualizerApp {
       this.pitchWorker.terminate();
       this.pitchWorker = null;
     }
+    if (this.voiceWorker) {
+      this.voiceWorker.terminate();
+      this.voiceWorker = null;
+    }
+    
+    // Reset lifecycle manager
+    if (this.lifecycleManager) {
+      this.lifecycleManager.reset();
+    }
+    
+    // Reset visualizer core
+    if (this.visualizerCore) {
+      this.visualizerCore.reset();
+    }
+    
+    // Reset debug display
+    this.elements.fpsValue.textContent = '0';
+    const bpmElement = document.getElementById('bpmValue');
+    const pitchElement = document.getElementById('pitchValue');
+    const keyElement = document.getElementById('keyValue');
+    const voiceElement = document.getElementById('voiceValue');
+    
+    if (bpmElement) bpmElement.textContent = '--';
+    if (pitchElement) pitchElement.textContent = '--';
+    if (keyElement) keyElement.textContent = '--';
+    if (voiceElement) voiceElement.textContent = '--';
   }
 
   startAnalysisLoop() {
@@ -254,7 +283,10 @@ class MusicVisualizerApp {
           if (analysisResults.beat && analysisResults.beat.detected) {
             this.tempoWorker.postMessage({
               type: 'beatDetected',
-              data: { timestamp: currentTime * 1000 }  // Convert to ms
+              data: {
+                timestamp: currentTime * 1000,  // Convert to ms
+                confidence: analysisResults.beat.confidence
+              }
             });
           }
 
@@ -433,6 +465,14 @@ class MusicVisualizerApp {
         if (pitchAnalyzer && pitchAnalyzer.updateConfig) {
           pitchAnalyzer.updateConfig();
           console.log(`Pitch config updated: ${path} = ${value}`);
+        }
+      }
+
+      // Update voice worker config if voice threshold changes
+      if (path === 'analysis.voice.confidenceThreshold') {
+        if (this.voiceDetector && this.voiceDetector.updateConfig) {
+          this.voiceDetector.updateConfig();
+          console.log(`Voice config updated: ${path} = ${value}`);
         }
       }
 

@@ -77,4 +77,9 @@ export class SpectrumBarsVisualizer extends BaseVisualizer {
         return `hsl(${(index / total) * 360}, 70%, ${40 + intensity * 20}%)`;
     }
   }
+
+  reset() {
+    this.spectrum = null;
+    this.data = null;
+  }
 }

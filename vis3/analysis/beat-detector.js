@@ -1,5 +1,6 @@
 // analysis/beat-detector.js
-// Beat detection via energy-based onset detection with adaptive threshold
+// Beat detection via bass-focused spectral flux with median threshold
+// Research: Ellis (2007) "Beat Tracking by Dynamic Programming"
 
 import { BaseAnalyzer } from './base-analyzer.js';
 
@@ -7,9 +8,23 @@ export class BeatDetector extends BaseAnalyzer {
   constructor(analyser, config) {
     super(analyser, config);
 
-    // Energy history for adaptive threshold
+    // Calculate frequency bins for bass range (20-200Hz)
+    this.sampleRate = analyser.context.sampleRate;
+    this.bufferLength = this.analyser.frequencyBinCount;
+    this.frequencyResolution = this.sampleRate / (this.bufferLength * 2);
+
+    // Bass frequency range for beat detection
+    this.bassMinFreq = 20;
+    this.bassMaxFreq = 200;
+    this.bassMinBin = Math.floor(this.bassMinFreq / this.frequencyResolution);
+    this.bassMaxBin = Math.floor(this.bassMaxFreq / this.frequencyResolution);
+
+    // Flux history for median-based threshold
     this.historySize = 60; // 1 second at 60fps
-    this.energyHistory = [];
+    this.fluxHistory = [];
+
+    // Previous spectrum for flux calculation
+    this.lastSpectrum = null;
 
     // Beat tracking
     this.lastBeatTime = 0;
@@ -17,59 +32,78 @@ export class BeatDetector extends BaseAnalyzer {
     this.maxIntervals = 8;
 
     // State
-    this.bufferLength = this.analyser.frequencyBinCount;
     this.dataArray = new Uint8Array(this.bufferLength);
+
+    console.log(`[BEAT] Initialized - Bass range: ${this.bassMinFreq}-${this.bassMaxFreq}Hz (bins ${this.bassMinBin}-${this.bassMaxBin})`);
   }
 
   analyze(currentTime) {
     // Get frequency data
     this.analyser.getByteFrequencyData(this.dataArray);
 
-    // Calculate RMS energy (Root Mean Square)
-    let sumSquares = 0;
-    for (let i = 0; i < this.bufferLength; i++) {
-      const normalized = this.dataArray[i] / 255;
-      sumSquares += normalized * normalized;
+    // Calculate spectral flux in bass range only
+    let flux = 0;
+
+    if (this.lastSpectrum) {
+      // Sum positive differences in bass range
+      for (let i = this.bassMinBin; i < Math.min(this.bassMaxBin, this.bufferLength); i++) {
+        const diff = this.dataArray[i] - this.lastSpectrum[i];
+        // Only positive changes (onsets)
+        if (diff > 0) {
+          flux += diff;
+        }
+      }
+
+      // Normalize by number of bins
+      flux = flux / (this.bassMaxBin - this.bassMinBin);
     }
-    const energy = Math.sqrt(sumSquares / this.bufferLength);
+
+    // Store current spectrum for next frame
+    if (!this.lastSpectrum) {
+      this.lastSpectrum = new Uint8Array(this.bufferLength);
+    }
+    this.lastSpectrum.set(this.dataArray);
 
     // Add to history
-    this.energyHistory.push(energy);
-    if (this.energyHistory.length > this.historySize) {
-      this.energyHistory.shift();
+    this.fluxHistory.push(flux);
+    if (this.fluxHistory.length > this.historySize) {
+      this.fluxHistory.shift();
     }
 
-    // Need enough history to detect beats
-    if (this.energyHistory.length < 20) {
+    // Need enough history
+    if (this.fluxHistory.length < 20) {
       return {
         timestamp: currentTime,
         detected: false,
         confidence: 0,
         strength: 0,
-        timeSinceLastBeat: currentTime - this.lastBeatTime,
-        energy: energy
+        timeSinceLastBeat: (currentTime * 1000) - this.lastBeatTime,
+        flux: flux
       };
     }
 
-    // Calculate adaptive threshold
-    const sensitivity = this.config.get('analysis.beat.sensitivity');
-    const mean = this.energyHistory.reduce((a, b) => a + b, 0) / this.energyHistory.length;
-    const variance = this.energyHistory.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / this.energyHistory.length;
-    const stdDev = Math.sqrt(variance);
+    // Calculate MEDIAN-based threshold (more robust than mean)
+    const sortedFlux = [...this.fluxHistory].sort((a, b) => a - b);
+    const median = sortedFlux[Math.floor(sortedFlux.length / 2)];
 
-    // Threshold = mean + (sensitivity * stdDev)
-    const threshold = mean + (sensitivity * stdDev);
+    // Calculate MAD (Median Absolute Deviation) for robustness
+    const deviations = this.fluxHistory.map(f => Math.abs(f - median));
+    const sortedDeviations = deviations.sort((a, b) => a - b);
+    const mad = sortedDeviations[Math.floor(sortedDeviations.length / 2)];
+
+    // Threshold = median + (sensitivity * MAD)
+    const sensitivity = this.config.get('analysis.beat.sensitivity');
+    const threshold = median + (sensitivity * mad);
 
     // Check for beat
     const minTimeBetweenBeats = this.config.get('analysis.beat.minTimeBetweenBeats');
-    const timeSinceLastBeat = (currentTime * 1000) - this.lastBeatTime; // Convert to ms
-    const isBeat = energy > threshold && timeSinceLastBeat > minTimeBetweenBeats;
+    const timeSinceLastBeat = (currentTime * 1000) - this.lastBeatTime;
+    const isBeat = flux > threshold && timeSinceLastBeat > minTimeBetweenBeats;
 
     let confidence = 0;
 
     if (isBeat) {
-      // Record beat timing
-      this.lastBeatTime = currentTime * 1000; // Store in ms
+      this.lastBeatTime = currentTime * 1000;
 
       if (timeSinceLastBeat > 0) {
         this.beatIntervals.push(timeSinceLastBeat);
@@ -78,24 +112,21 @@ export class BeatDetector extends BaseAnalyzer {
         }
       }
 
-      // Calculate confidence based on timing consistency
+      // Calculate confidence from interval consistency
       if (this.beatIntervals.length >= 3) {
         const avgInterval = this.beatIntervals.reduce((a, b) => a + b, 0) / this.beatIntervals.length;
-        const intervalVariance = this.beatIntervals.reduce((sum, val) => sum + Math.pow(val - avgInterval, 2), 0) / this.beatIntervals.length;
-        const intervalStdDev = Math.sqrt(intervalVariance);
+        const variance = this.beatIntervals.reduce((sum, val) => sum + Math.pow(val - avgInterval, 2), 0) / this.beatIntervals.length;
+        const stdDev = Math.sqrt(variance);
 
-        // Confidence is higher when intervals are consistent
-        confidence = Math.max(0, Math.min(1, 1 - (intervalStdDev / avgInterval)));
+        confidence = Math.max(0, Math.min(1, 1 - (stdDev / avgInterval)));
       } else {
         confidence = 0.5;
       }
 
-      // Log detection
-      console.log(`[BEAT] Detected at ${currentTime.toFixed(2)}s | Energy: ${energy.toFixed(3)} > Threshold: ${threshold.toFixed(3)} | Confidence: ${confidence.toFixed(2)}`);
+      console.log(`[BEAT] Detected at ${currentTime.toFixed(2)}s | Flux: ${flux.toFixed(1)} > Threshold: ${threshold.toFixed(1)} | Interval: ${timeSinceLastBeat.toFixed(0)}ms | Confidence: ${confidence.toFixed(2)}`);
     }
 
-    // Normalized strength
-    const strength = Math.min(1, energy / (threshold > 0 ? threshold : 1));
+    const strength = Math.min(1, flux / (threshold > 0 ? threshold : 1));
 
     return {
       timestamp: currentTime,
@@ -103,13 +134,14 @@ export class BeatDetector extends BaseAnalyzer {
       confidence: confidence,
       strength: strength,
       timeSinceLastBeat: timeSinceLastBeat,
-      energy: energy,
+      flux: flux,
       threshold: threshold
     };
   }
 
   reset() {
-    this.energyHistory = [];
+    this.fluxHistory = [];
+    this.lastSpectrum = null;
     this.lastBeatTime = 0;
     this.beatIntervals = [];
   }

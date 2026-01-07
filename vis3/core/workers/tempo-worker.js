@@ -1,13 +1,17 @@
 // core/workers/tempo-worker.js
-// Web Worker for tempo detection via autocorrelation
+// Tempo detection with histogram accumulation and tempo locking
 
 let config = {
   minBPM: 60,
-  maxBPM: 180,
-  analysisWindow: 8 // Number of beat intervals to analyze
+  maxBPM: 200,
+  lockConfidenceThreshold: 0.8  // Lock tempo once this confident
 };
 
 let beatTimestamps = [];
+let tempoHistogram = new Map(); // BPM -> count
+let lockedBPM = null;
+let lockedConfidence = 0;
+let lockFrameCount = 0;
 
 self.onmessage = function(e) {
   const { type, data } = e.data;
@@ -19,11 +23,15 @@ self.onmessage = function(e) {
       break;
 
     case 'beatDetected':
-      handleBeatDetected(data.timestamp);
+      handleBeatDetected(data.timestamp, data.confidence);
       break;
 
     case 'reset':
       beatTimestamps = [];
+      tempoHistogram.clear();
+      lockedBPM = null;
+      lockedConfidence = 0;
+      lockFrameCount = 0;
       self.postMessage({ type: 'reset_complete' });
       break;
 
@@ -32,16 +40,15 @@ self.onmessage = function(e) {
   }
 };
 
-function handleBeatDetected(timestamp) {
+function handleBeatDetected(timestamp, beatConfidence) {
   beatTimestamps.push(timestamp);
 
-  // Keep only recent beats for analysis
-  const maxBeats = config.analysisWindow * 2;
-  if (beatTimestamps.length > maxBeats) {
+  // Keep last 16 beats for analysis
+  if (beatTimestamps.length > 16) {
     beatTimestamps.shift();
   }
 
-  // Need at least 4 beats to calculate BPM
+  // Need at least 4 beats
   if (beatTimestamps.length < 4) {
     self.postMessage({
       type: 'result',
@@ -51,16 +58,38 @@ function handleBeatDetected(timestamp) {
     return;
   }
 
-  // Calculate intervals between beats
+  // Calculate intervals
   const intervals = [];
   for (let i = 1; i < beatTimestamps.length; i++) {
     intervals.push(beatTimestamps[i] - beatTimestamps[i - 1]);
   }
 
-  // Perform autocorrelation to find dominant period
-  const { period, correlation } = autoCorrelate(intervals);
+  // If tempo is locked, only refine gradually
+  if (lockedBPM !== null && lockedConfidence >= config.lockConfidenceThreshold) {
+    lockFrameCount++;
 
-  if (period === -1) {
+    // Recalculate every 8 beats to refine
+    if (lockFrameCount % 8 === 0) {
+      const refinedBPM = refineLockedTempo(intervals, lockedBPM);
+      lockedBPM = refinedBPM;
+      lockedConfidence = Math.min(0.95, lockedConfidence + 0.01); // Gradually increase confidence
+    }
+
+    self.postMessage({
+      type: 'result',
+      bpm: lockedBPM,
+      confidence: lockedConfidence
+    });
+    return;
+  }
+
+  // Not locked yet - accumulate tempo histogram
+  accumulateTempoHistogram(intervals);
+
+  // Find most likely tempo from histogram
+  const tempoEstimate = getTempoFromHistogram();
+
+  if (!tempoEstimate) {
     self.postMessage({
       type: 'result',
       bpm: null,
@@ -69,63 +98,107 @@ function handleBeatDetected(timestamp) {
     return;
   }
 
-  // Convert period (ms) to BPM
-  const bpm = 60000 / period;
-
-  // Clamp to configured range
-  const clampedBPM = Math.max(config.minBPM, Math.min(config.maxBPM, bpm));
-
-  // Confidence based on correlation strength and consistency
-  const confidence = Math.min(1, correlation);
+  // Check if we should lock
+  if (tempoEstimate.confidence >= config.lockConfidenceThreshold && beatTimestamps.length >= 8) {
+    lockedBPM = tempoEstimate.bpm;
+    lockedConfidence = tempoEstimate.confidence;
+    lockFrameCount = 0;
+    console.log(`[TEMPO] Locked at ${lockedBPM.toFixed(1)} BPM (confidence: ${lockedConfidence.toFixed(2)})`);
+  }
 
   self.postMessage({
     type: 'result',
-    bpm: clampedBPM,
-    confidence: confidence
+    bpm: tempoEstimate.bpm,
+    confidence: tempoEstimate.confidence
   });
 }
 
-function autoCorrelate(intervals) {
-  if (intervals.length < 3) {
-    return { period: -1, correlation: 0 };
-  }
+function accumulateTempoHistogram(intervals) {
+  // Add each interval's implied BPM to histogram
+  for (const interval of intervals) {
+    const bpm = 60000 / interval;
 
-  let bestPeriod = -1;
-  let bestCorrelation = 0;
+    // Quantize to nearest 0.5 BPM
+    const quantizedBPM = Math.round(bpm * 2) / 2;
 
-  // Calculate average interval as starting point
-  const avgInterval = intervals.reduce((a, b) => a + b, 0) / intervals.length;
-
-  // Test periods around the average interval
-  const minPeriod = avgInterval * 0.5;
-  const maxPeriod = avgInterval * 1.5;
-  const step = 10; // ms
-
-  for (let period = minPeriod; period <= maxPeriod; period += step) {
-    let sum = 0;
-    let count = 0;
-
-    // Calculate correlation at this period
-    for (let i = 0; i < intervals.length; i++) {
-      const deviation = Math.abs(intervals[i] - period);
-      const maxDeviation = period * 0.1; // 10% tolerance
-
-      if (deviation < maxDeviation) {
-        // Good match - contribution to correlation
-        sum += 1 - (deviation / maxDeviation);
-        count++;
-      }
+    // Only accumulate valid BPMs
+    if (quantizedBPM >= config.minBPM && quantizedBPM <= config.maxBPM) {
+      const count = tempoHistogram.get(quantizedBPM) || 0;
+      tempoHistogram.set(quantizedBPM, count + 1);
     }
 
-    if (count > 0) {
-      const correlation = (sum / count) * (count / intervals.length);
+    // Also consider double-time and half-time
+    const doubleBPM = Math.round((bpm * 2) * 2) / 2;
+    const halfBPM = Math.round((bpm / 2) * 2) / 2;
 
-      if (correlation > bestCorrelation) {
-        bestCorrelation = correlation;
-        bestPeriod = period;
-      }
+    if (doubleBPM >= config.minBPM && doubleBPM <= config.maxBPM) {
+      const count = tempoHistogram.get(doubleBPM) || 0;
+      tempoHistogram.set(doubleBPM, count + 0.5); // Weight less
+    }
+
+    if (halfBPM >= config.minBPM && halfBPM <= config.maxBPM) {
+      const count = tempoHistogram.get(halfBPM) || 0;
+      tempoHistogram.set(halfBPM, count + 0.5); // Weight less
     }
   }
 
-  return { period: bestPeriod, correlation: bestCorrelation };
+  // Decay old histogram entries (exponential forgetting)
+  for (const [bpm, count] of tempoHistogram.entries()) {
+    tempoHistogram.set(bpm, count * 0.98);
+
+    // Remove very low counts
+    if (count < 0.1) {
+      tempoHistogram.delete(bpm);
+    }
+  }
+}
+
+function getTempoFromHistogram() {
+  if (tempoHistogram.size === 0) {
+    return null;
+  }
+
+  // Find peak in histogram
+  let maxCount = 0;
+  let peakBPM = null;
+
+  for (const [bpm, count] of tempoHistogram.entries()) {
+    if (count > maxCount) {
+      maxCount = count;
+      peakBPM = bpm;
+    }
+  }
+
+  if (peakBPM === null) {
+    return null;
+  }
+
+  // Calculate confidence from histogram distribution
+  const totalCount = Array.from(tempoHistogram.values()).reduce((a, b) => a + b, 0);
+  const confidence = maxCount / totalCount;
+
+  return {
+    bpm: peakBPM,
+    confidence: Math.min(1, confidence)
+  };
+}
+
+function refineLockedTempo(intervals, currentBPM) {
+  // Calculate average interval near locked tempo
+  const expectedInterval = 60000 / currentBPM;
+  const tolerance = expectedInterval * 0.1; // 10% tolerance
+
+  const validIntervals = intervals.filter(interval =>
+    Math.abs(interval - expectedInterval) < tolerance
+  );
+
+  if (validIntervals.length === 0) {
+    return currentBPM; // Keep current if no valid intervals
+  }
+
+  const avgInterval = validIntervals.reduce((a, b) => a + b, 0) / validIntervals.length;
+  const refinedBPM = 60000 / avgInterval;
+
+  // Smooth adjustment (move slowly toward refined value)
+  return currentBPM * 0.9 + refinedBPM * 0.1;
 }

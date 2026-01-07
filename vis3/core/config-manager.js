@@ -5,7 +5,7 @@ export class ConfigManager {
   constructor() {
     this.config = {
       audio: {
-        fftSize: 2048,
+        fftSize: 8192,
         smoothingTimeConstant: 0.8
       },
       analysis: {

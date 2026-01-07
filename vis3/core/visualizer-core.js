@@ -103,4 +103,22 @@ export class VisualizerCore {
   getAllVisualizers() {
     return this.visualizers;
   }
+
+  reset() {
+    // Reset all visualizers
+    for (const visualizer of this.visualizers.values()) {
+      if (visualizer.reset) {
+        visualizer.reset();
+      }
+    }
+
+    // Clear FPS history
+    this.fpsHistory = [];
+    this.currentFPS = 0;
+
+    // Clear canvas
+    const bgColor = this.config.get('visual.backgroundColor');
+    this.ctx.fillStyle = bgColor;
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+  }
 }
