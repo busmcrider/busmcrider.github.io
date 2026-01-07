@@ -103,4 +103,17 @@ export class AudioManager {
   isAudioPlaying() {
     return this.isPlaying;
   }
+
+  restart() {
+    if (this.audioElement) {
+      this.audioElement.currentTime = 0;
+      if (!this.isPlaying) {
+        this.play();
+      }
+    }
+  }
+
+  hasEnded() {
+    return this.audioElement ? this.audioElement.ended : false;
+  }
 }

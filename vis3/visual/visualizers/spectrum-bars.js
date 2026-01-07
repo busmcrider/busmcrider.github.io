@@ -22,36 +22,43 @@ export class SpectrumBarsVisualizer extends BaseVisualizer {
 
     const numBars = this.config.get('visualizers.spectrumBars.numBars');
     const colorScheme = this.config.get('visualizers.spectrumBars.colorScheme');
-    const barWidth = this.width / numBars;
-    const gap = Math.min(2, barWidth * 0.1); // Gap proportional to bar width, max 2px
 
-    // Debug logging (only once)
+    // Calculate bar width to fill entire canvas
+    const barWidth = this.width / numBars;
+    const gap = Math.max(1, Math.floor(barWidth * 0.1)); // 10% gap, minimum 1px
+
+    // Log once for debugging
     if (!this._debugLogged) {
-      console.log(`[SPECTRUM] Canvas: ${this.width}x${this.height} | Bars: ${numBars} | BarWidth: ${barWidth.toFixed(2)} | Gap: ${gap.toFixed(2)}`);
+      console.log(`[SPECTRUM] Canvas: ${this.width}x${this.height}`);
+      console.log(`[SPECTRUM] Bars: ${numBars}, BarWidth: ${barWidth.toFixed(2)}, Gap: ${gap}`);
+      console.log(`[SPECTRUM] Spectrum length: ${this.spectrum.length}`);
+      console.log(`[SPECTRUM] Total width used: ${numBars * barWidth}`);
       this._debugLogged = true;
     }
 
-    // Sample spectrum array for numBars
-    const samplingRate = Math.floor(this.spectrum.length / numBars);
+    // Calculate sampling rate
+    const samplingRate = this.spectrum.length / numBars;
 
+    // Draw bars across full width
     for (let i = 0; i < numBars; i++) {
-      // Sample from spectrum
+      // Sample from spectrum using interpolation for smooth bars
       const dataIndex = Math.floor(i * samplingRate);
-      const value = this.spectrum[dataIndex] || 0;
+      const value = this.spectrum[Math.min(dataIndex, this.spectrum.length - 1)] || 0;
 
-      // Calculate bar height (normalized 0-1, then to canvas height)
+      // Calculate bar height
       const normalizedValue = value / 255;
       const barHeight = normalizedValue * this.height;
 
-      // Calculate color based on scheme
+      // Get color
       const color = this.getColor(i, numBars, colorScheme, normalizedValue);
 
-      // Draw bar - ensure exact positioning
+      // Draw bar - ensure it fills space
       this.ctx.fillStyle = color;
       const x = i * barWidth;
       const y = this.height - barHeight;
-      const width = Math.ceil(barWidth - gap); // Ceil to prevent gaps
-      this.ctx.fillRect(x, y, width, barHeight);
+      const drawWidth = barWidth - gap;
+
+      this.ctx.fillRect(x, y, drawWidth, barHeight);
     }
   }
 

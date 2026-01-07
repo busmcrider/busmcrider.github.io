@@ -10,6 +10,18 @@ export class InstantaneousAnalyzer extends BaseAnalyzer {
     // Reuse typed array for performance
     this.bufferLength = this.analyser.frequencyBinCount;
     this.dataArray = new Uint8Array(this.bufferLength);
+
+    console.log(`[INSTANTANEOUS] Initialized - FFT: ${this.analyser.fftSize}, Bins: ${this.bufferLength}`);
+  }
+
+  updateFFTSize() {
+    // Recreate buffer if FFT size changed
+    const newBufferLength = this.analyser.frequencyBinCount;
+    if (newBufferLength !== this.bufferLength) {
+      console.log(`[INSTANTANEOUS] FFT changed - Bins: ${this.bufferLength} → ${newBufferLength}`);
+      this.bufferLength = newBufferLength;
+      this.dataArray = new Uint8Array(this.bufferLength);
+    }
   }
 
   analyze(currentTime) {

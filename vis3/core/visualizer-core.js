@@ -25,6 +25,8 @@ export class VisualizerCore {
     this.canvas.width = rect.width;
     this.canvas.height = rect.height;
 
+    console.log(`[VISUALIZER] Canvas resized: ${this.canvas.width}x${this.canvas.height}`);
+
     // Notify all visualizers of resize
     for (const visualizer of this.visualizers.values()) {
       visualizer.resize(this.canvas.width, this.canvas.height);

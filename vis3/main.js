@@ -136,83 +136,88 @@ class MusicVisualizerApp {
   }
 
   setupAnalysisSystem() {
-      const analyser = this.audioManager.getAnalyser();
+    const analyser = this.audioManager.getAnalyser();
 
-      // Reset lifecycle manager
-      if (this.lifecycleManager) {
-        this.lifecycleManager.reset();
-      }
-      this.lifecycleManager = new LifecycleManager(this.config);
+    // Reset lifecycle manager
+    if (this.lifecycleManager) {
+      this.lifecycleManager.reset();
+    }
+    this.lifecycleManager = new LifecycleManager(this.config);
 
-      // Clear existing coordinator if present
-      if (this.analysisCoordinator) {
-        // Reset all analyzers
-        for (const name of this.analysisCoordinator.getAllAnalyzers()) {
-          const analyzer = this.analysisCoordinator.getAnalyzer(name);
-          if (analyzer && analyzer.reset) {
-            analyzer.reset();
-          }
+    // Clear existing coordinator if present
+    if (this.analysisCoordinator) {
+      // Reset all analyzers
+      for (const name of this.analysisCoordinator.getAllAnalyzers()) {
+        const analyzer = this.analysisCoordinator.getAnalyzer(name);
+        if (analyzer && analyzer.reset) {
+          analyzer.reset();
         }
       }
-
-      // Create analysis coordinator
-      this.analysisCoordinator = new AnalysisCoordinator(this.audioManager, this.config);
-
-      // Create and register instantaneous analyzer
-      const instantaneousAnalyzer = new InstantaneousAnalyzer(analyser, this.config);
-      this.analysisCoordinator.registerAnalyzer('instantaneous', instantaneousAnalyzer);
-
-      // Create and register beat detector
-      const beatDetector = new BeatDetector(analyser, this.config);
-      this.analysisCoordinator.registerAnalyzer('beat', beatDetector);
-
-      // Create and register pitch detector with worker
-      const pitchDetector = new PitchDetector(analyser, this.config);
-      this.pitchWorker = new Worker('core/workers/pitch-worker.js');
-      pitchDetector.setWorker(this.pitchWorker);
-      this.analysisCoordinator.registerAnalyzer('pitch', pitchDetector);
-
-      // Create and register key detector
-      this.keyDetector = new KeyDetector(analyser, this.config);
-      this.analysisCoordinator.registerAnalyzer('key', this.keyDetector);
-
-      // Create and register voice detector with worker
-      this.voiceDetector = new VoiceDetector(analyser, this.config);
-      this.voiceWorker = new Worker('core/workers/voice-worker.js');
-      this.voiceDetector.setWorker(this.voiceWorker);
-      this.analysisCoordinator.registerAnalyzer('voice', this.voiceDetector);
-
-      // Initialize tempo worker
-      this.tempoWorker = new Worker('core/workers/tempo-worker.js');
-      this.tempoWorker.onmessage = (e) => {
-        if (e.data.type === 'result') {
-          this.lifecycleManager.updateBPM(e.data.bpm, e.data.confidence);
-        }
-      };
-      this.tempoWorker.postMessage({
-        type: 'init',
-        data: {
-          minBPM: this.config.get('analysis.tempo.minBPM'),
-          maxBPM: this.config.get('analysis.tempo.maxBPM')
-        }
-      });
-
-      // Create and add spectrum bars visualizer
-      const spectrumBarsVisualizer = new SpectrumBarsVisualizer(
-        this.elements.canvas,
-        this.elements.canvas.getContext('2d'),
-        this.config
-      );
-      this.visualizerCore.addVisualizer('spectrumBars', spectrumBarsVisualizer);
-
-      // Set up pairing: instantaneous analyzer -> spectrum bars visualizer
-      this.dataBridge.pair('instantaneous', 'spectrumBars');
-
-      console.log('Analysis system initialized');
     }
 
+    // Create analysis coordinator
+    this.analysisCoordinator = new AnalysisCoordinator(this.audioManager, this.config);
+
+    // Create and register instantaneous analyzer
+    const instantaneousAnalyzer = new InstantaneousAnalyzer(analyser, this.config);
+    this.analysisCoordinator.registerAnalyzer('instantaneous', instantaneousAnalyzer);
+
+    // Create and register beat detector
+    const beatDetector = new BeatDetector(analyser, this.config);
+    this.analysisCoordinator.registerAnalyzer('beat', beatDetector);
+
+    // Create and register pitch detector with worker
+    const pitchDetector = new PitchDetector(analyser, this.config);
+    this.pitchWorker = new Worker('core/workers/pitch-worker.js');
+    pitchDetector.setWorker(this.pitchWorker);
+    this.analysisCoordinator.registerAnalyzer('pitch', pitchDetector);
+
+    // Create and register key detector
+    this.keyDetector = new KeyDetector(analyser, this.config);
+    this.analysisCoordinator.registerAnalyzer('key', this.keyDetector);
+
+    // Create and register voice detector with worker
+    this.voiceDetector = new VoiceDetector(analyser, this.config);
+    this.voiceWorker = new Worker('core/workers/voice-worker.js');
+    this.voiceDetector.setWorker(this.voiceWorker);
+    this.analysisCoordinator.registerAnalyzer('voice', this.voiceDetector);
+
+    // Initialize tempo worker
+    this.tempoWorker = new Worker('core/workers/tempo-worker.js');
+    this.tempoWorker.onmessage = (e) => {
+      if (e.data.type === 'result') {
+        this.lifecycleManager.updateBPM(e.data.bpm, e.data.confidence);
+      }
+    };
+    this.tempoWorker.postMessage({
+      type: 'init',
+      data: {
+        minBPM: this.config.get('analysis.tempo.minBPM'),
+        maxBPM: this.config.get('analysis.tempo.maxBPM')
+      }
+    });
+
+    // Create and add spectrum bars visualizer
+    const spectrumBarsVisualizer = new SpectrumBarsVisualizer(
+      this.elements.canvas,
+      this.elements.canvas.getContext('2d'),
+      this.config
+    );
+    this.visualizerCore.addVisualizer('spectrumBars', spectrumBarsVisualizer);
+
+    // Set up pairing: instantaneous analyzer -> spectrum bars visualizer
+    this.dataBridge.pair('instantaneous', 'spectrumBars');
+
+    console.log('Analysis system initialized');
+  }
+
   play() {
-    this.audioManager.play();
+    // If track ended, restart from beginning
+    if (this.audioManager.hasEnded()) {
+      this.audioManager.restart();
+    } else {
+      this.audioManager.play();
+    }
 
     // Start render loop
     this.visualizerCore.start();
@@ -243,24 +248,24 @@ class MusicVisualizerApp {
       this.voiceWorker.terminate();
       this.voiceWorker = null;
     }
-    
+
     // Reset lifecycle manager
     if (this.lifecycleManager) {
       this.lifecycleManager.reset();
     }
-    
+
     // Reset visualizer core
     if (this.visualizerCore) {
       this.visualizerCore.reset();
     }
-    
+
     // Reset debug display
     this.elements.fpsValue.textContent = '0';
     const bpmElement = document.getElementById('bpmValue');
     const pitchElement = document.getElementById('pitchValue');
     const keyElement = document.getElementById('keyValue');
     const voiceElement = document.getElementById('voiceValue');
-    
+
     if (bpmElement) bpmElement.textContent = '--';
     if (pitchElement) pitchElement.textContent = '--';
     if (keyElement) keyElement.textContent = '--';
@@ -455,6 +460,19 @@ class MusicVisualizerApp {
         if (this.audioManager.analyser) {
           this.audioManager.analyser.fftSize = this.config.get('audio.fftSize');
           this.audioManager.analyser.smoothingTimeConstant = this.config.get('audio.smoothingTimeConstant');
+
+          // Update instantaneous analyzer buffer
+          const instantaneous = this.analysisCoordinator.getAnalyzer('instantaneous');
+          if (instantaneous && instantaneous.updateFFTSize) {
+            instantaneous.updateFFTSize();
+          }
+
+          // Reset spectrum visualizer debug flag
+          const spectrumViz = this.visualizerCore.getVisualizer('spectrumBars');
+          if (spectrumViz) {
+            spectrumViz._debugLogged = false;
+          }
+
           console.log(`Audio setting updated: ${path} = ${value}`);
         }
       }
