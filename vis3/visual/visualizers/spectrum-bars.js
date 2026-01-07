@@ -23,14 +23,20 @@ export class SpectrumBarsVisualizer extends BaseVisualizer {
     const numBars = this.config.get('visualizers.spectrumBars.numBars');
     const colorScheme = this.config.get('visualizers.spectrumBars.colorScheme');
     const barWidth = this.width / numBars;
-    const gap = 2;
+    const gap = Math.min(2, barWidth * 0.1); // Gap proportional to bar width, max 2px
+
+    // Debug logging (only once)
+    if (!this._debugLogged) {
+      console.log(`[SPECTRUM] Canvas: ${this.width}x${this.height} | Bars: ${numBars} | BarWidth: ${barWidth.toFixed(2)} | Gap: ${gap.toFixed(2)}`);
+      this._debugLogged = true;
+    }
 
     // Sample spectrum array for numBars
     const samplingRate = Math.floor(this.spectrum.length / numBars);
 
     for (let i = 0; i < numBars; i++) {
       // Sample from spectrum
-      const dataIndex = i * samplingRate;
+      const dataIndex = Math.floor(i * samplingRate);
       const value = this.spectrum[dataIndex] || 0;
 
       // Calculate bar height (normalized 0-1, then to canvas height)
@@ -40,11 +46,12 @@ export class SpectrumBarsVisualizer extends BaseVisualizer {
       // Calculate color based on scheme
       const color = this.getColor(i, numBars, colorScheme, normalizedValue);
 
-      // Draw bar
+      // Draw bar - ensure exact positioning
       this.ctx.fillStyle = color;
       const x = i * barWidth;
       const y = this.height - barHeight;
-      this.ctx.fillRect(x, y, barWidth - gap, barHeight);
+      const width = Math.ceil(barWidth - gap); // Ceil to prevent gaps
+      this.ctx.fillRect(x, y, width, barHeight);
     }
   }
 
@@ -81,5 +88,6 @@ export class SpectrumBarsVisualizer extends BaseVisualizer {
   reset() {
     this.spectrum = null;
     this.data = null;
+    this._debugLogged = false;
   }
 }
