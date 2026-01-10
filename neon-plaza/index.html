@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neon Plaza - 6-Page Overview (Internal)</title>
+    <title>Neon Plaza - Internal Design Bible (Early Stage)</title>
 
     <style>
         @page { size: letter; margin: 0.5in; }
@@ -146,6 +146,17 @@
         }
         .table-wrap table { margin: 0; }
 
+        .pillars {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+        .pillar {
+            border: 1px solid var(--cyan);
+            padding: 10px;
+            background: rgba(0, 255, 255, 0.05);
+        }
+
         @media (max-width: 900px) {
             body { padding: 10px; }
             .page { padding: 16px; min-height: auto; }
@@ -162,85 +173,66 @@
 <body>
 
 <!-- ===================================================================== -->
-<!-- PITCH — PAGE 1/2                                                      -->
+<!-- PAGE 1 — PITCH + PILLARS + IDENTITY                                   -->
 <!-- ===================================================================== -->
 <div class="page">
     <h1>NEON PLAZA</h1>
-    <div class="phase-tag">Pitch — Page 1 of 2 (Internal)</div>
+    <div class="phase-tag">Design Bible — Page 1 (Pitch + Pillars)</div>
 
     <div class="box">
         <p><span class="highlight">ELEVATOR PITCH:</span> <i>AKANE’s</i> tempo-driven flow meets <i>Zero Sievert’s</i> extraction tension — set in 1988 neon NYC.</p>
         <p>Chain kills into combo-accelerating music, push <span class="highlight">HEAT</span> to the brink, outsmart a roaming <span class="highlight">LIEUTENANT</span>, kill the <span class="highlight">KINGPIN</span>, and extract with rare tech.</p>
-        <p class="kicker"><span class="highlight">Core Identity:</span> absurdly fun to play as a whole — momentum, pressure, and mastery.</p>
+        <p class="kicker"><span class="highlight">Core Identity:</span> absurdly fun to play as a whole — momentum, pressure, mastery.</p>
+    </div>
+
+    <h2>Design Pillars (Non-Negotiable)</h2>
+    <div class="pillars">
+        <div class="pillar"><span class="highlight">1) FUN-FIRST FLOW:</span> the product is how it feels minute-to-minute. Fast restarts. No dead time.</div>
+        <div class="pillar"><span class="highlight">2) HEAT + MUSIC FUSED:</span> state/intensity is the UI. You should hear danger coming.</div>
+        <div class="pillar"><span class="highlight">3) LIEUTENANT STORIES:</span> Lieutenants define runs. Fair. Iconic. Always answerable.</div>
+        <div class="pillar"><span class="highlight">4) OUTSMART / OUTRUN / HIDE:</span> counterplay is always available, regardless of gear.</div>
+        <div class="pillar"><span class="highlight">5) CONTENT VS ENHANCEMENT VS OPERATIONS:</span> Origin unlocks content. Revenge unlocks enhancements. Chips buy run advantages.</div>
     </div>
 
     <h2>The Player Fantasy</h2>
     <ul>
-        <li><span class="highlight">Combat-forward:</span> lethal top-down action with fast restarts and constant forward motion.</li>
-        <li><span class="highlight">Stealth optional:</span> play it as a heist where combat is a consequence — or go loud and ride the soundtrack.</li>
-        <li><span class="highlight">Smart play wins:</span> locks, keys, hacking, gadgets, and improvisation create advantages.</li>
-        <li><span class="highlight">Extraction stakes:</span> take the loot, survive the escape, tell the story.</li>
+        <li><span class="highlight">Combat-forward:</span> lethal top-down action with constant forward motion.</li>
+        <li><span class="highlight">Stealth optional:</span> heist-forward runs are viable; combat becomes consequence.</li>
+        <li><span class="highlight">Smart play wins:</span> hacking, locks, gadgets, and improvisation create advantages.</li>
+        <li><span class="highlight">Extraction stakes:</span> bank loot and chips by surviving the escape.</li>
     </ul>
 
     <h2>Core Loop (20–30 Minutes)</h2>
     <ol>
-        <li><span class="highlight">Infiltrate</span> a procedural hideout (floor-by-floor).</li>
+        <li><span class="highlight">Infiltrate</span> procedural hideout floors.</li>
         <li><span class="highlight">Loot + MacGyver</span> (keys, hacks, gadgets, shortcuts).</li>
-        <li><span class="highlight">Build Combo</span> by chaining kills → music intensifies → loot quantity spikes.</li>
-        <li><span class="highlight">Heat Escalates</span> as stealth breaks → security response grows.</li>
-        <li><span class="highlight">Lieutenant Hunts</span> (optional mini-boss; kill for reward + Heat relief).</li>
-        <li><span class="highlight">Kill the Kingpin</span> in a handcrafted fight.</li>
-        <li><span class="highlight">Extract</span> at one of two exits — survive until the sequence completes.</li>
+        <li><span class="highlight">Build Combo</span> → music spikes → <span class="highlight">earn more chips</span>.</li>
+        <li><span class="highlight">Heat escalates</span> as stealth breaks → security response grows.</li>
+        <li><span class="highlight">Lieutenant hunts</span> (kill for reward + banking boost + heat relief).</li>
+        <li><span class="highlight">Kill Kingpin</span> and survive the merge rule if triggered.</li>
+        <li><span class="highlight">Extract</span> — survive until the sequence completes.</li>
     </ol>
 
     <h2>Signature Tension: Heat + Lieutenant</h2>
     <div class="box">
         <ul>
             <li><span class="highlight">HEAT</span> rises as a consequence of losing stealth (detection, alarms, loud play).</li>
-            <li><span class="highlight">LIEUTENANT</span> is the roaming predator that turns runs into stories (tracks by sound and sight).</li>
-            <li><span class="warn">CRITICAL RULE:</span> if the Lieutenant is alive and <span class="highlight">HEAT &gt; 50%</span>, they will join the boss fight when the Kingpin hits <span class="highlight">50% health</span>.</li>
-            <li><span class="highlight">Meaningful choice:</span> hunt the Lieutenant now, or accept the guaranteed nightmare merge later.</li>
+            <li><span class="highlight">LIEUTENANT</span> is the roaming predator (tracks by sound + sight).</li>
+            <li><span class="warn">MERGE RULE:</span> if Lieutenant is alive and <span class="highlight">Heat &gt; 50%</span>, they join the boss fight when the Kingpin hits <span class="highlight">50% HP</span> (guaranteed).</li>
         </ul>
-    </div>
-
-    <h2>Modes (Formalized)</h2>
-    <div class="box">
-        <p><span class="highlight">Progression Split:</span> <span class="highlight">ORIGIN unlocks CONTENT.</span> <span class="highlight">REVENGE unlocks ENHANCEMENTS.</span></p>
-        <p class="small">Origin is the first contact and the narrative backbone. Revenge is the extraction mastery loop where you perfect builds, improve gear, and chase achievements.</p>
-    </div>
-
-    <div class="grid">
-        <div class="grid-item">
-            <h3>ORIGIN MODE (CONTENT)</h3>
-            <ul>
-                <li>Linear boss hunt: training + narrative + mastery.</li>
-                <li><span class="highlight">Completing Origin unlocks the next hideout.</span></li>
-                <li><span class="highlight">Progressive rewards inside Origin</span> (see Page 4).</li>
-                <li><span class="highlight">Heat Model:</span> always rises; stealth reduces the rise rate.</li>
-            </ul>
-        </div>
-        <div class="grid-item">
-            <h3>REVENGE MODE (ENHANCEMENTS)</h3>
-            <ul>
-                <li>Extraction roguelite: loot → boss → extract.</li>
-                <li><span class="highlight">Unlocked on your first Origin attempt</span> for that hideout (even if you fail).</li>
-                <li><span class="highlight">Rewards:</span> ammo tiers, armor tiers, perks, cosmetics, mastery goals.</li>
-                <li><span class="highlight">Heat Model:</span> Heat can drop only during Stealth (full stealth fast, soft stealth slow).</li>
-            </ul>
-        </div>
     </div>
 </div>
 
 
 <!-- ===================================================================== -->
-<!-- PITCH — PAGE 2/2                                                      -->
+<!-- PAGE 2 — HIDEOUTS + THEMES + STORY SPINE                               -->
 <!-- ===================================================================== -->
 <div class="page">
     <h1>NEON PLAZA</h1>
-    <div class="phase-tag">Pitch — Page 2 of 2 (Hideouts + Lore)</div>
+    <div class="phase-tag">Design Bible — Page 2 (Hideouts + Themes)</div>
 
-    <h2>Hideouts</h2>
-    <p>Each hideout is a corruption archetype with its own traversal hook, extracts, landmarks, enemies, loot identity, and a Kingpin + Lieutenant duo designed to be deadly alone and terrifying together.</p>
+    <h2>Hideouts (Corruption Archetypes)</h2>
+    <p>Each hideout has: traversal hook, extracts, landmarks, enemy identity, loot identity, and a Kingpin + Lieutenant duo designed to be deadly alone and terrifying together.</p>
 
     <div class="grid">
         <div class="grid-item">
@@ -274,7 +266,7 @@
         </div>
 
         <div class="grid-item">
-            <h3>PHASE 2 — CASINO</h3>
+            <h3>PHASE 2 — CASINO (FINAL)</h3>
             <ul>
                 <li><span class="highlight">Traversal:</span> open pit + ring halls + vault + high roller</li>
                 <li><span class="highlight">Landmarks:</span> gambling pit, vault, high roller room</li>
@@ -284,8 +276,8 @@
         </div>
     </div>
 
-    <h2>Kingpins + Lieutenants</h2>
-    <p class="small"><span class="highlight">Rule:</span> Lieutenants match the Kingpin’s theme but use a different playstyle. Together, they become extra deadly.</p>
+    <h2>Kingpins + Lieutenants (Named, Complementary)</h2>
+    <p class="small"><span class="highlight">Rule:</span> Lieutenants match the Kingpin theme but use a different playstyle. Together they become extra deadly.</p>
 
     <div class="grid">
         <div class="grid-item">
@@ -295,40 +287,40 @@
             <ul>
                 <li><span class="highlight">Lieutenant:</span> drones + lockdown pulses + camera traps.</li>
                 <li><span class="highlight">Kingpin:</span> protocol phases + Heat-based security waves.</li>
-                <li><span class="highlight">Merge:</span> Sentry denies routes while Glass forces patterns.</li>
+                <li><span class="highlight">Merge:</span> route denial + forced patterns.</li>
             </ul>
         </div>
 
         <div class="grid-item">
             <h3>HOTEL</h3>
-            <p><span class="highlight">KINGPIN:</span> Luis “Concierge” Vargas — broker of secrets, luxury, and favors.</p>
+            <p><span class="highlight">KINGPIN:</span> Luis “Concierge” Vargas — broker of secrets and favors.</p>
             <p><span class="highlight">LIEUTENANT:</span> Yuri “Housekeeper” Morozov — silent enforcer who cleans up mistakes.</p>
             <ul>
                 <li><span class="highlight">Lieutenant:</span> silence zones + ambush routes + flanks.</li>
                 <li><span class="highlight">Kingpin:</span> decoys + suite-to-suite chase phases.</li>
-                <li><span class="highlight">Merge:</span> Housekeeper punishes noise while Concierge controls space.</li>
+                <li><span class="highlight">Merge:</span> punishes noise while Kingpin controls space.</li>
             </ul>
         </div>
 
         <div class="grid-item">
             <h3>SHOPPING CENTER</h3>
             <p><span class="highlight">KINGPIN:</span> Vivian “Brand” Choi — turns consumerism into a pipeline.</p>
-            <p><span class="highlight">LIEUTENANT:</span> “Turnstile” Tommy Reyes — patrol captain who controls entrances and crowds.</p>
+            <p><span class="highlight">LIEUTENANT:</span> “Turnstile” Tommy Reyes — controls entrances and crowds.</p>
             <ul>
                 <li><span class="highlight">Lieutenant:</span> barricades + chokepoints + moving patrol walls.</li>
                 <li><span class="highlight">Kingpin:</span> shifting arenas (food court → loading bay → storefront gauntlet).</li>
-                <li><span class="highlight">Merge:</span> Turnstile constricts while Brand relocates the fight.</li>
+                <li><span class="highlight">Merge:</span> constriction + relocation.</li>
             </ul>
         </div>
 
         <div class="grid-item">
             <h3>CASINO</h3>
             <p><span class="highlight">KINGPIN:</span> Sal “The Dealer” Marino — rigs the city like a table.</p>
-            <p><span class="highlight">LIEUTENANT:</span> “Blackjack” Mariana Rojas — pit boss enforcer, fast and ruthless.</p>
+            <p><span class="highlight">LIEUTENANT:</span> “Blackjack” Mariana Rojas — fast and ruthless.</p>
             <ul>
                 <li><span class="highlight">Lieutenant:</span> rushdowns + pressure pushes + punishes hesitation.</li>
                 <li><span class="highlight">Kingpin:</span> “house advantage” hazards + vault locks.</li>
-                <li><span class="highlight">Merge:</span> Blackjack rushes while Dealer denies safe zones.</li>
+                <li><span class="highlight">Merge:</span> rushdown + safe-zone denial.</li>
             </ul>
         </div>
     </div>
@@ -345,13 +337,13 @@
 
 
 <!-- ===================================================================== -->
-<!-- TECH — PAGE 1/2                                                       -->
+<!-- PAGE 3 — SYSTEMS CONTRACT (THE TRUTH TABLE)                            -->
 <!-- ===================================================================== -->
 <div class="page">
     <h1>NEON PLAZA</h1>
-    <div class="phase-tag">Tech — Page 1 of 2 (State + Heat)</div>
+    <div class="phase-tag">Design Bible — Page 3 (Systems Contract)</div>
 
-    <h2>State + Intensity (Canonical Rules)</h2>
+    <h2>State + Intensity (Canonical)</h2>
     <div class="table-wrap">
         <table>
             <tr>
@@ -364,7 +356,7 @@
                 <td>Stealth / Skirmish / Combat / Boss</td>
                 <td>
                     <span class="highlight">Stealth:</span> undetected (default)<br/>
-                    <span class="highlight">Skirmish:</span> detected OR alarms triggered; you’re not stealth but not combo-ing<br/>
+                    <span class="highlight">Skirmish:</span> detected OR alarms triggered; not stealth but not combo-ing<br/>
                     <span class="highlight">Combat:</span> entering combo<br/>
                     <span class="highlight">Boss:</span> boss fights only
                 </td>
@@ -373,8 +365,8 @@
                 <td><span class="highlight">INTENSITY</span></td>
                 <td>Low / Medium / High Heat</td>
                 <td>
-                    Heat rises as a consequence of losing stealth (detection/alarms/loud play).<br/>
-                    Heat can drop only during <span class="highlight">Stealth state</span> (Revenge Mode).
+                    Heat rises as a consequence of losing stealth.<br/>
+                    Heat drops only during <span class="highlight">Stealth state</span> (Revenge Mode).
                 </td>
             </tr>
             <tr>
@@ -388,36 +380,34 @@
     <h2>Soft Stealth vs Full Stealth</h2>
     <div class="box">
         <p><span class="highlight">Full Stealth:</span> not detected, low detectability → Heat drops rapidly.</p>
-        <p><span class="highlight">Soft Stealth:</span> not detected but being detectable (risk is high) → Heat drops slowly.</p>
-        <p class="small"><span class="highlight">Player clarity:</span> you can track which stealth tier you’re in by watching the Heat drop rate.</p>
+        <p><span class="highlight">Soft Stealth:</span> not detected but being detectable → Heat drops slowly.</p>
+        <p class="small"><span class="highlight">Player clarity:</span> you track stealth tier by watching Heat drop rate.</p>
     </div>
 
-    <h2>Heat Behavior (Origin vs Revenge)</h2>
+    <h2>Heat Model (Mode Differences)</h2>
     <div class="grid">
         <div class="grid-item">
             <h3>REVENGE MODE</h3>
             <ul>
-                <li>Heat can decrease only during <span class="highlight">Stealth state</span>.</li>
-                <li><span class="highlight">Full stealth:</span> rapid decrease.</li>
-                <li><span class="highlight">Soft stealth:</span> slow decrease.</li>
-                <li><span class="highlight">Relief valve:</span> killing Lieutenant can reduce Heat, but usually raises it first (balance carefully).</li>
+                <li>Heat can decrease only in Stealth.</li>
+                <li>Full stealth drops fast; soft stealth drops slow.</li>
+                <li>Killing Lieutenant can reduce Heat (net outcome must be balanced).</li>
             </ul>
         </div>
         <div class="grid-item">
             <h3>ORIGIN MODE</h3>
             <ul>
-                <li>Heat only rises (unless you kill the Lieutenant).</li>
+                <li>Heat only rises.</li>
                 <li>Stealth reduces rise rate (more time to reach boss).</li>
-                <li>Higher Heat at boss entry = more waves / more chaos.</li>
-                <li><span class="warn">Super fight:</span> Heat &gt; 50% + Lieutenant alive = brutal.</li>
+                <li>Higher Heat at boss entry = more waves / chaos.</li>
             </ul>
         </div>
     </div>
 
-    <h2>Guaranteed Merge Rule (Boss + Lieutenant)</h2>
+    <h2>Merge Rule (Guaranteed Escalation)</h2>
     <div class="box">
-        <p><span class="warn">Guaranteed:</span> if the Lieutenant is alive and <span class="highlight">Heat &gt; 50%</span>, they will enter the boss fight when the Kingpin hits <span class="highlight">50% HP</span>.</p>
-        <p class="small"><span class="highlight">Design intent:</span> creates a clear mid-fight escalation that players can anticipate and plan around.</p>
+        <p><span class="warn">Guaranteed:</span> Lieutenant alive + <span class="highlight">Heat &gt; 50%</span> → Lieutenant enters boss fight at <span class="highlight">50% Kingpin HP</span>.</p>
+        <p class="small"><span class="highlight">Design intent:</span> a readable mid-fight escalation that players plan around.</p>
     </div>
 
     <h2>Extraction Rule</h2>
@@ -425,103 +415,64 @@
         <p><span class="highlight">After killing the Kingpin:</span> you may extract without clearing remaining enemies.</p>
         <p><span class="highlight">But:</span> you must survive until the extraction sequence completes.</p>
     </div>
-</div>
 
-
-<!-- ===================================================================== -->
-<!-- TECH — PAGE 2/2                                                       -->
-<!-- ===================================================================== -->
-<div class="page">
-    <h1>NEON PLAZA</h1>
-    <div class="phase-tag">Tech — Page 2 of 2 (PCG + Lieutenant Standards)</div>
-
-    <h2>Lieutenant Standards (Formal)</h2>
-    <div class="table-wrap">
-        <table>
-            <tr>
-                <th>Standard</th>
-                <th>Meaning</th>
-                <th>Must Have</th>
-            </tr>
-            <tr>
-                <td><span class="highlight">Iconic Entry</span></td>
-                <td>Players know it’s them instantly.</td>
-                <td>Audio motif + UI indicator + distinct silhouette.</td>
-            </tr>
-            <tr>
-                <td><span class="highlight">Counterplay</span></td>
-                <td>Always answerable.</td>
-                <td>Outsmart / outrun / hide are always valid.</td>
-            </tr>
-            <tr>
-                <td><span class="highlight">Theme Pairing</span></td>
-                <td>Complements Kingpin’s corruption style.</td>
-                <td>Same theme, different playstyle.</td>
-            </tr>
-            <tr>
-                <td><span class="highlight">Synergy</span></td>
-                <td>With Kingpin, becomes extra deadly.</td>
-                <td>Covers Kingpin weakness, creates new threat geometry.</td>
-            </tr>
-            <tr>
-                <td><span class="highlight">Fair Deaths</span></td>
-                <td>No cheap losses.</td>
-                <td>Telegraphs; readable counters; predictable escalation.</td>
-            </tr>
-        </table>
-    </div>
-
-    <h2>Procedural Generation: Quality Gates</h2>
-    <div class="grid">
-        <div class="grid-item">
-            <h3>MUST PASS (VALIDATION)</h3>
-            <ul>
-                <li>At least 2 viable routes forward.</li>
-                <li>No softlocks: redundancy for keys/hacks.</li>
-                <li>Extraction always reachable.</li>
-                <li>No unfair spawn traps or blind instant deaths.</li>
-                <li>Vertical transitions do not strand AI or break LoS unfairly.</li>
-            </ul>
-        </div>
-        <div class="grid-item">
-            <h3>MUST FEEL (VARIETY)</h3>
-            <ul>
-                <li>Landmarks appear consistently.</li>
-                <li>Rule variants per run (cameras / patrols / lockdown).</li>
-                <li>Route archetypes (vents/service routes/main halls).</li>
-                <li>Event rooms (alarm reroute, elevator override).</li>
-                <li>Setpieces tied to corruption theme.</li>
-            </ul>
-        </div>
-    </div>
-
-    <h2>Accessibility (Audio-as-Gameplay)</h2>
+    <h2>Counterplay Contract (Always-Available)</h2>
     <ul>
-        <li>All critical audio cues get optional visual cues (UI pulses/subtitle indicators).</li>
-        <li>Heat tiers readable without color alone (icons + patterns + text).</li>
+        <li><span class="highlight">Outsmart:</span> knowledge, routes, hacks, gadgets.</li>
+        <li><span class="highlight">Outrun:</span> traversal and reposition.</li>
+        <li><span class="highlight">Hide:</span> break LoS and enter Stealth to cool Heat (Revenge).</li>
     </ul>
-</div>
 
-
-<!-- ===================================================================== -->
-<!-- PLAN — PAGE 1/2                                                       -->
-<!-- ===================================================================== -->
-<div class="page">
-    <h1>NEON PLAZA</h1>
-    <div class="phase-tag">Plan — Page 1 of 2 (Progression Formalized)</div>
-
-    <h2>Progression Split (Formal)</h2>
+    <h2>Fairness Contract (No Cheap Losses)</h2>
     <div class="box">
-        <p><span class="highlight">ORIGIN UNLOCKS CONTENT.</span> <span class="highlight">REVENGE UNLOCKS ENHANCEMENTS.</span></p>
         <ul>
-            <li><span class="highlight">Origin:</span> gates the campaign and unlocks new hideouts, gear families, enemies, and systems.</li>
-            <li><span class="highlight">Revenge:</span> tracks mastery and improves performance (ammo tiers, perks, cosmetics, prestige).</li>
+            <li>Players always know why Heat increased.</li>
+            <li>Lieutenant presence is always announced (audio + UI cue).</li>
+            <li>Deaths are explainable: clear damage source and mistake.</li>
+            <li>No invisible, instant, unavoidable failures.</li>
         </ul>
     </div>
+</div>
 
-    <h2>Origin Unlocks (Content, Progressive Rewards)</h2>
-    <p>Origin should feel rewarding even before completion. Players get staged unlocks as they push deeper.</p>
 
+<!-- ===================================================================== -->
+<!-- PAGE 4 — PROGRESSION CONTRACT (ORIGIN VS REVENGE VS CHIPS)             -->
+<!-- ===================================================================== -->
+<div class="page">
+    <h1>NEON PLAZA</h1>
+    <div class="phase-tag">Design Bible — Page 4 (Progression Contract)</div>
+
+    <h2>The Progression Triangle (Formal)</h2>
+    <div class="box">
+        <p><span class="highlight">ORIGIN unlocks CONTENT.</span> <span class="highlight">REVENGE unlocks ENHANCEMENTS.</span> <span class="highlight">CHIPS buy OPERATIONS (temporary).</span></p>
+        <p class="small"><span class="highlight">No Overlap Rule:</span> chips never buy permanent unlocks. Perks/ammo tiers are unlocked in Revenge, then purchased with chips to bring into a run.</p>
+    </div>
+
+    <div class="grid">
+        <div class="grid-item">
+            <h3>ORIGIN (CONTENT)</h3>
+            <ul>
+                <li>Unlocks hideouts (campaign progression).</li>
+                <li>Unlocks signature gadgets and weapon families.</li>
+                <li>Unlocks new enemies, maps, systems, story beats.</li>
+                <li>Always rewarding even when you fail.</li>
+            </ul>
+        </div>
+        <div class="grid-item">
+            <h3>REVENGE (ENHANCEMENTS)</h3>
+            <ul>
+                <li>Unlocks ammo tiers, armor tiers, and global perks.</li>
+                <li>Unlocks mastery cosmetics and prestige goals.</li>
+                <li>Creates build identity and long-term mastery.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="box">
+        <p><span class="highlight">CHIPS (OPERATIONS):</span> a global currency themed to the Casino endgame. Earned during raids, banked on extract (partial on death), spent at the Fence on temporary run advantages.</p>
+    </div>
+
+    <h2>Origin Unlocks (Progressive)</h2>
     <div class="table-wrap">
         <table>
             <tr>
@@ -531,7 +482,7 @@
             </tr>
             <tr>
                 <td><span class="highlight">Enter Origin (first attempt)</span></td>
-                <td>Access unlock</td>
+                <td>Mode access</td>
                 <td>Unlock that hideout’s <span class="highlight">Revenge Mode</span> even if you fail.</td>
             </tr>
             <tr>
@@ -541,40 +492,18 @@
             </tr>
             <tr>
                 <td><span class="highlight">Kill Lieutenant</span></td>
-                <td>Signature weapon</td>
+                <td>Signature weapon family</td>
                 <td>Unlock that hideout’s <span class="highlight">signature weapon</span> family.</td>
             </tr>
             <tr>
                 <td><span class="highlight">Kill Kingpin (complete Origin)</span></td>
-                <td>Content progression</td>
+                <td>Campaign progression</td>
                 <td><span class="highlight">Unlock next hideout</span> + major story reveal.</td>
             </tr>
         </table>
     </div>
 
-    <div class="box">
-        <p><span class="highlight">Key best-practice rule:</span> Origin rewards should feel like new toys and new places, not just stat bumps.</p>
-        <p class="small"><span class="highlight">Reason:</span> content unlocks motivate exploration and make failure feel like progress.</p>
-    </div>
-
-    <h2>Phase Structure (Content)</h2>
-    <ul>
-        <li><span class="highlight">Phase 1 (12 months):</span> Office Tower + Hotel.</li>
-        <li><span class="highlight">Phase 2 (+12 months):</span> Shopping Center + Casino.</li>
-    </ul>
-</div>
-
-
-<!-- ===================================================================== -->
-<!-- PLAN — PAGE 2/2                                                       -->
-<!-- ===================================================================== -->
-<div class="page" style="page-break-after: auto;">
-    <h1>NEON PLAZA</h1>
-    <div class="phase-tag">Plan — Page 2 of 2 (Revenge Tracking + Timeline)</div>
-
-    <h2>Revenge Unlocks (Enhancements + Mastery)</h2>
-    <p>Revenge mode rewards are meta-tracked goals that improve performance and expression.</p>
-
+    <h2>Revenge Unlocks (Meta Tracking)</h2>
     <div class="table-wrap">
         <table>
             <tr>
@@ -584,13 +513,13 @@
             </tr>
             <tr>
                 <td><span class="highlight">Extract 5 times (per hideout)</span></td>
-                <td>Perk (theme-matched)</td>
-                <td>Unlock that hideout’s <span class="highlight">corruption perk</span> (build-defining enhancement).</td>
+                <td>Global perk</td>
+                <td>Unlock a global perk themed to that hideout’s corruption.</td>
             </tr>
             <tr>
                 <td><span class="highlight">Hit 40 combo</span></td>
-                <td>Ammo tier upgrade</td>
-                <td>Unlock next-tier ammo for that hideout’s signature weapon.</td>
+                <td>Ammo tier unlock</td>
+                <td>Unlock next-tier ammo for a weapon family (then purchase with chips).</td>
             </tr>
             <tr>
                 <td><span class="highlight">Kill 1,000 enemies</span></td>
@@ -599,13 +528,109 @@
             </tr>
         </table>
     </div>
+</div>
 
+
+<!-- ===================================================================== -->
+<!-- PAGE 5 — ECONOMY MAP (CHIPS, FENCE, PITY GIFT, BANKING)                -->
+<!-- ===================================================================== -->
+<div class="page">
+    <h1>NEON PLAZA</h1>
+    <div class="phase-tag">Design Bible — Page 5 (Economy + Chips)</div>
+
+    <h2>Chips (Global Currency)</h2>
     <div class="box">
-        <p><span class="highlight">Key best-practice rule:</span> Revenge rewards should feel like better tools, cleaner runs, and stronger builds — not unlocking core content.</p>
-        <p class="small"><span class="highlight">Reason:</span> content gating belongs in Origin; mastery belongs in Revenge.</p>
+        <ul>
+            <li><span class="highlight">Earned in-run:</span> combo paydays, Heat risk bonuses, contracts, landmarks.</li>
+            <li><span class="highlight">Banked:</span> full on extract; partial on death based on floor progress.</li>
+            <li><span class="highlight">Spent:</span> at the Fence between raids on temporary advantages (consumables + services).</li>
+            <li><span class="highlight">Never buys permanent unlocks.</span></li>
+        </ul>
     </div>
 
-    <h2>Timeline (Clean & Readable)</h2>
+    <h2>Combo → Chips (Core Reward Logic)</h2>
+    <div class="box">
+        <p><span class="highlight">Combo increases chip income</span> (paycheck fantasy). Heat increases chip yield but raises danger (risk multiplier).</p>
+        <p class="small"><span class="highlight">Stealth support:</span> combo cooldown timer is more forgiving in stealth, so stealth players can still cash out through smart chains.</p>
+    </div>
+
+    <h2>Banking Rules (Death Cashout)</h2>
+    <div class="box">
+        <p><span class="highlight">On death:</span> bank a % of earned chips based on floors completed.</p>
+        <ul>
+            <li>0 floors = 10%</li>
+            <li>1 floor = 20%</li>
+            <li>2 floors = 30%</li>
+            <li>3 floors = 40%</li>
+            <li>4+ floors = 50% (cap before modifiers)</li>
+        </ul>
+        <p><span class="highlight">Lieutenant bonus:</span> killing the Lieutenant guarantees minimum banking protection:</p>
+        <ul>
+            <li>If bank % would be below 50% → raise to 50%.</li>
+            <li>If bank % would be above 50% → raise to 80%.</li>
+            <li><span class="highlight">Bank cap on death:</span> 80% (prevents intentional “death cashouts”).</li>
+        </ul>
+    </div>
+
+    <h2>The Fence (Rotating Store)</h2>
+    <div class="box">
+        <p><span class="highlight">Fence selection rotates</span> each run. Inventory is drawn from a pool of what you’ve unlocked.</p>
+        <p class="small"><span class="highlight">Guarantee rule:</span> always offers at least one stealth tool, one combat tool, one survival tool, one “panic” option, and one high-risk/high-reward option.</p>
+    </div>
+
+    <h2>Fence Inventory Categories (What Chips Buy)</h2>
+    <div class="grid">
+        <div class="grid-item">
+            <h3>CONSUMABLES (ONE-RUN)</h3>
+            <ul>
+                <li>Medkits, bandages, trauma kits</li>
+                <li>Smoke grenades, flashbangs</li>
+                <li>Decoy devices</li>
+                <li>Door wedges / lockpick sets</li>
+                <li>Portable jammers</li>
+                <li>Breach charges</li>
+            </ul>
+        </div>
+        <div class="grid-item">
+            <h3>SERVICES (ONE-RUN)</h3>
+            <ul>
+                <li>Intel: reveal 1 landmark room</li>
+                <li>Intel: reveal 1 extract</li>
+                <li>Insurance slot: protect 1 item</li>
+                <li>Bribe: delay security response slightly</li>
+                <li>Ammo/armor: purchase tier you’ve unlocked</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2>Pity Gift System (“The City Takes Pity on You”)</h2>
+    <div class="box">
+        <p><span class="highlight">Trigger:</span> die 3 runs in a row.</p>
+        <p><span class="highlight">Effect:</span> before the next run, the city grants a <span class="highlight">high-tier temporary gift</span> for that run (not permanent unlock).</p>
+        <ul>
+            <li>Can include a powerful weapon/gear/gadget preview.</li>
+            <li>Must always materially improve survivability or control.</li>
+            <li>Cannot be a permanent unlock.</li>
+        </ul>
+        <p class="small"><span class="highlight">Purpose:</span> helps weaker players recover, previews future unlocks, and reduces frustration without breaking the progression contract.</p>
+    </div>
+</div>
+
+
+<!-- ===================================================================== -->
+<!-- PAGE 6 — PRODUCTION PLAN + TUNING TARGETS                              -->
+<!-- ===================================================================== -->
+<div class="page" style="page-break-after: auto;">
+    <h1>NEON PLAZA</h1>
+    <div class="phase-tag">Design Bible — Page 6 (Plan + Tuning Targets)</div>
+
+    <h2>Phase Structure</h2>
+    <ul>
+        <li><span class="highlight">Phase 1 (12 months):</span> Office Tower + Hotel.</li>
+        <li><span class="highlight">Phase 2 (+12 months):</span> Shopping Center + Casino (final).</li>
+    </ul>
+
+    <h2>Timeline (Clean)</h2>
     <div class="grid">
         <div class="grid-item">
             <h3>PHASE 1 (MONTHS 1–12)</h3>
@@ -628,6 +653,42 @@
         </div>
     </div>
 
+    <h2>Tuning Targets (Early Draft — Adjust After Playtests)</h2>
+    <div class="table-wrap">
+        <table>
+            <tr>
+                <th>Metric</th>
+                <th>Target</th>
+                <th>Why It Matters</th>
+            </tr>
+            <tr>
+                <td><span class="highlight">Average run length</span></td>
+                <td>20–30 minutes</td>
+                <td>Fast loop supports “one more run” flow.</td>
+            </tr>
+            <tr>
+                <td><span class="highlight">Extraction success rate (overall)</span></td>
+                <td>~35–55% (varies by skill)</td>
+                <td>Too low = frustration; too high = no tension.</td>
+            </tr>
+            <tr>
+                <td><span class="highlight">Heat &gt; 50% + Lieutenant alive endgame</span></td>
+                <td>“Expert-only” survival</td>
+                <td>Nightmare merge should be feared but fair.</td>
+            </tr>
+            <tr>
+                <td><span class="highlight">Fence purchase frequency</span></td>
+                <td>1–3 items per run</td>
+                <td>Ensures chips matter without inflation.</td>
+            </tr>
+            <tr>
+                <td><span class="highlight">Pity gift frequency</span></td>
+                <td>Rare but noticeable</td>
+                <td>Safety net without encouraging intentional failure.</td>
+            </tr>
+        </table>
+    </div>
+
     <h2>Quality Contract (Internal Success Criteria)</h2>
     <div class="box">
         <ul>
@@ -635,7 +696,8 @@
             <li>Deaths are explainable; Heat feels earned; Lieutenants feel fair.</li>
             <li>Origin always rewards forward progress (even when you fail).</li>
             <li>Revenge rewards mastery without gating content.</li>
-            <li>Heat and music feel fused; you can <i>hear</i> the city closing in.</li>
+            <li>Chips create satisfying “payday” moments and meaningful pre-raid decisions.</li>
+            <li>“The city takes pity on you” makes bad players recover and keeps them playing.</li>
         </ul>
     </div>
 </div>
