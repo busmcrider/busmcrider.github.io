@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neon Plaza - Internal Design Bible (Early Stage)</title>
+    <title>Neon Plaza - Design Bible</title>
 
     <style>
         @page { size: letter; margin: 0.5in; }
@@ -171,12 +171,38 @@
 </head>
 
 <body>
+  <!-- Add this right after your opening <body> tag -->
+  <header class="hero">
+    <img
+      src="img/banner.png"
+      alt="Neon Plaza key art"
+      class="hero__img"
+      loading="eager"
+      decoding="async"
+    />
+  </header>
+
+  <style>
+    /* Full-width responsive hero image */
+    .hero {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .hero__img {
+      display: block;          /* removes the little gap under images */
+      width: 100vw;            /* fill viewport width */
+      max-width: 100%;         /* safety for weird containers */
+      height: auto;            /* keep aspect ratio */
+      object-fit: cover;       /* crops gracefully if you later set a fixed height */
+    }
+  </style>
 
 <!-- ===================================================================== -->
 <!-- PAGE 1 — PITCH + PILLARS + IDENTITY                                   -->
 <!-- ===================================================================== -->
 <div class="page">
-    <h1>NEON PLAZA</h1>
     <div class="phase-tag">Design Bible — Page 1 (Pitch + Pillars)</div>
 
     <div class="box">
