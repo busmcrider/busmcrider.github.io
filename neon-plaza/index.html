@@ -3,147 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neon Plaza - 3-Page Overview (Internal)</title>
+    <title>Neon Plaza - 6-Page Overview (Internal)</title>
+
     <style>
-        @page {
-            size: letter;
-            margin: 0.5in;
+        @page { size: letter; margin: 0.5in; }
+
+        :root{
+            --bg: #000;
+            --text: #e0e0e0;
+            --cyan: #00ffff;
+            --magenta: #ff00ff;
+            --magenta2:#ff0080;
+            --pageGradA:#0a0a0d;
+            --pageGradB:#0d0a0f;
         }
 
         body {
             font-family: 'Courier New', monospace;
-            font-size: 10pt;
-            line-height: 1.4;
-            color: #e0e0e0;
-            background: #000;
+            font-size: 12pt;              /* INCREASED (was 10pt) */
+            line-height: 1.55;            /* INCREASED readability */
+            color: var(--text);
+            background: var(--bg);
             margin: 0;
-            padding: 20px;
+            padding: 18px;
         }
 
+        /* MOBILE-FRIENDLY PAGE WRAPPER */
         .page {
-            width: 8.5in;
+            width: min(8.5in, 100%);
             min-height: 11in;
-            background: linear-gradient(135deg, #0a0a0d 0%, #0d0a0f 100%);
-            margin: 0 auto 20px;
-            padding: 0.5in;
+            background: linear-gradient(135deg, var(--pageGradA) 0%, var(--pageGradB) 100%);
+            margin: 0 auto 18px;
+            padding: 0.55in;
             box-shadow: 0 0 30px rgba(255, 0, 255, 0.4);
             page-break-after: always;
-            border: 1px solid #ff00ff;
+            border: 1px solid var(--magenta);
             position: relative;
+            box-sizing: border-box;
         }
 
         .page::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             height: 3px;
-            background: linear-gradient(90deg, #ff00ff, #00ffff, #ff00ff);
+            background: linear-gradient(90deg, var(--magenta), var(--cyan), var(--magenta));
         }
 
         h1 {
-            font-size: 18pt;
-            color: #00ffff;
+            font-size: 22pt;              /* INCREASED */
+            color: var(--cyan);
             text-transform: uppercase;
             letter-spacing: 3px;
-            border-bottom: 2px solid #ff00ff;
-            padding-bottom: 5px;
-            margin: 0 0 12px 0;
-            text-shadow: 0 0 10px #00ffff;
+            border-bottom: 2px solid var(--magenta);
+            padding-bottom: 6px;
+            margin: 0 0 14px 0;
+            text-shadow: 0 0 10px var(--cyan);
         }
 
         h2 {
-            font-size: 12pt;
-            color: #ff00ff;
+            font-size: 14pt;              /* INCREASED */
+            color: var(--magenta);
             text-transform: uppercase;
-            margin: 14px 0 6px 0;
-            border-left: 3px solid #00ffff;
-            padding-left: 8px;
+            margin: 16px 0 8px 0;
+            border-left: 3px solid var(--cyan);
+            padding-left: 10px;
         }
 
         h3 {
-            font-size: 11pt;
-            color: #00ffff;
-            margin: 10px 0 4px 0;
+            font-size: 13pt;              /* INCREASED */
+            color: var(--cyan);
+            margin: 12px 0 6px 0;
         }
 
         .phase-tag {
             display: inline-block;
-            background: linear-gradient(135deg, #ff00ff, #ff0080);
+            background: linear-gradient(135deg, var(--magenta), var(--magenta2));
             color: #000;
-            padding: 3px 12px;
-            font-size: 9pt;
+            padding: 4px 14px;
+            font-size: 10pt;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        p {
-            margin: 6px 0;
-        }
+        p { margin: 7px 0; }
 
-        ul {
-            margin: 5px 0;
-            padding-left: 20px;
-        }
+        ul { margin: 6px 0; padding-left: 22px; }
+        li { margin: 4px 0; }
 
-        li {
-            margin: 3px 0;
-        }
-
-        .highlight {
-            color: #00ffff;
-            font-weight: bold;
-        }
-
-        .warn {
-            color: #ff00ff;
-            font-weight: bold;
-        }
+        .highlight { color: var(--cyan); font-weight: bold; }
+        .warn { color: var(--magenta); font-weight: bold; }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 8px 0;
-            font-size: 9pt;
+            margin: 10px 0;
+            font-size: 10.5pt;            /* slightly smaller than body */
         }
-
         th, td {
-            border: 1px solid #00ffff;
-            padding: 5px;
+            border: 1px solid var(--cyan);
+            padding: 7px;
             text-align: left;
+            vertical-align: top;
         }
-
         th {
             background: rgba(255, 0, 255, 0.2);
-            color: #00ffff;
+            color: var(--cyan);
             font-weight: bold;
         }
 
         .box {
-            border: 1px solid #ff00ff;
-            padding: 8px;
-            margin: 8px 0;
-            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--magenta);
+            padding: 10px;
+            margin: 10px 0;
+            background: rgba(0, 0, 0, 0.55);
         }
 
         .grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin: 8px 0;
+            gap: 12px;
+            margin: 10px 0;
         }
 
         .grid-item {
-            border: 1px solid #00ffff;
-            padding: 8px;
-            background: rgba(0, 255, 255, 0.05);
+            border: 1px solid var(--cyan);
+            padding: 10px;
+            background: rgba(0, 255, 255, 0.06);
+        }
+
+        .kicker {
+            opacity: 0.9;
+            margin-top: 6px;
+        }
+
+        .small { font-size: 10.5pt; opacity: 0.95; }
+
+        /* MOBILE OVERRIDES */
+        @media (max-width: 900px) {
+            body { padding: 10px; font-size: 12.5pt; }
+            .page { padding: 16px; min-height: auto; }
+            .grid { grid-template-columns: 1fr; }
+            h1 { font-size: 20pt; }
+            h2 { font-size: 14pt; }
+            h3 { font-size: 13pt; }
+            table { font-size: 11pt; }
         }
 
         @media print {
-            body { background: white; }
+            body { background: white; color: #111; }
             .page { box-shadow: none; }
         }
     </style>
@@ -151,368 +161,581 @@
 
 <body>
 
-<!-- ===================================================== -->
-<!-- PAGE 1 — PITCH                                        -->
-<!-- ===================================================== -->
+<!-- ===================================================================== -->
+<!-- PITCH — PAGE 1/2                                                      -->
+<!-- ===================================================================== -->
 <div class="page">
     <h1>NEON PLAZA</h1>
-    <div class="phase-tag">3-Page Overview — Internal</div>
+    <div class="phase-tag">Pitch — Page 1 of 2 (Internal)</div>
 
     <div class="box">
         <p><span class="highlight">ELEVATOR PITCH:</span> <i>AKANE’s</i> tempo-driven flow meets <i>Zero Sievert’s</i> extraction tension — set in 1988 neon NYC.</p>
-        <p>Chain kills into combo-accelerating music, manage escalating <span class="highlight">HEAT</span>, outsmart a roaming <span class="highlight">LIEUTENANT</span>, kill the <span class="highlight">KINGPIN</span>, and extract with rare tech.</p>
+        <p>Chain kills into combo-accelerating music, push <span class="highlight">HEAT</span> to the brink, outsmart a roaming <span class="highlight">LIEUTENANT</span>, kill the <span class="highlight">KINGPIN</span>, and extract with rare tech.</p>
+        <p class="kicker"><span class="highlight">Core Identity:</span> it’s absurdly fun to play — moment-to-moment flow is the product.</p>
     </div>
 
     <h2>The Player Fantasy</h2>
     <ul>
-        <li><span class="highlight">Be the city’s loudest ghost:</span> lethal top-down combat where momentum is everything.</li>
-        <li><span class="highlight">Choose your pace:</span> aggro players go loud, stealth players go quiet, smart players MacGyver.</li>
-        <li><span class="highlight">Steal corruption’s trophies:</span> rare tech, signature weapons, and hideout-specific collectibles.</li>
-        <li><span class="highlight">Escape under pressure:</span> alarms, sirens, patrols, and a Lieutenant hunting your footsteps.</li>
+        <li><span class="highlight">Combat-forward:</span> lethal top-down action with instant restart speed and constant forward motion.</li>
+        <li><span class="highlight">Stealth optional:</span> play it as a heist where combat is a consequence — or go loud and farm momentum.</li>
+        <li><span class="highlight">Smart play wins:</span> locks, keys, hacking, gadgets, and MacGyver improvisation open new routes and solve problems.</li>
+        <li><span class="highlight">Extraction stakes:</span> every run is a push-your-luck story — take the loot, survive the escape.</li>
     </ul>
 
     <h2>Core Loop (20–30 Minutes)</h2>
     <ol>
         <li><span class="highlight">Infiltrate</span> a procedural hideout (floor-by-floor).</li>
-        <li><span class="highlight">Loot + MacGyver</span> (keys, locks, hacking, gadgets, shortcuts).</li>
+        <li><span class="highlight">Loot + MacGyver</span> (keys, hacks, gadgets, route shortcuts).</li>
         <li><span class="highlight">Build Combo</span> by chaining kills → music intensifies → loot quantity spikes.</li>
-        <li><span class="highlight">Heat Escalates</span> as you act → security changes + elite units appear.</li>
-        <li><span class="highlight">The Lieutenant Hunts</span> (optional mini-boss with high-tier reward + Heat relief).</li>
-        <li><span class="highlight">Kill the Kingpin</span> in a handcrafted arena.</li>
-        <li><span class="highlight">Extract</span> at one of two exits (each with different risks + mechanics).</li>
+        <li><span class="highlight">Heat Escalates</span> as stealth breaks → security response grows.</li>
+        <li><span class="highlight">Lieutenant Hunts</span> (optional mini-boss; kill for reward + Heat relief).</li>
+        <li><span class="highlight">Kill the Kingpin</span> in a handcrafted fight.</li>
+        <li><span class="highlight">Extract</span> at one of two exits — survive until the sequence completes.</li>
     </ol>
 
-    <h2>Heat + Lieutenant: The Signature Tension</h2>
+    <h2>Signature Tension: Heat + Lieutenant</h2>
     <div class="box">
         <ul>
-            <li><span class="highlight">HEAT</span> is your pressure gauge: rising Heat triggers escalating security responses and higher stakes.</li>
-            <li><span class="highlight">LIEUTENANT</span> is the hideout’s roaming predator: tracks by sound and sight, punishes sloppy runs.</li>
-            <li><span class="warn">CRITICAL RULE:</span> If the Lieutenant is alive and <span class="highlight">HEAT &gt; 50%</span>, they can join the <span class="highlight">final fight / extraction chaos</span> alongside the Kingpin.</li>
-            <li><span class="highlight">Result:</span> optional hunt becomes a strategic decision — remove the threat now, or risk a nightmare ending.</li>
+            <li><span class="highlight">HEAT</span> rises as a consequence of losing stealth (detection, alarms, loud play).</li>
+            <li><span class="highlight">LIEUTENANT</span> is the roaming predator that turns runs into stories (tracks by sound and sight).</li>
+            <li><span class="warn">CRITICAL RULE:</span> if the Lieutenant is alive and <span class="highlight">HEAT &gt; 50%</span>, they can join the <span class="highlight">final fight / extraction chaos</span> alongside the Kingpin.</li>
+            <li><span class="highlight">Strategic choice:</span> hunt the Lieutenant now, or risk the nightmare ending later.</li>
         </ul>
     </div>
 
-    <h2>Modes</h2>
+    <h2>Mode Structure (First Contact = Origin)</h2>
     <div class="grid">
         <div class="grid-item">
-            <h3>REVENGE MODE (Primary)</h3>
+            <h3>ORIGIN MODE (First Contact)</h3>
             <ul>
-                <li>Extraction roguelite run structure.</li>
-                <li>Persistent progression + unlocks.</li>
-                <li>Death loses run loot, but long-term progress remains.</li>
-                <li>Playstyle freedom: loud / stealth / smart are all viable.</li>
+                <li>Linear boss hunt: training + narrative + mastery.</li>
+                <li>Completing a hideout’s Origin <span class="highlight">unlocks that hideout’s Revenge Mode</span>.</li>
+                <li><span class="highlight">Meta Gains:</span> new weapon/equipment types, enemies, maps.</li>
+                <li><span class="highlight">Heat Model:</span> always rises; stealth reduces the rate of increase.</li>
             </ul>
         </div>
         <div class="grid-item">
-            <h3>ORIGIN MODE (Secondary)</h3>
+            <h3>REVENGE MODE (Extraction Roguelite)</h3>
             <ul>
-                <li>Linear boss hunt (training + narrative).</li>
-                <li>Introduces gangs, corruption themes, and your revenge motive.</li>
-                <li>Curated challenges teach loadouts + systems.</li>
+                <li>Extraction loop: loot → boss → extract.</li>
+                <li><span class="highlight">Meta Gains:</span> better ammo, armor, perks, long-term power.</li>
+                <li><span class="highlight">Heat Model:</span> can be reduced by entering stealth over time (cost = TIME).</li>
+                <li>First successful extraction unlocks <span class="highlight">custom loadouts for Origin</span>.</li>
             </ul>
         </div>
     </div>
 
-    <h2>Phase Scope</h2>
-    <p><span class="highlight">PHASE 1 (12 Months):</span> Base game launches with <span class="highlight">2 hideouts</span> — Office Tower + Hotel.</p>
-    <p><span class="highlight">PHASE 2 (+12 Months):</span> Expansion adds <span class="highlight">2 hideouts</span> — Shopping Center + Casino.</p>
-
-    <h2>The “Trailer Moment”</h2>
-    <ul>
-        <li><span class="highlight">Combo crescendo:</span> the soundtrack hits peak intensity during a perfect streak.</li>
-        <li><span class="highlight">Boss kill → sprint to extract:</span> Heat maxed out, rare tech in hand, alarms screaming.</li>
-        <li><span class="highlight">Lieutenant vengeance:</span> you spared them, Heat rose, and now they’re in the final chaos.</li>
-    </ul>
+    <div class="box">
+        <p><span class="highlight">Why this works:</span> Origin teaches the rules and story. Revenge delivers the heist fantasy and stakes. Both feed progression without flattening skill expression.</p>
+    </div>
 </div>
 
 
-<!-- ===================================================== -->
-<!-- PAGE 2 — TECH / SYSTEMS                               -->
-<!-- ===================================================== -->
+<!-- ===================================================================== -->
+<!-- PITCH — PAGE 2/2                                                      -->
+<!-- ===================================================================== -->
 <div class="page">
     <h1>NEON PLAZA</h1>
-    <div class="phase-tag">Page 2 — Tech + Systems</div>
+    <div class="phase-tag">Pitch — Page 2 of 2 (Hideouts + Lore)</div>
 
-    <h2>Design Pillars → Implementation Targets</h2>
-    <ul>
-        <li><span class="highlight">Readability at speed:</span> lethal combat needs clean silhouettes, instant feedback, strong audio cues.</li>
-        <li><span class="highlight">Pressure with counterplay:</span> Heat rises, but stealth + gadgets + hacks let players re-shape the situation.</li>
-        <li><span class="highlight">Music as state feedback:</span> players hear danger + flow without checking UI.</li>
-        <li><span class="highlight">Procedural, not random:</span> rules + quality gates prevent “bad runs.”</li>
-    </ul>
+    <h2>Hideouts (What Makes Each One Memorable)</h2>
+    <p>Each hideout is a corruption archetype with its own traversal hook, extract pair, enemy identity, loot identity, and a Kingpin + Lieutenant duo designed to be deadly alone and terrifying together.</p>
 
-    <h2>System Stack (The “Neon Plaza Engine”)</h2>
-    <table>
-        <tr>
-            <th>System</th>
-            <th>What It Does</th>
-            <th>Why It Matters</th>
-        </tr>
-        <tr>
-            <td><span class="highlight">Music State Machine</span></td>
-            <td>Stealth → Combat → Combo → Extraction (bar-synced transitions where possible).</td>
-            <td>Makes momentum audible. Defines the identity.</td>
-        </tr>
-        <tr>
-            <td><span class="highlight">Combo</span></td>
-            <td>Chaining kills increases intensity + loot quantity.</td>
-            <td>Reinforces “flow-state” play and creates shareable peaks.</td>
-        </tr>
-        <tr>
-            <td><span class="highlight">Heat</span></td>
-            <td>Escalation tiers that change patrols, threats, and events.</td>
-            <td>Turns every run into a push-your-luck story.</td>
-        </tr>
-        <tr>
-            <td><span class="highlight">Lieutenant (Hunter)</span></td>
-            <td>Roaming predator with counterplay + big rewards. Joins endgame if spared at high Heat.</td>
-            <td>Run-defining drama + meaningful strategic choice.</td>
-        </tr>
-        <tr>
-            <td><span class="highlight">Procedural Hideouts</span></td>
-            <td>Chunk templates + rule assembly + quality gates + handcrafted boss arenas.</td>
-            <td>Replayability without unfair layouts.</td>
-        </tr>
-        <tr>
-            <td><span class="highlight">MacGyver Toolkit</span></td>
-            <td>Locks/keys/hacks/gadgets create alternate routes and solutions.</td>
-            <td>Supports stealth and “smart” playstyles.</td>
-        </tr>
-    </table>
-
-    <h2>Lieutenant + Kingpin Integration (Narrative + Gameplay)</h2>
-    <div class="box">
-        <p><span class="highlight">Rule:</span> each hideout has a Kingpin + Lieutenant who represent the same corruption theme — but from different angles.</p>
-        <p><span class="highlight">Gameplay Role Split:</span></p>
-        <ul>
-            <li><span class="highlight">Lieutenant:</span> roaming, reactive, punishing — tests adaptation and stealth under pressure.</li>
-            <li><span class="highlight">Kingpin:</span> setpiece fight — tests mastery, loadout prep, and execution under high Heat.</li>
-            <li><span class="warn">Merge Condition:</span> Lieutenant alive + Heat &gt; 50% → “two-boss chaos” at the end.</li>
-        </ul>
-    </div>
-
-    <h2>Procedural Hideouts (Rules + Quality Gates)</h2>
-    <ul>
-        <li><span class="highlight">Chunk Templates:</span> curated rooms with purpose (combat pocket, stealth corridor, loot room, lock/hack room).</li>
-        <li><span class="highlight">Pacing Rules:</span> quiet → spike → recovery (no endless hallway slog).</li>
-        <li><span class="highlight">Key Rules:</span> never lock progression behind a single failure point (multiple solutions: hack, key, brute tool).</li>
-        <li><span class="highlight">Quality Gates:</span> protect readability (sightlines, cover, enemy spawn fairness, escape routes).</li>
-        <li><span class="highlight">Handcrafted Endcaps:</span> boss arenas + signature setpieces per hideout.</li>
-    </ul>
-
-    <h2>Simulated Verticality (Top-Down Across Floors)</h2>
-    <div class="grid">
-        <div class="grid-item">
-            <h3>OFFICE TOWER</h3>
-            <ul>
-                <li>Traversal: <span class="highlight">vents + stairwells + security shafts</span>.</li>
-                <li>Risk: tight corridors, cameras, locked shortcuts.</li>
-                <li>Feel: corporate labyrinth — clean, cold, deadly.</li>
-            </ul>
-        </div>
-        <div class="grid-item">
-            <h3>HOTEL</h3>
-            <ul>
-                <li>Traversal: <span class="highlight">elevators + service corridors</span>.</li>
-                <li>Risk: open suites, long sightlines, ambush routes.</li>
-                <li>Feel: luxury maze — secrets behind every door.</li>
-            </ul>
-        </div>
-    </div>
-
-    <h2>MacGyver Toolkit (Locks, Hacks, Gadgets)</h2>
-    <ul>
-        <li><span class="highlight">Locks & Keys:</span> keycards, coded locks, master keys, stolen credentials.</li>
-        <li><span class="highlight">Hacking:</span> cameras, alarms, elevator overrides, security routing, power panels.</li>
-        <li><span class="highlight">Gadgets:</span> decoys, EMPs, smoke, breaching tools, signal jammers, zip/rappel kits.</li>
-        <li><span class="highlight">Found Tech:</span> rare loot that changes how you play (temporary cloak, portable bypass, heat dampener).</li>
-    </ul>
-
-    <h2>Audio/Music Implementation Notes</h2>
-    <ul>
-        <li><span class="highlight">Clarity First:</span> state changes must be unmistakable (players feel it instantly).</li>
-        <li><span class="highlight">Stability Under Chaos:</span> rapid combat events can’t break transitions.</li>
-        <li><span class="highlight">Graceful Degrade:</span> if bar-sync fails, fallback to stingers + timed fades without losing vibe.</li>
-    </ul>
-</div>
-
-
-<!-- ===================================================== -->
-<!-- PAGE 3 — PLAN / ROADMAP                               -->
-<!-- ===================================================== -->
-<div class="page" style="page-break-after: auto;">
-    <h1>NEON PLAZA</h1>
-    <div class="phase-tag">Page 3 — Plan (Features + Timeline)</div>
-
-    <h2>Hideouts (Phase Structure)</h2>
     <table>
         <tr>
             <th>Phase</th>
             <th>Hideout</th>
             <th>Traversal Hook</th>
+            <th>Landmarks</th>
             <th>Extract Pair (Examples)</th>
             <th>Corruption Theme</th>
         </tr>
         <tr>
-            <td><span class="highlight">PHASE 1</span></td>
+            <td><span class="highlight">P1</span></td>
             <td>Office Tower (Nakatomi Plaza-inspired)</td>
-            <td>Vents + security shafts</td>
+            <td>Vents + security shafts + stairwells</td>
+            <td>Server Room, Executive Office, Helipad</td>
             <td>Helipad / Subway Access</td>
             <td>Corporate power + exploitation</td>
         </tr>
         <tr>
-            <td><span class="highlight">PHASE 1</span></td>
+            <td><span class="highlight">P1</span></td>
             <td>Hotel</td>
-            <td>Elevators + service corridors</td>
+            <td>Elevators + service corridors + suites</td>
+            <td>Lobby, Restaurant, Boardroom</td>
             <td>Rooftop Parachute / Street Exit</td>
             <td>Luxury influence + blackmail</td>
         </tr>
         <tr>
-            <td><span class="highlight">PHASE 2</span></td>
+            <td><span class="highlight">P2</span></td>
             <td>Shopping Center</td>
-            <td>Escalators + backrooms</td>
+            <td>Escalators + backrooms + loading docks</td>
+            <td>Jewelry Store, Fashion House, Electronics Store</td>
             <td>Loading Dock / Maintenance Tunnel</td>
             <td>Consumer greed + trafficking</td>
         </tr>
         <tr>
-            <td><span class="highlight">PHASE 2</span></td>
+            <td><span class="highlight">P2</span></td>
             <td>Casino</td>
-            <td>Open pit + ring hallways + vault floor</td>
+            <td>Open pit + ring halls + vault + high roller</td>
+            <td>Gambling Pit, Vault, High Roller Room</td>
             <td>Car Garage / Rappel Exit</td>
             <td>Vice + money laundering</td>
         </tr>
     </table>
 
-    <h2>Kingpins + Lieutenants (Named + Thematic)</h2>
-    <p><span class="highlight">NOTE:</span> names are placeholders — final naming can lean Japanese, NYC, or hybrid neon noir.</p>
+    <h2>Kingpins + Lieutenants (Named, Thematic, Complementary)</h2>
+    <p class="small"><span class="highlight">Naming note:</span> these are final-quality placeholders; adjust cultural flavor as desired. The structure is the important part.</p>
 
     <div class="grid">
         <div class="grid-item">
-            <h3>OFFICE TOWER — “NAKATOMI PLAZA”</h3>
-            <p><span class="highlight">KINGPIN:</span> KENJI “GLASS” KATO — corporate fixer who buys police, contracts, and people.</p>
-            <p><span class="highlight">LIEUTENANT:</span> MAEVE “SENTRY” HOLLIS — head of security tech; always watching.</p>
+            <h3>OFFICE TOWER</h3>
+            <p><span class="highlight">KINGPIN:</span> Kenji “Glass” Kato — corporate fixer who buys police, contracts, and people.</p>
+            <p><span class="highlight">LIEUTENANT:</span> Maeve “Sentry” Hollis — surveillance chief; always watching.</p>
             <ul>
-                <li><span class="highlight">Lieutenant Style:</span> surveillance + drones + locking down corridors.</li>
-                <li><span class="highlight">Kingpin Style:</span> staged phases + shifting cover + “security protocol” patterns.</li>
-                <li><span class="warn">If spared at Heat &gt; 50%:</span> Sentry joins the end fight with drones + lockdown pulses.</li>
+                <li><span class="highlight">Lieutenant Playstyle:</span> drones, lockdown pulses, camera traps, corridor control.</li>
+                <li><span class="highlight">Kingpin Playstyle:</span> protocol phases, cover shifts, security waves based on Heat entry.</li>
             </ul>
         </div>
 
         <div class="grid-item">
             <h3>HOTEL</h3>
-            <p><span class="highlight">KINGPIN:</span> LUIS “CONCIERGE” VARGAS — luxury broker of secrets and favors.</p>
-            <p><span class="highlight">LIEUTENANT:</span> YURI “HOUSEKEEPER” MOROZOV — silent enforcer who cleans up mistakes.</p>
+            <p><span class="highlight">KINGPIN:</span> Luis “Concierge” Vargas — broker of secrets, luxury, and favors.</p>
+            <p><span class="highlight">LIEUTENANT:</span> Yuri “Housekeeper” Morozov — silent enforcer who cleans up mistakes.</p>
             <ul>
-                <li><span class="highlight">Lieutenant Style:</span> stealth pressure, flank routes, silence zones.</li>
-                <li><span class="highlight">Kingpin Style:</span> decoys, false retreats, “room-to-room” chase phases.</li>
-                <li><span class="warn">If spared at Heat &gt; 50%:</span> Housekeeper appears mid-fight to cut escapes and punish noise.</li>
+                <li><span class="highlight">Lieutenant Playstyle:</span> stealth pressure, flanks, silence zones, ambush routes.</li>
+                <li><span class="highlight">Kingpin Playstyle:</span> decoys, false retreats, suite-to-suite chase phases.</li>
             </ul>
         </div>
 
         <div class="grid-item">
             <h3>SHOPPING CENTER</h3>
-            <p><span class="highlight">KINGPIN:</span> VIVIAN “BRAND” CHOI — runs the mall as a pipeline: contraband, exploitation, profit.</p>
-            <p><span class="highlight">LIEUTENANT:</span> “TURNSTILE” TOMMY REYES — patrol captain who controls entrances and crowds.</p>
+            <p><span class="highlight">KINGPIN:</span> Vivian “Brand” Choi — turns consumerism into a pipeline.</p>
+            <p><span class="highlight">LIEUTENANT:</span> “Turnstile” Tommy Reyes — patrol captain who controls entrances and crowds.</p>
             <ul>
-                <li><span class="highlight">Lieutenant Style:</span> crowd control, barricades, moving patrol walls.</li>
-                <li><span class="highlight">Kingpin Style:</span> shifting arenas (food court → loading bay → storefront gauntlet).</li>
-                <li><span class="warn">If spared at Heat &gt; 50%:</span> Turnstile turns extraction into a forced gauntlet with chokepoints.</li>
+                <li><span class="highlight">Lieutenant Playstyle:</span> barricades, chokepoints, moving patrol walls.</li>
+                <li><span class="highlight">Kingpin Playstyle:</span> shifting arenas (food court → loading bay → storefront gauntlet).</li>
             </ul>
         </div>
 
         <div class="grid-item">
             <h3>CASINO</h3>
-            <p><span class="highlight">KINGPIN:</span> SAL “THE DEALER” MARINO — laundering king who rigs the city like a table.</p>
-            <p><span class="highlight">LIEUTENANT:</span> “BLACKJACK” MARIANA ROJAS — pit boss enforcer, fast and ruthless.</p>
+            <p><span class="highlight">KINGPIN:</span> Sal “The Dealer” Marino — rigs the city like a table.</p>
+            <p><span class="highlight">LIEUTENANT:</span> “Blackjack” Mariana Rojas — pit boss enforcer, fast and ruthless.</p>
             <ul>
-                <li><span class="highlight">Lieutenant Style:</span> high-speed pressure, aggressive pushes, punishes hesitation.</li>
-                <li><span class="highlight">Kingpin Style:</span> trap rooms, vault locks, “house advantage” mechanics.</li>
-                <li><span class="warn">If spared at Heat &gt; 50%:</span> Blackjack joins the end fight to rush you while the Kingpin controls space.</li>
+                <li><span class="highlight">Lieutenant Playstyle:</span> aggressive pressure, rushdowns, punishes hesitation.</li>
+                <li><span class="highlight">Kingpin Playstyle:</span> trap rooms, vault locks, “house advantage” arena rules.</li>
             </ul>
         </div>
     </div>
 
-    <h2>Feature Rollout Timeline</h2>
-    <p><span class="highlight">BASE GAME (PHASE 1)</span> is a 12-month cycle. <span class="highlight">PHASE 2</span> adds Shopping Center + Casino over the next 12 months.</p>
+    <h2>Story Spine (Origin Mode)</h2>
+    <div class="box">
+        <p><span class="highlight">Loose backstory:</span> the gangs are connected. Each hideout is a different face of corruption in the same city.</p>
+        <ul>
+            <li><span class="highlight">Origin</span> reveals why you want revenge and how these factions feed into each other.</li>
+            <li>Each Kingpin + Lieutenant duo represents a corruption “ecosystem” (power + enforcement).</li>
+            <li>Revenge Mode is the consequence: you are dismantling the machine one hideout at a time.</li>
+        </ul>
+    </div>
 
+    <h2>Trailer Moments (Shareable)</h2>
+    <ul>
+        <li><span class="highlight">Combo crescendo</span> → track hits peak intensity during a perfect streak.</li>
+        <li><span class="highlight">Boss kill → extraction sprint</span> with Heat maxed out and rare tech in hand.</li>
+        <li><span class="highlight">Two-boss chaos</span> when the spared Lieutenant joins at Heat &gt; 50%.</li>
+    </ul>
+</div>
+
+
+<!-- ===================================================================== -->
+<!-- TECH — PAGE 1/2                                                       -->
+<!-- ===================================================================== -->
+<div class="page">
+    <h1>NEON PLAZA</h1>
+    <div class="phase-tag">Tech — Page 1 of 2 (State/Intensity + Fairness)</div>
+
+    <h2>Audio + Heat + State Model (Your Core Framework)</h2>
+    <p>This is the backbone of the entire experience: <span class="highlight">state</span> describes situation; <span class="highlight">intensity</span> describes Heat tier.</p>
+
+    <table>
+        <tr>
+            <th>Layer</th>
+            <th>Values</th>
+            <th>Triggers</th>
+            <th>Player Read</th>
+        </tr>
+        <tr>
+            <td><span class="highlight">STATE</span></td>
+            <td>Stealth / Skirmish / Combat / Boss</td>
+            <td>
+                Stealth = default<br/>
+                Skirmish = detected OR alarms triggered<br/>
+                Combat = entering combo<br/>
+                Boss = boss fight only
+            </td>
+            <td>“What’s happening right now?”</td>
+        </tr>
+        <tr>
+            <td><span class="highlight">INTENSITY</span></td>
+            <td>Low Heat / Medium Heat / High Heat</td>
+            <td>
+                Heat tier rises as stealth breaks and time passes under pressure.<br/>
+                In Revenge: stealth reduces Heat over time (cost = time).<br/>
+                In Origin: Heat always rises; stealth reduces rise rate.
+            </td>
+            <td>“How bad is it getting?”</td>
+        </tr>
+        <tr>
+            <td><span class="highlight">BOSS INTENSITY</span></td>
+            <td>Boss Health Phases</td>
+            <td>Boss intensity follows boss health (not Heat).</td>
+            <td>“How close is victory?”</td>
+        </tr>
+    </table>
+
+    <div class="box">
+        <p><span class="highlight">Environmental Feedback Contract:</span></p>
+        <ul>
+            <li>Heat increases must be visible and audible: flashing lights, alarms, PA announcements, security doors.</li>
+            <li>State changes must be musically obvious: stealth is restrained, combat is aggressive, combo is triumphant.</li>
+            <li>Lieutenant presence has its own signature cue (audio motif + UI indicator).</li>
+        </ul>
+    </div>
+
+    <h2>Boss Difficulty Scaling (Heat as “Consequences”)</h2>
+    <ul>
+        <li><span class="highlight">Origin Mode:</span> higher Heat at boss = more waves / reinforcements.</li>
+        <li><span class="highlight">Revenge Mode:</span> Heat affects security response, Lieutenant behavior, and extraction difficulty.</li>
+        <li><span class="warn">Super Fight Condition:</span> Heat &gt; 50% + Lieutenant alive = “experienced players only” endgame scenario.</li>
+    </ul>
+
+    <h2>Fairness Contract (Best-Practice Guardrails)</h2>
+    <p>The game is lethal and high-stakes, but never arbitrary. Every loss must be explainable.</p>
+    <div class="grid">
+        <div class="grid-item">
+            <h3>What Players Must Always Know</h3>
+            <ul>
+                <li>Why Heat increased (detected / alarm / loud action).</li>
+                <li>Whether the Lieutenant is active and where the danger is coming from.</li>
+                <li>How close the extraction sequence is to completion.</li>
+                <li>Why they died (clear damage source and failure point).</li>
+            </ul>
+        </div>
+        <div class="grid-item">
+            <h3>What Players Must Always Have</h3>
+            <ul>
+                <li>At least one viable route forward (never “dead runs”).</li>
+                <li>At least one counterplay tool for the Lieutenant (hide, break LoS, decoy, hack).</li>
+                <li>A meaningful decision under pressure (hunt vs flee vs cool down).</li>
+                <li>A fast restart that respects their time.</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2>Extraction Rule (Important)</h2>
+    <div class="box">
+        <p><span class="highlight">After killing the Kingpin:</span> the player can extract without clearing remaining enemies.</p>
+        <p><span class="highlight">But:</span> they must survive until extraction sequence completes.</p>
+        <p class="small"><span class="highlight">Result:</span> extraction becomes a cinematic escape, not a cleanup chore.</p>
+    </div>
+</div>
+
+
+<!-- ===================================================================== -->
+<!-- TECH — PAGE 2/2                                                       -->
+<!-- ===================================================================== -->
+<div class="page">
+    <h1>NEON PLAZA</h1>
+    <div class="phase-tag">Tech — Page 2 of 2 (Lieutenant Design + PCG)</div>
+
+    <h2>Lieutenant Design Framework (Make Them Iconic)</h2>
+    <p>Each Lieutenant is as important as each Kingpin. They must be <span class="highlight">recognizable</span>, <span class="highlight">fair</span>, and <span class="highlight">counterplay-rich</span>.</p>
+
+    <table>
+        <tr>
+            <th>Requirement</th>
+            <th>Definition</th>
+            <th>Implementation Notes</th>
+        </tr>
+        <tr>
+            <td><span class="highlight">Signature Cue</span></td>
+            <td>Player instantly knows “it’s them.”</td>
+            <td>Audio motif + UI indicator + unique silhouette.</td>
+        </tr>
+        <tr>
+            <td><span class="highlight">Independent Threat</span></td>
+            <td>Lieutenant is deadly alone.</td>
+            <td>Unique pursuit pattern + special ability tied to hideout theme.</td>
+        </tr>
+        <tr>
+            <td><span class="highlight">Counterplay Vocabulary</span></td>
+            <td>At least 3 reliable ways to respond.</td>
+            <td>Break LoS, decoys, hacks, traps, vent routes, silence zones, etc.</td>
+        </tr>
+        <tr>
+            <td><span class="highlight">Theme Pairing</span></td>
+            <td>Matches Kingpin’s corruption style.</td>
+            <td>Same aesthetic + narrative, different playstyle.</td>
+        </tr>
+        <tr>
+            <td><span class="highlight">Synergy Combo</span></td>
+            <td>Together they’re extra deadly.</td>
+            <td>Lieutenant covers the Kingpin’s weakness (rushdown + zoning, silence + drones, etc.).</td>
+        </tr>
+        <tr>
+            <td><span class="highlight">No Cheap Losses</span></td>
+            <td>Players understand why they lost.</td>
+            <td>Telegraph abilities; avoid invisible, instant, unavoidable hits.</td>
+        </tr>
+    </table>
+
+    <div class="box">
+        <p><span class="highlight">Hard Best-Practice Rule:</span> Every Lieutenant ability must be answered by at least one of:</p>
+        <ul>
+            <li><span class="highlight">Skill response</span> (movement, positioning, aim)</li>
+            <li><span class="highlight">Stealth response</span> (hiding, LoS breaks, silence, reroutes)</li>
+            <li><span class="highlight">Smart response</span> (hack, gadget, trap, decoy)</li>
+        </ul>
+    </div>
+
+    <h2>Procedural Generation: Quality Gates (Best Practices)</h2>
+    <p>Procedural content must feel authored. The goal is <span class="highlight">perceived variety</span>, not combinatorics.</p>
+
+    <div class="grid">
+        <div class="grid-item">
+            <h3>Validation Gates (Must Pass)</h3>
+            <ul>
+                <li>At least 2 viable routes forward.</li>
+                <li>No softlocks: keys/hacks have redundancy.</li>
+                <li>Extraction is always reachable.</li>
+                <li>Combat spaces are readable (no spawn traps, no blind instant deaths).</li>
+                <li>Vertical transitions cannot create stuck AI or broken LoS.</li>
+            </ul>
+        </div>
+        <div class="grid-item">
+            <h3>Variety Levers (Must Include)</h3>
+            <ul>
+                <li>Landmarks (server room, vault, lobby, etc.).</li>
+                <li>Rule variants (camera-heavy vs patrol-heavy vs lockdown-heavy).</li>
+                <li>Route archetypes (vents vs hallways vs service routes).</li>
+                <li>Hideout-specific setpieces and “signature moments.”</li>
+                <li>Event rooms (alarm reroute, elevator override, keycard chase).</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2>Progression Structure (Origin ↔ Revenge)</h2>
+    <div class="box">
+        <p><span class="highlight">Meta Gains Split:</span> two progression lanes that feed each other without flattening skill.</p>
+        <ul>
+            <li><span class="highlight">Origin Rewards:</span> unlock new weapons/equipment types, enemies, maps (content breadth).</li>
+            <li><span class="highlight">Revenge Rewards:</span> better ammo, better armor, perks (power + comfort).</li>
+            <li><span class="highlight">Bridge:</span> first Revenge extraction unlocks custom Origin loadouts (helps skill-challenged players progress).</li>
+        </ul>
+    </div>
+
+    <h2>Accessibility Gotchas (Audio-as-Gameplay)</h2>
+    <ul>
+        <li><span class="highlight">Sound cues</span> must be mirrored with optional visual cues (subtitles, UI pulses).</li>
+        <li><span class="highlight">Color-blind safe</span> indicators for Heat tiers and alarms.</li>
+        <li><span class="highlight">Difficulty slider</span> should adjust forgiveness (damage, extraction timers, Lieutenant aggression) without breaking core rules.</li>
+    </ul>
+</div>
+
+
+<!-- ===================================================================== -->
+<!-- PLAN — PAGE 1/2                                                       -->
+<!-- ===================================================================== -->
+<div class="page">
+    <h1>NEON PLAZA</h1>
+    <div class="phase-tag">Plan — Page 1 of 2 (Phase 1: 12 Months)</div>
+
+    <h2>PHASE 1 — Base Game (Office Tower + Hotel)</h2>
+    <p><span class="highlight">Goal:</span> ship a complete game with 2 fully distinct hideouts, iconic Lieutenants, strong bosses, a stable audio/Heat framework, and a replayable extraction loop.</p>
+
+    <h2>Phase 1 Feature List (Must Ship)</h2>
+    <div class="grid">
+        <div class="grid-item">
+            <h3>Core Gameplay</h3>
+            <ul>
+                <li>Lethal top-down combat (flow-forward).</li>
+                <li>Stealth optional (viable heist play).</li>
+                <li>Combo system → music intensity → loot quantity.</li>
+                <li>Heat tiers with clear environmental feedback.</li>
+                <li>Extraction sequences (survive to completion).</li>
+            </ul>
+        </div>
+        <div class="grid-item">
+            <h3>Systems</h3>
+            <ul>
+                <li>Audio state machine (Stealth/Skirmish/Combat/Boss).</li>
+                <li>Intensity tiers (Low/Medium/High Heat).</li>
+                <li>Lieutenant hunter AI + counterplay tools.</li>
+                <li>Procgen templates + quality gates + landmarks.</li>
+                <li>MacGyver: locks/keys/hacks/gadgets.</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2>Phase 1 Timeline (Month-by-Month)</h2>
     <table>
         <tr>
             <th>Month</th>
             <th>Milestone</th>
-            <th>Must-Prove Outcomes</th>
+            <th>Non-Negotiable Proof</th>
         </tr>
         <tr>
             <td>1</td>
-            <td>Combat + Controls + Basic AI</td>
-            <td>Lethal flow is fun. Stealth + loud both feel valid.</td>
+            <td>Combat + Stealth Foundations</td>
+            <td>Flow is fun. Loud and stealth both work. Instant readability.</td>
         </tr>
         <tr>
             <td>2</td>
-            <td>Music States + Heat Tiers</td>
-            <td>Players can HEAR danger + momentum; Heat changes the run.</td>
+            <td>Audio/Heat Framework v1</td>
+            <td>State/intensity model works; transitions stable; Heat is readable.</td>
         </tr>
         <tr>
             <td>3</td>
-            <td>Lieutenant v1 + Extraction Loop</td>
-            <td>The Hunter creates stories; extraction is tense and readable.</td>
+            <td>Extraction Loop + Progression v1</td>
+            <td>Players want “one more run.” Meta progression feels rewarding.</td>
         </tr>
         <tr>
             <td>4</td>
+            <td>Lieutenant v1 + Counterplay Toolkit</td>
+            <td>Lieutenant is iconic and fair; at least 3 counterplays exist.</td>
+        </tr>
+        <tr>
+            <td>5</td>
             <td>Procgen v1 + Quality Gates</td>
-            <td>Runs feel different without unfair layouts.</td>
+            <td>No dead runs. Landmarks feel authored.</td>
         </tr>
         <tr>
-            <td>5–6</td>
+            <td>6–7</td>
             <td>Office Tower Content Complete</td>
-            <td>Hideout identity is strong: traversal + extracts + enemies + boss.</td>
+            <td>Traversal hook, extracts, enemy identity, Kingpin + Lieutenant complete.</td>
         </tr>
         <tr>
-            <td>7–8</td>
+            <td>8–9</td>
             <td>Hotel Content Complete</td>
-            <td>Second hideout feels meaningfully different; systems scale.</td>
+            <td>Hideout feels radically different; boss scaling works with Heat.</td>
         </tr>
         <tr>
-            <td>9–10</td>
-            <td>Lieutenant/Kingpin Merge + MacGyver Depth</td>
-            <td>Lieutenant joins endgame if spared at Heat &gt; 50% (iconic twist).</td>
+            <td>10</td>
+            <td>Lieutenant Join Condition + Endgame Tuning</td>
+            <td>Heat &gt; 50% + alive Lieutenant = optional nightmare ending (telegraphed).</td>
         </tr>
         <tr>
-            <td>11–12</td>
-            <td>Origin Mode + Polish + Balance</td>
-            <td>Narrative connects gangs; onboarding works; ship-quality stability.</td>
+            <td>11</td>
+            <td>Origin Mode + Narrative Spine</td>
+            <td>Origin is the best first contact; unlock flow works.</td>
         </tr>
         <tr>
-            <td>13–18</td>
-            <td>Phase 2 — Shopping Center</td>
-            <td>Escalator + backroom traversal + crowd-control threats are fun.</td>
-        </tr>
-        <tr>
-            <td>19–24</td>
-            <td>Phase 2 — Casino</td>
-            <td>Open pit + ring hallways + vault floor deliver a new run feel.</td>
+            <td>12</td>
+            <td>Polish + Balance + Stability</td>
+            <td>Ship-ready: fast restarts, low friction, strong readability.</td>
         </tr>
     </table>
 
-    <h2>Phase 2 Additions (Beyond Hideouts)</h2>
+    <h2>Phase 1 “Gotchas” Checklist (Avoid These)</h2>
     <ul>
-        <li><span class="highlight">More Lieutenants:</span> unique abilities per hideout, stronger narrative voice, and tighter counterplay.</li>
-        <li><span class="highlight">More Kingpin Mechanics:</span> corruption themes expressed through boss patterns + arena rules.</li>
-        <li><span class="highlight">More Extract Rules:</span> unique extraction minigames (locks, hacks, timed routes, multi-stage escapes).</li>
-        <li><span class="highlight">More Weapon Families:</span> hideout-themed weapon types + gadget ecosystems.</li>
-        <li><span class="highlight">More Origin Chapters:</span> deepen the gang connection, reveal the revenge chain, escalate stakes.</li>
+        <li><span class="warn">Inventory friction killing flow:</span> keep loot decisions fast and clear.</li>
+        <li><span class="warn">Lieutenant feeling unfair:</span> always telegraph presence and abilities; always provide counterplay.</li>
+        <li><span class="warn">Heat feeling random:</span> Heat rises only when stealth breaks; environment always reflects it.</li>
+        <li><span class="warn">Procgen repetition:</span> landmarks and rule variants must be visible early.</li>
+    </ul>
+</div>
+
+
+<!-- ===================================================================== -->
+<!-- PLAN — PAGE 2/2                                                       -->
+<!-- ===================================================================== -->
+<div class="page" style="page-break-after: auto;">
+    <h1>NEON PLAZA</h1>
+    <div class="phase-tag">Plan — Page 2 of 2 (Phase 2: +12 Months)</div>
+
+    <h2>PHASE 2 — Expansion (Shopping Center + Casino)</h2>
+    <p><span class="highlight">Goal:</span> scale content while deepening the system vocabulary (MacGyver tools, unique extracts, and stronger hideout rules).</p>
+
+    <h2>Hideout Identity (Phase 2)</h2>
+    <div class="grid">
+        <div class="grid-item">
+            <h3>SHOPPING CENTER</h3>
+            <ul>
+                <li><span class="highlight">Traversal:</span> escalators + backrooms + loading docks.</li>
+                <li><span class="highlight">Landmarks:</span> jewelry store, fashion house, electronics store.</li>
+                <li><span class="highlight">Rule Hook:</span> crowd control, barricades, shifting patrol walls.</li>
+                <li><span class="highlight">Extract pair:</span> loading dock / maintenance tunnel.</li>
+            </ul>
+        </div>
+        <div class="grid-item">
+            <h3>CASINO</h3>
+            <ul>
+                <li><span class="highlight">Traversal:</span> open pit + ring hallways; vault floor + high roller room.</li>
+                <li><span class="highlight">Landmarks:</span> gambling pit, vault, high roller room.</li>
+                <li><span class="highlight">Rule Hook:</span> “house advantage” hazards; risk/reward vault sequences.</li>
+                <li><span class="highlight">Extract pair:</span> car garage / rappel exit.</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2>Phase 2 Timeline (Months 13–24)</h2>
+    <table>
+        <tr>
+            <th>Months</th>
+            <th>Milestone</th>
+            <th>What Gets Added / Deepened</th>
+        </tr>
+        <tr>
+            <td>13–15</td>
+            <td>Shopping Center Production</td>
+            <td>New traversal (escalators/backrooms), crowd-control threats, Kingpin + Lieutenant duo, new extracts.</td>
+        </tr>
+        <tr>
+            <td>16</td>
+            <td>System Deepening Pass</td>
+            <td>New MacGyver gadgets, more lock/hack variants, new rule events (barricade reroutes, riot alarms).</td>
+        </tr>
+        <tr>
+            <td>17–20</td>
+            <td>Casino Production</td>
+            <td>Open pit + ring hall identity, vault sequences, “house advantage” arena rules, Kingpin + Lieutenant duo.</td>
+        </tr>
+        <tr>
+            <td>21</td>
+            <td>Lieutenant Variety Upgrade</td>
+            <td>More distinctive abilities; stronger synergy with Kingpins; improved fairness telegraphs.</td>
+        </tr>
+        <tr>
+            <td>22</td>
+            <td>Extract Mechanics Upgrade</td>
+            <td>Extract-specific interactions: hacking, timed locks, route splits, chase sequences.</td>
+        </tr>
+        <tr>
+            <td>23–24</td>
+            <td>Origin Expansion + Balancing</td>
+            <td>More chapters, corruption connections, tuning of progression and difficulty scaling.</td>
+        </tr>
+    </table>
+
+    <h2>Phase 2 Best-Practice Hurdles (Plan For Them)</h2>
+    <ul>
+        <li><span class="warn">Scope creep:</span> every new hideout needs 1 traversal hook + 1 rule hook + 3 landmarks — no more.</li>
+        <li><span class="warn">System sprawl:</span> add gadgets as “verbs” (new solutions), not as minor stat variants.</li>
+        <li><span class="warn">Balance drift:</span> ensure loud/stealth/smart remain equally viable as content grows.</li>
+        <li><span class="warn">Two-boss chaos:</span> keep the combined finale short, cinematic, and readable.</li>
     </ul>
 
     <div class="box">
         <p><span class="highlight">INTERNAL SUCCESS CRITERIA:</span></p>
         <ul>
-            <li>Players can describe a run as a single dramatic sentence.</li>
-            <li>Aggro / stealth / smart builds all feel viable and distinct.</li>
-            <li>The Lieutenant is feared, fair, and worth hunting.</li>
-            <li>The music makes “flow” unforgettable.</li>
-            <li>Hideouts feel radically different through traversal + extracts + threats.</li>
+            <li>Players describe runs as single dramatic sentences (“I spared Sentry and she joined the helipad fight…”).</li>
+            <li>The game is fun even when you lose (fast restart + clear lessons).</li>
+            <li>Lieutenants are iconic, fair, and worth hunting.</li>
+            <li>Heat and music feel fused; you can <i>hear</i> the city closing in.</li>
+            <li>Each hideout feels radically different from the others.</li>
         </ul>
     </div>
-
 </div>
 
 </body>
