@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Plaza - Design Document v4</title>
+    <style>
+        @page {
+            size: letter;
+            margin: 0.5in;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            font-size: 10pt;
+            line-height: 1.4;
+            color: #e0e0e0;
+            background: #000;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .page {
+            width: 8.5in;
+            min-height: 11in;
+            background: linear-gradient(135deg, #0a0a0d 0%, #0d0a0f 100%);
+            margin: 0 auto 20px;
+            padding: 0.5in;
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.4);
+            page-break-after: always;
+            border: 1px solid #ff00ff;
+            position: relative;
+        }
+
+        .page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ff00ff, #00ffff, #ff00ff);
+        }
+
+        h1 {
+            font-size: 18pt;
+            color: #00ffff;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            border-bottom: 2px solid #ff00ff;
+            padding-bottom: 5px;
+            margin: 0 0 12px 0;
+            text-shadow: 0 0 10px #00ffff;
+        }
+
+        h2 {
+            font-size: 12pt;
+            color: #ff00ff;
+            text-transform: uppercase;
+            margin: 14px 0 6px 0;
+            border-left: 3px solid #00ffff;
+            padding-left: 8px;
+        }
+
+        h3 {
+            font-size: 11pt;
+            color: #00ffff;
+            margin: 10px 0 4px 0;
+        }
+
+        .phase-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff00ff, #ff0080);
+            color: #000;
+            padding: 3px 12px;
+            font-size: 9pt;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        p {
+            margin: 6px 0;
+        }
+
+        ul {
+            margin: 5px 0;
+            padding-left: 20px;
+        }
+
+        li {
+            margin: 3px 0;
+        }
+
+        .highlight {
+            color: #00ffff;
+            font-weight: bold;
+        }
+
+        .warn {
+            color: #ff00ff;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 8px 0;
+            font-size: 9pt;
+        }
+
+        th, td {
+            border: 1px solid #00ffff;
+            padding: 5px;
+            text-align: left;
+        }
+
+        th {
+            background: rgba(255, 0, 255, 0.2);
+            color: #00ffff;
+            font-weight: bold;
+        }
+
+        .box {
+            border: 1px solid #ff00ff;
+            padding: 8px;
+            margin: 8px 0;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 8px 0;
+        }
+
+        .grid-item {
+            border: 1px solid #00ffff;
+            padding: 8px;
+            background: rgba(0, 255, 255, 0.05);
+        }
+
+        @media print {
+            body { background: white; }
+            .page { box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- PAGE 1: PITCH - LAUNCH -->
+<div class="page">
+    <h1>NEON PLAZA – Pitch (Launch)</h1>
+    <div class="phase-tag">PHASE 1: LAUNCH – Months 1-6</div>
+
+    <p><span class="highlight">Elevator Pitch:</span> A synth-jungle fusion roguelite raiding yakuza towers in late-80s NYC. Chain kills into tempo-accelerating combos, hunt roaming kingpins under constant Heat pressure, extract with rare tech. AKANE's flow meets Zero Sievert's extraction tension—dark new wave synths over videogame jungle breakbeats.</p>
+
+    <h2>Setting: New York City, 1988</h2>
+    <p>Berlin Wall crumbling. Japan's tech bubble inflating Manhattan real estate. Yakuza fronts occupy skyscrapers. Rain-slicked streets reflect pink and cyan neon.</p>
+
+    <p><span class="warn">Visual:</span> Blade Runner's dark futurism + 80s color saturation. Deep blacks, vibrant magentas/cyans. Akira's kinetic violence. CRT scan lines. VHS artifacts.</p>
+
+    <p><span class="warn">Audio:</span> Dark synth (Depeche Mode, New Order) + 90s jungle breakbeats (120-180 BPM tempo scaling). Cold wave bass under Amen breaks.</p>
+
+    <h2>Dual Mode Philosophy</h2>
+    <p><span class="highlight">ORIGIN MODE (Narrative/Unlock):</span> Linear path to kingpin. Stealth reduces Heat. Boss hunt via clues. Death = end. Victory unlocks new hideouts, characters, weapons, areas. Take Revenge upgrades into Origin for power fantasy. Fast respawn, permadeath.</p>
+
+    <p><span class="highlight">REVENGE MODE (Extraction/Power):</span> Loot-focused runs. Extract to keep persistent upgrades (armor tier, stamina, reload speed). Staying longer = higher risk/reward. Killing kingpin resets Heat for extraction push. Hard mode with vertical progression.</p>
+
+    <h2>Core Loop (30-90s per floor)</h2>
+    <p><span class="highlight">FLOW (Combat):</span> Burst through rooms, chain kills, build tempo. Music accelerates 120→180 BPM with combo. Combo affects drop quality.</p>
+
+    <p><span class="highlight">HUNT (Origin):</span> Find 3 live clues (expire after 3 floors) to reveal kingpin's floor. Audio cues when on boss floor. Stealth lowers Heat.</p>
+
+    <p><span class="highlight">LOOT (Revenge):</span> Break flow to search. Quality scales with combo. Extract = keep everything.</p>
+
+    <p><span class="highlight">HEAT (Pressure):</span> Rises +10% per 30s, falls during stealth. Higher Heat = more reinforcements. Balancing act: speed vs thoroughness.</p>
+
+    <p><span class="highlight">TRAVERSE:</span> Elevators (fast/loud), stairs (quiet), vents (panic escapes). Multi-path floors.</p>
+
+    <h2>Launch Hideout: Nakatomi Tower</h2>
+    <ul>
+        <li><span class="highlight">7 Floors:</span> Lobby → Offices ×3 → Security → Executive → Roof (Helipad extraction)</li>
+        <li><span class="highlight">Boss:</span> Kingpin roams Server/Executive/Helipad zones (~40% of zone). Audio telegraphs location when on same floor.</li>
+        <li><span class="highlight">Gang:</span> Salaryman Yakuza (corporate fronts, tech smuggling)</li>
+        <li><span class="highlight">Enemies:</span> Katana enforcers, pistol gunners, shotgun rushers, SMG elites</li>
+    </ul>
+
+    <h2>Music System (Tempo + Layering)</h2>
+    <ul>
+        <li><span class="highlight">Foundation:</span> Starts 120 BPM (tense, moody). Combo drives tempo: 10 kills = 130 BPM, 25 kills = 160 BPM, max combo = 180 BPM</li>
+        <li><span class="highlight">Vertical Layers:</span> Drums/bass always present. Combo 10+ adds cold wave melody. Combo 25+ adds Reese bass intensity.</li>
+        <li><span class="highlight">Beat-synced:</span> Transitions on bar boundaries. Combo milestones trigger "stings" on-beat.</li>
+        <li><span class="highlight">Stingers:</span> Alarm/boss reveal/extraction fire on beat</li>
+        <li><span class="highlight">Decay:</span> Lose combo = tempo/layers strip = vulnerable feeling</li>
+    </ul>
+
+    <h2>Progression (Horizontal + Vertical)</h2>
+    <p><span class="highlight">Origin Unlocks (Horizontal):</span> Beat Nakatomi → Casino. Beat Casino → Dept Store. Beat Store → Hotel. Linear sequence. Each unlocks new gangs, enemies, weapons, characters, area mechanics.</p>
+    <p><span class="highlight">Revenge Unlocks (Vertical):</span> Extract successfully → persistent upgrades (armor tier, max stamina, reload speed, movement speed, ammo capacity). 15 total tiers. Start with 3 unlocks, expand to 15 by Month 6.</p>
+</div>
+
+<!-- PAGE 2: PITCH - GROW -->
+<div class="page">
+    <h1>NEON PLAZA – Pitch (Grow)</h1>
+    <div class="phase-tag">PHASE 2: GROW – Months 7-12</div>
+
+    <h2>3 New Hideouts (Linear Unlock)</h2>
+    <p>Each hideout = new Origin cycle + Revenge variant. Core mechanics (music, Heat, combo) apply universally. Unique mechanics add flavor without fragmenting design.</p>
+
+    <div class="box">
+        <h3>Update 1: CASINO (Months 7-8)</h3>
+        <p><span class="highlight">Gang:</span> Triad gambling syndicate | <span class="highlight">Floors:</span> 5 (Casino → VIP → Penthouse) | <span class="highlight">Extraction:</span> Limousine (parking garage)</p>
+        <p><span class="warn">Unique Mechanics:</span></p>
+        <ul>
+            <li>Fortune Slots: Interactive loot stations. Random buff/curse (damage/speed/health). Risk/reward choice.</li>
+            <li>Chip Economy: Elites drop chips. Mid-run shops (weapons, ammo, armor). Adds economy layer.</li>
+            <li>Environmental: Exploding chandeliers (AOE traps), slot machine explosions</li>
+            <li>Enemies: Dealer enforcers (short teleport dash), high-roller bodyguards (heavy armor)</li>
+        </ul>
+        <p><span class="warn">Integration:</span> Fortune slots become loot stations in all hideouts (themed: vending machines in Nakatomi, arcade cabinets in Dept Store). Chip economy adds to all.</p>
+    </div>
+
+    <div class="box">
+        <h3>Update 2: DEPARTMENT STORE (Months 9-10)</h3>
+        <p><span class="highlight">Gang:</span> Korean smuggler cartel | <span class="highlight">Floors:</span> 8 (Retail → Fashion/Electronics → Warehouse → Roof) | <span class="highlight">Extraction:</span> Rooftop helicopter</p>
+        <p><span class="warn">Unique Mechanics:</span></p>
+        <ul>
+            <li>Mannequin Decoys: Fake enemies. Shooting decoy = instant alarm. Visual puzzle layer.</li>
+            <li>Escalator Combat: Moving platforms, reversible direction. Adds verticality to fights.</li>
+            <li>Department Themes: Fashion (tight corridors), Electronics (open sightlines), Warehouse (multi-level)</li>
+            <li>Enemies: Shopkeeper snipers (long-range), warehouse bruisers (melee tanks)</li>
+        </ul>
+        <p><span class="warn">Integration:</span> Escalators add to Nakatomi offices, Hotel lobbies. Decoys appear in contextual places (lobby sculptures, office plants).</p>
+    </div>
+
+    <div class="box">
+        <h3>Update 3: HOTEL (Months 11-12)</h3>
+        <p><span class="highlight">Gang:</span> Russian bratva | <span class="highlight">Floors:</span> 12 (Lobby → Rooms ×6 → Conference → Penthouse ×2 → Roof) | <span class="highlight">Extraction:</span> Rooftop parachute</p>
+        <p><span class="warn">Unique Mechanics:</span></p>
+        <ul>
+            <li>Civilian NPCs: Panic AI (run/hide/alarm). Killing civilians = +30% Heat spike. Moral tension.</li>
+            <li>Extreme Verticality: 12 floors. Balcony ziplines (risky shortcuts, exposed).</li>
+            <li>Environmental Spread: Kitchen fires spread to adjacent rooms. Pool flooding slows movement. Glass balconies shatter.</li>
+            <li>Room Service Intel: Intercept carts for clues/supplies (Origin mode).</li>
+            <li>Enemies: Bellhop scouts (fast, alert others), chef brutes (cleaver AoE), concierge tacticians (call reinforcements)</li>
+        </ul>
+        <p><span class="warn">Integration:</span> Civilians appear contextually (Casino guests, Dept Store shoppers). Balconies add to Casino penthouse, Nakatomi exec floors. Fire/water spread universal.</p>
+    </div>
+
+    <h2>Feature Polish Timeline</h2>
+    <table>
+        <tr>
+            <th>Month</th>
+            <th>Polish Focus</th>
+            <th>New Features</th>
+        </tr>
+        <tr>
+            <td>7-8</td>
+            <td>Music horizontal states (stealth/combat/boss), VFX pass</td>
+            <td>Fortune slots, chip shops, exploding objects</td>
+        </tr>
+        <tr>
+            <td>9-10</td>
+            <td>Procgen variety (150+ templates), fog-of-war polish</td>
+            <td>Decoys, escalators, department themes</td>
+        </tr>
+        <tr>
+            <td>11-12</td>
+            <td>Boss AI depth (tells, roaming AI), extraction variety</td>
+            <td>Civilians, balconies, environmental spread</td>
+        </tr>
+    </table>
+
+    <h2>Music Evolution (Horizontal Resequencing)</h2>
+    <p><span class="highlight">Month 7-8 Addition:</span> State-based transitions (Stealth → Skirmish → Combat → Boss → Extraction). Each state = different segment playlist. Vertical layering (combo/tempo) works within each state. Applies to all hideouts retroactively.</p>
+
+    <p><span class="highlight">Hideout Soundscapes:</span></p>
+    <ul>
+        <li>Casino: Liquid DnB, lounge jazz samples, upbeat sinister</li>
+        <li>Dept Store: Glitch-hop jungle, corrupted muzak loops</li>
+        <li>Hotel: Ambient dark wave, minimal breaks, slow-burn tension</li>
+        <li>All maintain 120-180 BPM core, tempo/layer reactivity</li>
+    </ul>
+
+    <h2>Meta Progression Expansion</h2>
+    <p><span class="highlight">Revenge System (Month 11-12):</span></p>
+    <ul>
+        <li>Persistent Upgrades: 3 → 15 total (armor tiers I-III, stamina +20%/+40%/+60%, reload speed, movement, ammo capacity, health regen, dash count)</li>
+        <li>Challenge Unlocks: Specific objectives = specific gear (e.g., "Extract 5 times without alarm" → Silenced SMG)</li>
+        <li>Difficulty Modifiers: Pre-run Heat multiplier, enemy density, no HUD. Higher risk = better unlock currency.</li>
+    </ul>
+
+    <h2>Narrative (Origin Arcs)</h2>
+    <ul>
+        <li><span class="highlight">Nakatomi:</span> Corporate espionage, illegal biotech R&D</li>
+        <li><span class="highlight">Casino:</span> Money laundering pipeline, underground fight rings</li>
+        <li><span class="highlight">Dept Store:</span> Luxury goods smuggling, identity theft network</li>
+        <li><span class="highlight">Hotel:</span> Cold War sleeper cells, post-Soviet power struggle</li>
+    </ul>
+    <p><span class="warn">Meta-Story:</span> All 4 gangs connected via "Plaza Network" conspiracy. Defeating 4 kingpins unlocks teaser for Phase 3 endgame content.</p>
+</div>
+
+<!-- PAGE 3: TECH - LAUNCH -->
+<div class="page">
+    <h1>NEON PLAZA – Tech Core (Launch)</h1>
+    <div class="phase-tag">PHASE 1: LAUNCH – Months 1-6</div>
+
+    <h2>Philosophy: Playable Fast → Polish Deep</h2>
+    <p><span class="warn">Goal:</span> Core loop functional in 8 weeks. Music reactive. Boss hunt works. Origin/Revenge modes complete. 6 months = full launch-ready game.</p>
+
+    <h2>Flow Combat</h2>
+    <p><span class="highlight">Pacing:</span> Tempo-driven kill cadence. 120 BPM start = methodical. 180 BPM max = frantic. AKANE weapon stamina forces variety.</p>
+    <p><span class="highlight">Combo System:</span> 4s decay timer. Drives tempo acceleration, music layers, drop quality, visual juice.</p>
+    <p><span class="highlight">Drop Quality:</span> Combo 0-9 = common loot. Combo 10-24 = uncommon. Combo 25+ = rare/elite drops. Incentivizes flow maintenance.</p>
+    <p><span class="highlight">Weapons (Launch):</span> Katana, bat, knife (stamina-based) | Pistol, shotgun, SMG, sniper (ammo-based). Clear telegraphs. TTK: 1-3 hits (basic), 5-7 hits (elite).</p>
+    <p><span class="highlight">Death (Origin):</span> Fast respawn (<2s). Instant restart at hideout entrance. Permadeath = lose run progress.</p>
+
+    <h2>Tension Systems</h2>
+    <p><span class="highlight">Fog-of-War:</span> 120° vision cone. Sound reveals (footsteps/gunfire pulse outline 1-2s). No persistent reveals. Forces tactical movement.</p>
+    <p><span class="highlight">Alarms:</span> Enemy must reach button. Shoot enemy before activation = prevented. Triggered = locks 1-2 routes + reinforcements spawn after 30s delay.</p>
+    <p><span class="highlight">Stealth = Heat Reduction:</span> Staying undetected lowers Heat -5% per 15s. Breaking stealth stops reduction. Enables strategic slow play.</p>
+
+    <h2>Intel System (Origin Mode)</h2>
+    <p><span class="highlight">Clue Types:</span> Camera footage, radio chatter, guard intel, environmental tells. Each floor has 1-2 clues (randomized spawn).</p>
+    <p><span class="highlight">Clue Lifespan:</span> Clues expire after 3 floors. Must maintain "3 live clues" to reveal boss floor. Forces upward momentum.</p>
+    <p><span class="highlight">Boss Floor Reveal:</span> 3 live clues → minimap shows which floor (Server/Exec/Helipad for Nakatomi). Doesn't show exact room.</p>
+    <p><span class="highlight">Boss Audio Cues:</span> Distinct sound (radio static, heavy footsteps, environmental tells) when on same floor as kingpin. Directional. Helps narrow search without hand-holding.</p>
+
+    <h2>Heat Escalation</h2>
+    <p><span class="highlight">Meter:</span> Starts 0%. Rises +10% per 30s during combat/exploration. Falls -5% per 15s during stealth (undetected). Visual: screen CRT distortion, red/cyan pulse.</p>
+    <p><span class="highlight">Thresholds:</span></p>
+    <ul>
+        <li>30% = Reinforcements every 60s (2-3 enemies)</li>
+        <li>60% = Reinforcements every 45s (3-4 enemies, 1 elite chance)</li>
+        <li>90% = Reinforcements every 30s (4-5 enemies, guaranteed elite)</li>
+    </ul>
+    <p><span class="highlight">Kingpin Kill (Revenge):</span> Resets Heat to 0%. Creates relief valve for extraction push.</p>
+    <p><span class="highlight">Anti-camping:</span> Stay on cleared floor >90s without vertical movement = bonus wave (5+ enemies).</p>
+
+    <h2>Procgen (Hand-Picked Templates)</h2>
+    <p><span class="highlight">Spine:</span> Nakatomi 7-floor fixed sequence. Each floor type has 8-12 hand-authored templates.</p>
+    <p><span class="highlight">Template Selection:</span> Designer curates "best playing" templates. Procedural assembly from curated pool. Guarantees quality over pure randomness.</p>
+    <p><span class="highlight">Launch Pool:</span> 60-80 total templates across 7 floor types. ~10 per type. Enough variety for 20+ runs without staleness.</p>
+    <p><span class="highlight">Traversal:</span> Elevator (all floors, 3s ride, loud alarm when used), Stairs (adjacent floors only, quiet), Vents (skip 1 floor up, one-way, emergency only).</p>
+    <p><span class="highlight">Anchors:</span> Security hub, vault, armory placed within appropriate floors (Security/Executive). 2-3 routes between anchors per floor.</p>
+
+    <h2>Boss Hunt (Zero Sievert-Inspired)</h2>
+    <p><span class="highlight">Roaming AI:</span> Kingpin patrols ~40% of assigned zone. Moves between 3-5 key rooms. Doesn't hide in corners. Engages enemies (reinforcements) if encountered.</p>
+    <p><span class="highlight">Audio Presence:</span> When player on same floor: Periodic radio chatter (every 20-30s), distinct footstep pattern, environmental reactions (guards saluting, doors opening).</p>
+    <p><span class="highlight">Combat:</span> 3 health phases. Phase 1 (100-66%) = standard AI. Phase 2 (66-33%) = calls reinforcements mid-fight. Phase 3 (33-0%) = desperate, faster attacks, attempts escape to heal.</p>
+    <p><span class="highlight">Anti-stall:</span> If player hasn't found kingpin in 8 minutes = boss auto-reveals on minimap + intense reinforcement wave. Prevents indefinite searching.</p>
+
+    <h2>Extraction (Revenge Mode Only)</h2>
+    <p><span class="highlight">Trigger:</span> Kill kingpin → Heat resets to 0% → 90s timer starts → reach extraction point (Nakatomi = Helipad on Roof).</p>
+    <p><span class="highlight">Finale (Launch):</span> Timed Holdout. Defend helipad for 60s. Waves every 15s (scaling intensity). Final wave = elite squad + mini-boss.</p>
+    <p><span class="highlight">Success:</span> Survive → extraction → keep all loot + earn unlock currency. Die → lose loot, no unlock progress.</p>
+    <p><span class="highlight">Origin Mode:</span> No extraction. Kill kingpin → loot tally → immediate end → Origin unlock (next hideout/character).</p>
+
+    <h2>Music (Tempo + Vertical Layers)</h2>
+    <p><span class="highlight">FMOD Setup:</span></p>
+    <ul>
+        <li>Parameter 1: Combo (0=120 BPM, 10=130, 25=160, 50=180). Tempo scales in real-time.</li>
+        <li>Parameter 2: Layers (0-9=drums/bass only, 10-24=+melody, 25+=+intensity bass)</li>
+        <li>Transitions: Queued to next bar boundary (every 4 beats). Smooth, no jarring cuts.</li>
+        <li>Stingers: Alarm/boss reveal/extraction play on-beat, override queue momentarily.</li>
+        <li>Decay: Lose combo = tempo/layers strip over 2-3 bars. Gradual tension loss.</li>
+    </ul>
+    <p><span class="warn">Defer:</span> Horizontal resequencing (stealth/combat states) to Month 7-8.</p>
+</div>
+
+<!-- PAGE 4: TECH - GROW -->
+<div class="page">
+    <h1>NEON PLAZA — Tech Core (Grow)</h1>
+    <div class="phase-tag">PHASE 2: GROW — Months 7-12</div>
+
+    <h2>Music System: Horizontal Resequencing</h2>
+    <p><span class="highlight">Month 7-8 Implementation:</span></p>
+    <ul>
+        <li>Add 5 state categories: Stealth, Skirmish, Combat, Boss, Extraction</li>
+        <li>Each state = curated segment playlist (sparse → intense)</li>
+        <li>Stealth: Minimal beats, ambient pads, emphasizes environment sounds</li>
+        <li>Skirmish: Light percussion, 1-3 enemies detected</li>
+        <li>Combat: Full jungle breaks, 4+ enemies or alarm triggered</li>
+        <li>Boss: Signature boss theme variation, darkest/heaviest</li>
+        <li>Extraction: Climax intensity, triumphant synth lead</li>
+        <li>State changes transition on bar boundaries, maintains vertical layering (combo/tempo) within state</li>
+        <li>Applies retroactively to Nakatomi, integrated into Casino/Dept Store/Hotel</li>
+    </ul>
+
+    <h2>Procgen Expansion (Month 9-10)</h2>
+    <p><span class="highlight">Template Growth:</span> 60-80 (launch) → 150+ (Month 10). Covers all 4 hideouts.</p>
+    <p><span class="highlight">Quality Control:</span> Internal playtests curate templates. AI tools generate variants, designers select best. Reject rate ~40% (generate 250, keep 150).</p>
+    <p><span class="highlight">Pacing Algorithms:</span></p>
+    <ul>
+        <li>Guaranteed rhythm: Combat room → Exploration room → Combat room. Prevents monotony.</li>
+        <li>Anchor spacing: Minimum 2 rooms between key locations (vault, armory, boss spawn zones).</li>
+        <li>Multi-path enforcement: 2-3 routes between vertical traversal points. Player choice matters.</li>
+    </ul>
+    <p><span class="highlight">Recognition Landmarks:</span> Each floor type has visual signature (Nakatomi offices = blue lighting + cubicles, Casino = gold trim + slot machines, Hotel = red carpet + room numbers).</p>
+
+    <h2>New Mechanics Integration</h2>
+
+    <p><span class="highlight">Month 7-8 (Casino Features):</span></p>
+    <ul>
+        <li>Fortune Slots: Interact = random modifier (damage +20%, speed +15%, curse: health -10%). Lasts until death. 20% spawn rate per floor. Themed per hideout (vending machines, arcade cabinets, hotel safes).</li>
+        <li>Chip Economy: Elites drop 10-50 chips. Mid-run shops spawn on 30% of floors. Buy weapons (150 chips), ammo (50), armor (200). Universal currency across all hideouts.</li>
+        <li>Exploding Objects: Template-tagged hazards. Chandeliers (AOE 3m radius), slot machines (chain explosion), fuel tanks. Shoot to trigger. Adds environmental tactics to all hideouts.</li>
+    </ul>
+
+    <p><span class="highlight">Month 9-10 (Dept Store Features):</span></p>
+    <ul>
+        <li>Decoy System: Mannequin templates. 10-15% enemy spawn rate. Identical appearance until damaged. Shooting decoy = instant alarm + no loot. Visual tells: Subtle animation loop, no shadow cast. Contextual per hideout (mannequins, statues, plants).</li>
+        <li>Escalator Traversal: Moving platform code. Reversible direction (shoot control panel). Speed: 2m/s. Adds dynamic vertical combat. Nakatomi offices get 2-3 escalators retroactively.</li>
+        <li>Department Theming: Template tags (tight/open/vertical) for procgen variety. Ensures visual/gameplay diversity across all hideouts.</li>
+    </ul>
+
+    <p><span class="highlight">Month 11-12 (Hotel Features):</span></p>
+    <ul>
+        <li>Civilian NPCs: Panic AI (run/hide/alarm). 5-10% spawn rate. Killing = +30% Heat spike. Contextual to hideout (Casino guests, Dept Store shoppers, Nakatomi janitors). Adds moral pressure.</li>
+        <li>Balcony Ziplines: One-way descent shortcuts. High risk (exposed) = high reward (speed skip 2-3 floors). Can be placed on exterior areas all hideouts (Casino penthouse, Nakatomi exec floors, Dept Store roof access).</li>
+        <li>Environmental Spread: Fire/water/glass propagation. Kitchen fires spread to adjacent rooms. Pool flooding slows movement. Glass balconies shatter. Universal hazard system.</li>
+        <li>Room Service Intel: Intercept carts for clues/supplies. Hotel-specific in Origin mode. Themed variants in other hideouts (supply carts, dealer trays).</li>
+    </ul>
+
+    <h2>Boss AI Depth (Month 11-12)</h2>
+    <p><span class="highlight">Attack Tells:</span> Visual/audio telegraphs before attacks. Shoulder wind-up, weapon raise, voice lines. Learnable patterns per phase.</p>
+    <p><span class="highlight">Roaming AI Polish:</span> Refined patrol routes. Guard interactions. Environmental awareness (uses cover, triggers hazards strategically).</p>
+    <p><span class="highlight">Phase 3 Escape:</span> Sub-33% health = attempts retreat to heal. Player can chase or intercept. Adds pursuit tension.</p>
+
+    <h2>Extraction Variety (Month 11-12)</h2>
+    <p><span class="highlight">Per-Hideout Finals:</span></p>
+    <ul>
+        <li>Nakatomi: Helipad holdout (60s defense, waves every 15s)</li>
+        <li>Casino: Limousine escape (parking garage, drive-by segment)</li>
+        <li>Dept Store: Helicopter rappel (rooftop winch defense)</li>
+        <li>Hotel: Parachute jump (balcony freefall sequence)</li>
+    </ul>
+
+    <h2>Meta Progression (Month 11-12)</h2>
+    <p><span class="highlight">Revenge Unlock Expansion:</span> 3 → 15 tiers. Armor I-III, stamina +20%/+40%/+60%, reload speed, movement speed, ammo capacity, health regen, dash count.</p>
+    <p><span class="highlight">Challenge Unlocks:</span> Specific objectives unlock specific gear. Example: "Extract 5 times without alarm" → Silenced SMG.</p>
+    <p><span class="highlight">Difficulty Modifiers:</span> Pre-run options. Heat multiplier, enemy density, no HUD. Higher difficulty = better unlock currency earn rate.</p>
+</div>
+<!-- PAGE 5: PLANNING - LAUNCH -->
+<div class="page">
+    <h1>NEON PLAZA — Planning (Phase 1)</h1>
+    <div class="phase-tag">PHASE 1: LAUNCH — Months 1-6</div>
+
+    <h2>Build Philosophy: Systems First, Content Parallel</h2>
+    <p><span class="warn">Core Approach:</span> Establish foundation systems (combat, music, Heat) early. Run content pipeline (templates, assets) in parallel. Integrate continuously. Iterate based on daily playtests.</p>
+
+    <h2>Week-by-Week Implementation Sequence</h2>
+
+    <div class="box">
+        <p><span class="highlight">WEEKS 1-2: Core Movement + Combat Foundation</span></p>
+        <ul>
+            <li>Player controller: 8-directional movement, dash (1 charge), basic collision</li>
+            <li>Melee combat: Katana swing (stamina-based, 3 charges, 2s cooldown per charge)</li>
+            <li>Enemy AI: Basic chase/attack. Simple state machine (patrol → detect → chase → attack)</li>
+            <li>Single room template: 15m x 15m test arena. Placeholder art (greybox)</li>
+            <li><span class="warn">Deliverable:</span> 30-second combat loop. Kill 5 enemies, feel weapon weight</li>
+        </ul>
+    </div>
+
+    <div class="box">
+        <p><span class="highlight">WEEKS 3-4: Combo System + Music Integration (Basic)</span></p>
+        <ul>
+            <li>Combo counter: 4s decay timer, visual feedback (screen pulse, combo number)</li>
+            <li>FMOD integration: Single music track, tempo parameter (120→180 BPM)</li>
+            <li>Tempo scaling: Link combo count to BPM (0=120, 10=130, 25=160, 50=180)</li>
+            <li>Gunplay: Pistol (12 rounds, 2s reload). Ammo pickups</li>
+            <li><span class="warn">Deliverable:</span> Music accelerates with kills. Combo feels rewarding</li>
+            <li><span class="warn">Iteration Risk:</span> Combo tuning may take 5-8 passes. Accept "good enough" by Week 4 end</li>
+        </ul>
+    </div>
+
+    <div class="box">
+        <p><span class="highlight">WEEKS 5-6: Heat System + Fog-of-War</span></p>
+        <li>Heat meter: +10%/30s during combat, -5%/15s during stealth. Visual: CRT distortion intensity</li>
+            <li>Reinforcement spawns: 30% threshold = 2 enemies/60s, 60% = 3 enemies/45s, 90% = 4 enemies/30s</li>
+            <li>Fog-of-war: 120° vision cone. Sound reveals (gunfire = 2s outline pulse, 10m radius)</li>
+            <li>Stealth detection: Line-of-sight checks, noise radius. Crouch = -50% noise</li>
+            <li>3 floor templates: Office (cubicles), Lobby (open), Security (tight corridors)</li>
+            <li><span class="warn">Deliverable:</span> Stealth vs combat meaningful choice. Heat creates pressure</li>
+        </ul>
+    </div>
+
+    <div class="box">
+        <p><span class="highlight">WEEKS 7-10: Vertical Traversal + Intel System</span></p>
+        <ul>
+            <li>Elevator: 3s ride, loud (triggers alarm 50% chance). Connects all floors</li>
+            <li>Stairs: Silent, adjacent floors only. 1s transition</li>
+            <li>Vents: One-way up, skip 1 floor. Emergency escape. 5s crawl animation</li>
+            <li>Intel clues: 4 types (camera, radio, guard, environmental). Randomized spawn (1-2 per floor)</li>
+            <li>Clue lifespan: 3 floors. UI shows live clues. 3 live = boss floor reveal</li>
+            <li>7-floor spine: Lobby → Office ×3 → Security → Executive → Roof. Fixed sequence</li>
+            <li><span class="warn">Deliverable:</span> Full vertical navigation. Intel hunt functional</li>
+        </ul>
+    </div>
+
+    <div class="box">
+        <p><span class="highlight">WEEKS 11-14: Boss AI + Roaming System</span></p>
+        <ul>
+            <li>Patrol AI: Kingpin moves between 3-5 rooms (40% of zone). Navmesh pathfinding</li>
+            <li>Audio cues: Radio chatter (20-30s intervals) when on same floor. Directional</li>
+            <li>Boss combat: 3 phases (100-66-33-0%). Phase 2 calls reinforcements. Phase 3 attempts escape</li>
+            <li>Anti-stall: 8-minute timer. Auto-reveal on minimap if not found</li>
+            <li><span class="warn">Deliverable:</span> Boss hunt creates tension. Audio cues guide without hand-holding</li>
+            <li><span class="warn">Technical Risk:</span> Navmesh on complex templates may break. Simplify boss zones if needed</li>
+        </ul>
+    </div>
+
+    <div class="box">
+        <p><span class="highlight">WEEKS 15-18: Origin/Revenge Modes + Extraction</span></p>
+        <ul>
+            <li>Origin Mode: Kill kingpin → loot tally → unlock next hideout. Permadeath. Fast respawn (<2s)</li>
+            <li>Revenge Mode: Kill kingpin → Heat reset → 90s extraction timer → Helipad holdout (60s)</li>
+            <li>Extraction finale: Waves every 15s. Final wave = elite squad. Survive = keep loot + unlock currency</li>
+            <li>Persistent upgrades: 3 tiers (Armor I/II/III). Unlock via Revenge extractions</li>
+            <li><span class="warn">Deliverable:</span> Dual modes complete. Extraction creates climax tension</li>
+        </ul>
+    </div>
+
+    <div class="box">
+        <p><span class="highlight">WEEKS 19-22: Content Complete + Polish</span></p>
+        <ul>
+            <li>Weapon set: Katana, bat, knife (melee) | Pistol, shotgun, SMG, sniper (ranged)</li>
+            <li>Enemy variety: 4 types (katana, pistol, shotgun, SMG). Different behaviors</li>
+            <li>Music vertical layers: Drums/bass (always) + melody (combo 10+) + intensity bass (combo 25+)</li>
+            <li>VFX pass: Muzzle flashes, blood spray, hit sparks, CRT glitch effects</li>
+            <li>UI polish: Combo counter, Heat meter, minimap, ammo display, health bar</li>
+            <li><span class="warn">Deliverable:</span> All features in. Rough but complete</li>
+        </ul>
+    </div>
+
+    <div class="box">
+        <p><span class="highlight">WEEKS 23-26: Balance + Bug Fixes</span></p>
+        <ul>
+            <li>Combat tuning: TTK, enemy aggression, weapon damage, combo decay timing</li>
+            <li>Heat tuning: Reinforcement rates, threshold values, stealth reduction rate</li>
+            <li>Boss difficulty: Health, damage output, reinforcement timing</li>
+            <li>Audio mix: Music/SFX balance, footstep volume, boss audio cue clarity</li>
+            <li>Bug fixes: Prioritize crashes, softlocks, progression blockers</li>
+            <li><span class="warn">Deliverable:</span> Launch-ready. Stable. Balanced</li>
+        </ul>
+    </div>
+
+    <h2>Template Production Pipeline</h2>
+    <p><span class="highlight">Goal:</span> 60-80 hand-authored templates by Week 18. 10-12 per floor type.</p>
+    <p><span class="highlight">Authoring Tool:</span> Level editor (Unity/Unreal scene editor). Modular tile system for rapid assembly.</p>
+    <p><span class="highlight">Production Rate:</span> Weeks 1-10 = 2 templates/week (designer learning). Weeks 11-18 = 4 templates/week (pipeline optimized).</p>
+    <p><span class="highlight">Template Workflow:</span></p>
+    <ul>
+        <li>Blockout: Greybox layout. Test flow/pacing (15-30min)</li>
+        <li>Enemy placement: Mark spawn points, patrol routes. Test combat density (30min)</li>
+        <li>Art pass: Replace greybox with modular assets. Lighting. Dressing (1-2 hours)</li>
+        <li>Playtest: Full combat run. Verify pacing, sight lines, traversal (30min)</li>
+        <li>Iteration: 1-2 revision passes based on playtest feedback (1 hour)</li>
+        <li><span class="warn">Total time per template:</span> 3-5 hours. Designer can produce 1/day at peak efficiency</li>
+    </ul>
+    <p><span class="highlight">Quality Gates:</span></p>
+    <ul>
+        <li>Template must support 2-3 traversal routes (elevator/stairs/vents)</li>
+        <li>Combat encounters spaced 15-30s apart (prevents monotony)</li>
+        <li>Sight lines allow stealth approach (no forced combat)</li>
+        <li>Boss zone templates (Server/Executive/Helipad): Extra playtesting for roaming AI compatibility</li>
+    </ul>
+
+    <h2>Music Production Pipeline</h2>
+    <p><span class="highlight">Composer Deliverables:</span></p>
+    <table>
+        <tr>
+            <th>Asset</th>
+            <th>Specs</th>
+            <th>Deadline</th>
+        </tr>
+        <tr>
+            <td>Base Track (120 BPM)</td>
+            <td>Drums + bass. 2-minute loop. Stems separated</td>
+            <td>Week 3</td>
+        </tr>
+        <tr>
+            <td>Tempo Variants</td>
+            <td>130, 160, 180 BPM versions. Time-stretched from base</td>
+            <td>Week 4</td>
+        </tr>
+        <tr>
+            <td>Melody Layer</td>
+            <td>Cold wave synth. Separate stem. 120-180 BPM versions</td>
+            <td>Week 16</td>
+        </tr>
+        <tr>
+            <td>Intensity Bass Layer</td>
+            <td>Reese bass. Separate stem. 120-180 BPM versions</td>
+            <td>Week 16</td>
+        </tr>
+        <tr>
+            <td>Stingers</td>
+            <td>Alarm, boss reveal, extraction. 2-4s each. Beat-synced</td>
+            <td>Week 17</td>
+        </tr>
+    </table>
+    <p><span class="highlight">FMOD Implementation:</span></p>
+    <ul>
+        <li>Parameter 1 (Tempo): Combo count drives BPM. Real-time pitch shift + time-stretch</li>
+        <li>Parameter 2 (Layers): Combo milestones (10, 25) trigger layer add/remove</li>
+        <li>Transition queuing: Bar boundary sync (every 4 beats). Smooth crossfade (0.5s)</li>
+        <li>Stinger override: Play on-beat, resume track after 2-4s</li>
+        <li><span class="warn">Integration Risk:</span> Tempo scaling may sound unnatural. Fallback: Discrete BPM tiers (120/140/160/180) if time-stretch artifacts</li>
+    </ul>
+
+    <h2>Art Asset Pipeline</h2>
+    <p><span class="highlight">Modular Environment System:</span></p>
+    <ul>
+        <li>Tile set: Floor, wall, ceiling modules. 2m x 2m grid. ~50 unique pieces</li>
+        <li>Props: Desks, cubicles, vending machines, security stations. ~30 unique props</li>
+        <li>Lighting: Baked lightmaps. Neon sign emissives. Pink/cyan color palette</li>
+        <li><span class="warn">Art schedule:</span> Weeks 1-10 = placeholders OK. Weeks 11-18 = final art pass. Weeks 19-22 = polish</li>
+    </ul>
+    <p><span class="highlight">Character/Enemy Assets:</span></p>
+    <ul>
+        <li>Player: Single character model. 8-direction sprite sheet OR 3D model (low poly ~5K tris)</li>
+        <li>Enemies: 4 types. Shared base mesh, texture variants. ~3K tris each</li>
+        <li>Weapons: First-person view models. Katana, pistol, shotgun, SMG, sniper. ~1K tris each</li>
+        <li><span class="warn">Animation:</span> Melee swing, shoot, reload, death. 5-10 frames each (2D) OR simple 3D rigs</li>
+    </ul>
+
+    <h2>Testing & Iteration Workflow</h2>
+    <p><span class="highlight">Daily Playtests (Programmer):</span> 15-30min runs. Test new features. Note feel/bugs. Iterate same day.</p>
+    <p><span class="highlight">Weekly Team Playtests (Full Team):</span> 1-hour session. Test full loop. Gather feedback. Prioritize fixes for next week.</p>
+    <p><span class="highlight">External Playtest (Week 16):</span> 5-10 external testers. Fresh eyes. Identify unclear mechanics, frustration points. 2-week iteration window.</p>
+    <p><span class="highlight">Metrics to Track:</span></p>
+    <ul>
+        <li>Average run time (target: 15-25 minutes per Nakatomi run)</li>
+        <li>Death locations (identify difficulty spikes)</li>
+        <li>Combo averages (tune 4s decay if too hard/easy to maintain)</li>
+        <li>Heat thresholds hit (ensure 30%/60%/90% all experienced)</li>
+        <li>Boss time-to-find (tune clue spawn rate if >8min average)</li>
+    </ul>
+
+    <h2>Technical Setup & Tools</h2>
+    <p><span class="highlight">Engine:</span> Unity 2023 LTS OR Unreal Engine 5.3. Choose based on team expertise.</p>
+    <p><span class="highlight">Version Control:</span> Git + GitHub/GitLab. Daily commits. Feature branches for major systems.</p>
+    <p><span class="highlight">Audio Middleware:</span> FMOD Studio. Required for tempo/layer reactivity.</p>
+    <p><span class="highlight">Art Tools:</span> Blender (3D), Photoshop/Aseprite (2D/sprites), Substance Painter (textures).</p>
+    <p><span class="highlight">Level Editor:</span> Engine's native scene editor. Custom tools for template tagging (combat/exploration/boss zone).</p>
+    <p><span class="highlight">Collaboration:</span> Slack/Discord (comms), Notion/Confluence (design docs), Trello/Jira (task tracking).</p>
+
+    <h2>Risk Mitigation Strategies</h2>
+    <table>
+        <tr>
+            <th>Risk</th>
+            <th>Likelihood</th>
+            <th>Impact</th>
+            <th>Mitigation</th>
+        </tr>
+        <tr>
+            <td>Combo system feels bad after 8+ iterations</td>
+            <td>MEDIUM</td>
+            <td>HIGH</td>
+            <td>Prototype Week 3. Accept imperfect by Week 4. Revisit in polish (Week 23+)</td>
+        </tr>
+        <tr>
+            <td>Template production <4/week by Week 11</td>
+            <td>HIGH</td>
+            <td>CRITICAL</td>
+            <td>Start Week 1 (parallel to code). Cut to 50 templates minimum if needed</td>
+        </tr>
+        <tr>
+            <td>Boss AI pathfinding breaks on complex layouts</td>
+            <td>MEDIUM</td>
+            <td>HIGH</td>
+            <td>Simplify boss zone templates. Wider corridors, fewer rooms. Test early Week 12</td>
+        </tr>
+        <tr>
+            <td>Music tempo scaling sounds unnatural</td>
+            <td>LOW</td>
+            <td>MEDIUM</td>
+            <td>Fallback: Discrete BPM tiers. Lose smooth scaling, keep reactivity</td>
+        </tr>
+        <tr>
+            <td>Scope creep (new mechanics mid-dev)</td>
+            <td>HIGH</td>
+            <td>HIGH</td>
+            <td>Lock scope Week 15. "Parking lot" doc for Phase 2 ideas</td>
+        </tr>
+    </table>
+
+    <h2>Success Criteria (Launch-Ready Checklist)</h2>
+    <ul>
+        <li><span class="highlight">Core Loop:</span> 15-25min runs. Music reactive. Combo rewarding. Heat creates tension</li>
+        <li><span class="highlight">Boss Hunt:</span> Intel system clear. Boss findable in <8min average. Audio cues functional</li>
+        <li><span class="highlight">Dual Modes:</span> Origin unlocks next hideout. Revenge extraction exciting. Persistent upgrades working</li>
+        <li><span class="highlight">Content Volume:</span> 60-80 templates (accept 50 minimum). 7-floor Nakatomi complete</li>
+        <li><span class="highlight">Stability:</span> No crashes. No softlocks. Playable start-to-finish without blockers</li>
+        <li><span class="highlight">Balance:</span> Combat fair. Heat tuned. Boss difficulty appropriate for intended skill level</li>
+    </ul>
+</div>
+<h2>Build Philosophy: Core Stable, Layer Features</h2>
+<p><span class="warn">Core Approach:</span> Phase 1 foundation locked. Each update adds 1 hideout + universal mechanics. Test integration with existing content. Avoid fragmentation—new features apply retroactively to all hideouts.</p>
+
+<h2>Update Release Schedule</h2>
+<table>
+    <tr>
+        <th>Update</th>
+        <th>Month</th>
+        <th>Hideout</th>
+        <th>New Mechanics</th>
+        <th>Universal Integration</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>7-8</td>
+        <td>Casino (5 floors)</td>
+        <td>Fortune slots, chip economy, music horizontal states</td>
+        <td>Slots → all hideouts. Chips → all. Music states → all</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>9-10</td>
+        <td>Dept Store (8 floors)</td>
+        <td>Decoys, escalators, 150+ template library</td>
+        <td>Decoys → contextual all. Escalators → Nakatomi/Hotel</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>11-12</td>
+        <td>Hotel (12 floors)</td>
+        <td>Civilians, balconies, environmental spread, 15 Revenge tiers</td>
+        <td>Civilians → all. Balconies → Casino/Nakatomi. Spread → all</td>
+    </tr>
+</table>
+
+<h2>Month 7-8: Casino Update</h2>
+
+<div class="box">
+    <p><span class="highlight">Week 27-28: Music Horizontal Resequencing (Universal)</span></p>
+    <ul>
+        <li>5 music states: Stealth, Skirmish, Combat, Boss, Extraction</li>
+        <li>Composer deliverables: 5 segment playlists per state. Sparse → intense variations</li>
+        <li>FMOD implementation: State parameter triggers playlist swap. Maintains vertical layers (combo/tempo)</li>
+        <li>Transitions: Bar-synced (every 4 beats). Smooth crossfade between states (0.5-1s)</li>
+        <li>Retroactive integration: Apply to Nakatomi. Test stealth → combat transitions feel natural</li>
+        <li><span class="warn">Deliverable:</span> Music adapts to gameplay context. Stealth tense, combat intense, boss climactic</li>
+    </ul>
+</div>
+
+<div class="box">
+    <p><span class="highlight">Week 29-30: Casino Hideout Foundation</span></p>
+    <ul>
+        <li>5-floor spine: Casino Floor → VIP Lounge → High Roller → Penthouse → Parking Garage (extraction)</li>
+        <li>Template production: 8-10 templates per floor type. 40-50 total. Reuse modular pipeline from Phase 1</li>
+        <li>Visual theme: Gold trim, red carpet, slot machines, chandeliers. High-saturation colors vs Nakatomi blue</li>
+        <li>Enemy set: Dealer enforcers (short teleport dash), high-roller bodyguards (heavy armor, slow)</li>
+        <li>Boss: Triad kingpin. Roams VIP/High Roller/Penthouse zones</li>
+        <li><span class="warn">Deliverable:</span> Casino playable Origin mode. Distinct visual identity. Enemy variety functional</li>
+    </ul>
+</div>
+
+<div class="box">
+    <p><span class="highlight">Week 31-32: Fortune Slots + Chip Economy (Universal)</span></p>
+    <ul>
+        <li>Fortune Slots: Interactive object. Trigger → random buff/curse. 20% spawn rate per floor</li>
+        <li>Buff/curse pool: Damage +20%, speed +15%, health -10%, reload +30%, curse: max health -15%</li>
+        <li>Duration: Until death. Visual: Screen border tint (green=buff, red=curse)</li>
+        <li>Slot theming: Casino = slot machines. Nakatomi = vending machines. Dept Store = arcade cabinets. Hotel = safes</li>
+        <li>Chip economy: Elites drop 10-50 chips. Mid-run shops (30% floor spawn rate). Buy weapons/ammo/armor</li>
+        <li>Shop pricing: Weapon 150 chips, ammo 50, armor 200. Balance via playtest (Week 32)</li>
+        <li>Retroactive integration: Add to Nakatomi, test economy doesn't break Phase 1 balance</li>
+        <li><span class="warn">Deliverable:</span> Slots create risk/reward choice. Chip economy adds strategic layer</li>
+    </ul>
+</div>
+
+<div class="box">
+    <p><span class="highlight">Week 33-34: Casino Polish + Extraction</span></p>
+    <ul>
+        <li>Exploding objects: Chandeliers (3m AOE), slot machines (chain explosion 2m radius), fuel tanks</li>
+        <li>Environmental tactics: Shoot chandelier above enemy group. Chain slot explosions</li>
+        <li>Extraction: Limousine escape. Parking garage. Drive-by shooting segment (90s, destroy roadblocks, fend off motorcycles)</li>
+        <li>VFX pass: Gold particle effects, neon reflections, glass shatter</li>
+        <li>Soundscape: Liquid DnB, lounge jazz samples. Upbeat sinister tone. 120-180 BPM maintained</li>
+        <li><span class="warn">Deliverable:</span> Casino complete. Dual modes functional. Extraction unique/exciting</li>
+    </ul>
+</div>
+
+<h2>Month 9-10: Department Store Update</h2>
+
+<div class="box">
+    <p><span class="highlight">Week 35-36: Procgen Template Library Expansion</span></p>
+    <ul>
+        <li>Template growth: 60-80 (Phase 1) → 150+ (Month 10). Covers all 4 hideouts</li>
+        <li>Production pipeline: AI-assisted generation → designer curation. Reject rate ~40% (generate 250, keep 150)</li>
+        <li>Dept Store templates: 50-60 new (8 floors × 8 templates/floor = 64 target)</li>
+        <li>Department theming: Fashion (tight corridors, mannequins), Electronics (open sightlines, display racks), Warehouse (multi-level, forklifts)</li>
+        <li>Quality gates: 2-3 traversal routes, 15-30s combat pacing, stealth viable</li>
+        <li><span class="warn">Deliverable:</span> 150+ template library. Enough variety for 50+ runs without staleness</li>
+    </ul>
+</div>
+
+<div class="box">
+    <p><span class="highlight">Week 37-38: Dept Store Hideout Foundation</span></p>
+    <ul>
+        <li>8-floor spine: Retail → Fashion × 2 → Electronics × 2 → Warehouse × 2 → Roof (extraction)</li>
+        <li>Visual theme: Bright retail lighting, product displays, escalators, muzak corruption. Clean vs Nakatomi gritty</li>
+        <li>Enemy set: Shopkeeper snipers (long-range, laser sight), warehouse bruisers (melee tank, cleaver AOE)</li>
+        <li>Boss: Korean smuggler kingpin. Roams Electronics/Warehouse zones</li>
+        <li><span class="warn">Deliverable:</span> Dept Store playable. 8 floors feels distinct from 5-floor Casino, 7-floor Nakatomi</li>
+    </ul>
+</div>
+
+<div class="box">
+    <p><span class="highlight">Week 39-40: Decoys + Escalators (Universal)</span></p>
+    <ul>
+        <li>Decoy system: Mannequin enemy templates. 10-15% enemy spawn replacement</li>
+        <li>Visual tells: Subtle animation loop (breathing vs static), no shadow cast, slightly off-color</li>
+        <li>Penalty: Shooting decoy = instant alarm trigger. No loot drop. Encourages observation</li>
+        <li>Contextual theming: Dept Store = mannequins. Nakatomi = potted plants. Casino = statues. Hotel = luggage</li>
+        <li>Escalator traversal: Moving platform (2m/s). Reversible direction (shoot control panel). Adds vertical combat dynamics</li>
+        <li>Retroactive integration: Add 2-3 escalators to Nakatomi offices, Hotel lobbies. Test combat on moving platforms</li>
+        <li><span class="warn">Deliverable:</span> Decoys add visual puzzle layer. Escalators create dynamic fights</li>
+    </ul>
+</div>
+
+<div class="box">
+    <p><span class="highlight">Week 41-42: Dept Store Polish + Extraction</span></p>
+    <ul>
+        <li>Fog-of-war polish: Improve sight line clarity. Audio cue tuning (footsteps, gunfire reveals)</li>
+        <li>Extraction: Rooftop helicopter rappel. Defend while winch lowers rope (45s). Sniper fire from adjacent buildings</li>
+        <li>VFX pass: Neon signage, product holograms, glass reflections</li>
+        <li>Soundscape: Glitch-hop jungle, corrupted muzak loops. Maintains 120-180 BPM core</li>
+        <li><span class="warn">Deliverable:</span> Dept Store complete. Fog-of-war feels polished across all hideouts</li>
+    </ul>
+</div>
+
+<h2>Month 11-12: Hotel Update</h2>
+
+<div class="box">
+    <p><span class="highlight">Week 43-44: Hotel Hideout Foundation</span></p>
+    <ul>
+        <li>12-floor spine: Lobby → Rooms ×6 → Conference → Kitchen → Penthouse ×2 → Roof (extraction)</li>
+        <li>Extreme verticality: Longest hideout. Balcony zipline shortcuts (skip 2-3 floors, high risk/reward)</li>
+        <li>Visual theme: Red carpet, room numbers, luxury furnishings. Oppressive vs Casino glamorous</li>
+        <li>Enemy set: Bellhop scouts (fast, alert others), chef brutes (cleaver AOE), concierge tacticians (call reinforcements)</li>
+        <li>Boss: Russian bratva kingpin. Roams Conference/Penthouse zones</li>
+        <li><span class="warn">Deliverable:</span> 12 floors playable. Verticality creates different pacing (longer runs, 20-30min)</li>
+    </ul>
+</div>
+
+<div class="box">
+    <p><span class="highlight">Week 45-46: Civilians + Environmental Spread (Universal)</span></p>
+    <ul>
+        <li>Civilian NPCs: Panic AI (run/hide/alarm). 5-10% spawn rate. Contextual per hideout</li>
+        <li>Civilian theming: Hotel = guests. Casino = gamblers. Dept Store = shoppers. Nakatomi = janitors/office workers</li>
+        <li>Moral pressure: Killing civilian = +30% Heat spike. Encourages precision/avoidance</li>
+        <li>Environmental spread: Fire/water/gas propagation. Kitchen fires spread 1 room/15s. Pool flooding (50% movement). Gas leaks (DOT zones)</li>
+        <li>Spread control: Shoot fire source to stop. Shoot water valve. Shoot gas vent</li>
+        <li>Retroactive integration: Fire in Nakatomi server rooms, water in Casino pools, gas in Dept Store HVAC</li>
+        <li><span class="warn">Deliverable:</span> Civilians add tension. Environmental spread creates dynamic hazards</li>
+    </ul>
+</div>
+
+<div class="box">
+    <p><span class="highlight">Week 47-48: Balconies + Boss AI Depth (Universal)</span></p>
+    <ul>
+        <li>Balcony ziplines: One-way descent. Skip 2-3 floors. 15s exposed vulnerability (sniper fire, no cover)</li>
+        <li>Balcony placement: Hotel exterior, Casino penthouse, Nakatomi exec floors, Dept Store roof access</li>
+        <li>Boss AI polish: Attack tells (0.5s telegraph), phase transitions (voice lines per phase), escape behavior (Phase 3 retreat to heal)</li>
+        <li>Roaming intelligence: Guard interactions (10s dialogue = ambush window), environmental use (triggers exploding objects)</li>
+        <li><span class="warn">Deliverable:</span> Ziplines create tense shortcuts. Boss AI feels intelligent/reactive</li>
+    </ul>
+</div>
+
+<div class="box">
+    <p><span class="highlight">Week 49-52: Meta Progression + Extraction Variety</span></p>
+    <ul>
+        <li>Revenge tier expansion: 3 tiers → 15 tiers. Armor I-III, stamina +20%/+40%/+60%, reload speed, movement, ammo capacity, health regen, dash count</li>
+        <li>Challenge unlocks: "Ghost Operator" (Extract 5× no alarm) → Silenced SMG. Specific objectives = specific gear</li>
+        <li>Difficulty modifiers: Heat ×1.5/×2, enemy density +50%, no HUD. Higher risk = better unlock currency</li>
+        <li>Extraction variety: Hotel = parachute jump (30s freefall, dodge debris). All 4 hideouts have unique extraction finale</li>
+        <li>VFX pass: Polish all hideouts. Screen effects, particle optimization, lighting refinement</li>
+        <li>Boss AI depth: Unique mechanics per kingpin (Nakatomi = biotech grenades, Casino = chip shield, Dept Store = mannequin bombs, Hotel = hostages)</li>
+        <li><span class="warn">Deliverable:</span> 15-tier progression complete. 4 unique extractions. Boss variety high. Phase 2 content complete</li>
+    </ul>
+</div>
+
+<h2>Asset Production Pipelines</h2>
+
+<p><span class="highlight">Template Production (Ongoing):</span></p>
+<ul>
+    <li>Month 7-8: 40-50 Casino templates (5 floors × 8-10/floor)</li>
+    <li>Month 9-10: 60-70 Dept Store templates (8 floors × 8/floor) + backfill Nakatomi/Casino to 150+ total</li>
+    <li>Month 11-12: 80-100 Hotel templates (12 floors × 8/floor). Final library = 180-220 total</li>
+    <li>Production rate: 4-5 templates/week sustained. Designer workflow optimized from Phase 1</li>
+    <li>Quality control: Reject templates that break pacing/traversal rules. Maintain 2-3 route requirement</li>
+</ul>
+
+<p><span class="highlight">Music Production (Months 7-8):</span></p>
+<table>
+    <tr>
+        <th>Asset</th>
+        <th>Specs</th>
+        <th>Integration</th>
+    </tr>
+    <tr>
+        <td>Stealth State Playlist</td>
+        <td>Minimal beats, ambient pads. 5 segments (2min each)</td>
+        <td>Triggers when undetected >10s. Emphasizes environment sounds</td>
+    </tr>
+    <tr>
+        <td>Skirmish State Playlist</td>
+        <td>Light percussion. 5 segments. 1-3 enemies detected</td>
+        <td>Transition from stealth when enemy alerts</td>
+    </tr>
+    <tr>
+        <td>Combat State Playlist</td>
+        <td>Full jungle breaks. 5 segments. 4+ enemies or alarm</td>
+        <td>Full intensity. Vertical layers (combo) active within state</td>
+    </tr>
+    <tr>
+        <td>Boss State Theme</td>
+        <td>Signature variation per kingpin. Darkest/heaviest</td>
+        <td>Triggers on boss floor reveal. Maintains until boss death/escape</td>
+    </tr>
+    <tr>
+        <td>Extraction State Playlist</td>
+        <td>Climax intensity. Triumphant synth lead. 3 segments</td>
+        <td>90s extraction timer. Builds to finale</td>
+    </tr>
+</table>
+
+<p><span class="highlight">Hideout-Specific Soundscapes:</span></p>
+<ul>
+    <li>Casino (Liquid DnB): Upbeat sinister. Lounge jazz samples. High-energy vs Nakatomi's cold tension</li>
+    <li>Dept Store (Glitch-hop jungle): Corrupted muzak loops. Digital artifacts. Playful chaos</li>
+    <li>Hotel (Ambient dark wave): Minimal breaks. Slow-burn tension. Oppressive atmosphere</li>
+    <li>All maintain 120-180 BPM core. Tempo/layer reactivity universal</li>
+</ul>
+
+<p><span class="highlight">Art Asset Production:</span></p>
+<ul>
+    <li>Casino modular set: Gold trim tiles, red carpet, slot machines, chandeliers. ~40 unique pieces + 20 props</li>
+    <li>Dept Store modular set: Retail shelving, mannequins, escalators, product displays. ~50 pieces + 30 props</li>
+    <li>Hotel modular set: Room doors, red carpet, luxury furniture, balconies. ~60 pieces + 35 props</li>
+    <li>New enemies: 8 new types across 3 hideouts. Shared animation rig. Texture variants</li>
+    <li>Environmental hazards: Fire particles, water flooding shader, gas cloud VFX, glass shatter</li>
+</ul>
+
+<h2>Testing & Balance Workflow</h2>
+
+<p><span class="highlight">Per-Update Playtest Cycle:</span></p>
+<ul>
+    <li>Week 1-2 (Foundation): Internal only. Test new hideout layout/flow</li>
+    <li>Week 3-4 (Mechanics): Team playtests. Test new mechanics integration with existing content</li>
+    <li>Week 5-6 (Polish): External playtest. 10-15 testers. Fresh hideout + retroactive mechanics on old hideouts</li>
+    <li>Week 7-8 (Balance): Iteration based on feedback. Tune new mechanics, fix integration bugs</li>
+</ul>
+
+<p><span class="highlight">Retroactive Integration Testing:</span></p>
+<ul>
+    <li>Each new mechanic: Test on ALL existing hideouts. Ensure thematic fit (slots, decoys, civilians)</li>
+    <li>Balance check: New mechanics shouldn't trivialize Phase 1 content. Tune if broken</li>
+    <li>Example: Fortune slots in Nakatomi. Does +20% damage break combat tuning? Adjust if needed</li>
+</ul>
+
+<p><span class="highlight">Metrics to Track (Expansion):</span></p>
+<ul>
+    <li>Average run times: Casino (12-18min), Dept Store (18-25min), Hotel (20-30min). Tune if outliers</li>
+    <li>Civilian kill rates: Track accidental vs intentional. Tune Heat penalty if >50% accidental</li>
+    <li>Decoy false positive rate: Track decoy shoots. Tune visual tells if >30% false positives</li>
+    <li>Chip economy: Track chip earn/spend rates. Adjust elite drop amounts if shop unusable</li>
+    <li>Extraction completion rates: Track deaths during finale. Tune difficulty if <40% success</li>
+</ul>
+
+<h2>Risk Mitigation Strategies</h2>
+<table>
+    <tr>
+        <th>Risk</th>
+        <th>Likelihood</th>
+        <th>Impact</th>
+        <th>Mitigation</th>
+    </tr>
+    <tr>
+        <td>New mechanics break Phase 1 balance</td>
+        <td>HIGH</td>
+        <td>HIGH</td>
+        <td>Extensive retroactive testing. Willing to nerf mechanics if needed. Balance > novelty</td>
+    </tr>
+    <tr>
+        <td>Template production <4/week sustained</td>
+        <td>MEDIUM</td>
+        <td>MEDIUM</td>
+        <td>Accept 150 total vs 180-220 ideal. Prioritize quality over quantity</td>
+    </tr>
+    <tr>
+        <td>Music horizontal states feel disconnected</td>
+        <td>LOW</td>
+        <td>MEDIUM</td>
+        <td>Composer iteration budget. Ensure thematic consistency across states. Test transitions early</td>
+    </tr>
+    <tr>
+        <td>Civilian AI too frustrating (accidental kills)</td>
+        <td>MEDIUM</td>
+        <td>MEDIUM</td>
+        <td>Clear visual distinction (clothing color). Audio cues (screams). Generous hitboxes (avoid stray bullets)</td>
+    </tr>
+    <tr>
+        <td>12-floor Hotel too long (fatigue)</td>
+        <td>MEDIUM</td>
+        <td>LOW</td>
+        <td>Zipline shortcuts. Pacing via fewer enemies per floor. Accept 20-30min as "hard mode"</td>
+    </tr>
+    <tr>
+        <td>Feature fatigue (too many mechanics)</td>
+        <td>LOW</td>
+        <td>HIGH</td>
+        <td>Universal integration keeps mechanics familiar. Retroactive application = practice on old content</td>
+    </tr>
+</table>
+
+<h2>Phase 2 Success Criteria</h2>
+<ul>
+    <li><span class="highlight">Content Volume:</span> 4 hideouts playable. 150+ templates. 15 Revenge tiers. All dual modes functional</li>
+    <li><span class="highlight">Universal Mechanics:</span> Slots, chips, decoys, civilians, environmental spread integrated across all hideouts</li>
+    <li><span class="highlight">Music Evolution:</span> Horizontal states (stealth/combat/boss/extraction) + vertical layers (tempo/combo). Feels reactive + contextual</li>
+    <li><span class="highlight">Variety:</span> 4 hideouts feel distinct (visual, enemies, extraction). Runs don't feel samey</li>
+    <li><span class="highlight">Balance:</span> New mechanics enhance without trivializing. Phase 1 content still challenging/fun</li>
+    <li><span class="highlight">Stability:</span> No new crashes. Integration bugs fixed. Retroactive features stable</li>
+    <li><span class="highlight">Meta-Story Setup:</span> 4 kingpins defeated reveals "Plaza Network" conspiracy teaser for Phase 3</li>
+</ul>
+</div>
+</html>
