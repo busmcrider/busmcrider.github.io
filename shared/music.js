@@ -138,8 +138,8 @@ const albumConfigs = [
       { title: "Set the Stage", src: "audio/3 - Set the Stage.mp3" },
       { title: "Escape the Maze", src: "audio/4 - Escape the Maze.mp3" },
       { title: "Fluorescent Compliance, pt. I", src: "audio/5 - Fluorescent Compliance.mp3" },
-      { title: "Fluorescent Compliance, pt. II", src: "audio/6 - Fluorescent Compliance 2.mp3" }
-      { title: "Glass Spine Protocol", src: "audio/7 - Glass Spine Protocol.mp3" }
+      { title: "Fluorescent Compliance, pt. II", src: "audio/6 - Fluorescent Compliance 2.mp3" },
+      { title: "Glass Spine Protocol", src: "audio/7 - Glass Spine Protocol.mp3" },
       { title: "Glass Floors, Red Eyes", src: "audio/8 - Glass Floors, Red Eyes.mp3" }
     ]
   },
