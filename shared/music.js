@@ -129,6 +129,22 @@ const albumConfigs = [
   },
 
   {
+    title: "Neon Plaza",
+    artist: "Bus McRider",
+    background: "Neon Plaza.jpeg",
+    tracks: [
+      { title: "Surveillance Floor 47", src: "audio/1 - Surveillance Floor 47.mp3" },
+      { title: "Sterile Observation Deck", src: "audio/2 - Sterile Observation Deck.mp3" },
+      { title: "Set the Stage", src: "audio/3 - Set the Stage.mp3" },
+      { title: "Escape the Maze", src: "audio/4 - Escape the Maze.mp3" },
+      { title: "Fluorescent Compliance, pt. I", src: "audio/5 - Fluorescent Compliance.mp3" },
+      { title: "Fluorescent Compliance, pt. II", src: "audio/6 - Fluorescent Compliance 2.mp3" }
+      { title: "Glass Spine Protocol", src: "audio/7 - Glass Spine Protocol.mp3" }
+      { title: "Glass Floors, Red Eyes", src: "audio/8 - Glass Floors, Red Eyes.mp3" }
+    ]
+  },
+
+  {
     title: "2017 - Half Stringer",
     artist: "Charuda",
     background: "Half Stringer.jpg",
