@@ -132,33 +132,33 @@ const tracks = [
   { title: "Enoch 2", src: "../Gnosify/audio/5 - Enoch 2.mp3" },
   { title: "Trojan Odyssey", src: "../Gnosify/audio/6 - Trojan Odyssey.mp3" },
   { title: "The Apocryphon Flow", src: "../Gnosify/audio/7 - The Apocryphon Flow.mp3" },
-  { title: "Gilgamesh from the Soil", src: "audio/1 - Gilgamesh from the Soil.mp3" },
-  { title: "Bronze Age Time Capsule", src: "audio/2 - Bronze Age Time Capsule.mp3" },
-  { title: "Kurupted Odyssey", src: "audio/3 - Kurupted Odyssey.mp3" },
-  { title: "Plows, Vines & Game Codes", src: "audio/4 - Plows, Vines & Game Codes.mp3" },
-  { title: "Metamorphosis & Chronic Smoke", src: "audio/5 - Metamorphosis & Chronic Smoke.mp3" },
-  { title: "Parallel Lives Cipher", src: "audio/6 - Parallel Lives Cipher.mp3" },
-  { title: "Archon Autopsy", src: "audio/7 - Archon Autopsy.mp3" },
-  { title: "Plows, Vines & Game Codes (Fast)", src: "audio/8 - Plows, Vines & Game Codes (Fast).mp3" },
-  { title: "Cat Battles!", src: "audio/1 - Cat Battles!.mp3" },
-  { title: "The Cat Rangers", src: "audio/2 - Cat Battles! The Cat Rangers.mp3" },
-  { title: "Cat Rangers vs. The Iron Paw", src: "audio/3 - Cat Battles! Cat Rangers vs. The Iron Paw.mp3" },
-  { title: "The Cat Illuminati", src: "audio/4 - Cat Battles! The Cat Illuminati.mp3" },
-  { title: "Cat Battles! (End Credits)", src: "audio/5 - Cat Battles! (End Credits).mp3" },
-  { title: "1999 (Bratty Mix)", src: "audio/1999 (Bratty Mix).mp3" },
-  { title: "Flip It Like a Woman", src: "audio/Flip It Like a Woman.mp3" },
-  { title: "Flip It Like a Woman (Fast)", src: "audio/Flip It Like a Woman (Fast).mp3" },
-  { title: "You Don’t Impress Me", src: "audio/You Don’t Impress Me.mp3" },
-  { title: "Before He Cheats", src: "audio/Before He Cheats.mp3" },
-  { title: "Jolene in My Own Name", src: "audio/Jolene in My Own Name.mp3" },
-  { title: "Surveillance Floor 47", src: "audio/1 - Surveillance Floor 47.mp3" },
-  { title: "Sterile Observation Deck", src: "audio/2 - Sterile Observation Deck.mp3" },
-  { title: "Set the Stage", src: "audio/3 - Set the Stage.mp3" },
-  { title: "Escape the Maze", src: "audio/4 - Escape the Maze.mp3" },
-  { title: "Fluorescent Compliance, pt. I", src: "audio/5 - Fluorescent Compliance.mp3" },
-  { title: "Fluorescent Compliance, pt. II", src: "audio/6 - Fluorescent Compliance 2.mp3" },
-  { title: "Glass Spine Protocol", src: "audio/7 - Glass Spine Protocol.mp3" },
-  { title: "Glass Floors, Red Eyes", src: "audio/8 - Glass Floors, Red Eyes.mp3" }  
+  { title: "Gilgamesh from the Soil", src: "../Gnosify II/audio/1 - Gilgamesh from the Soil.mp3" },
+  { title: "Bronze Age Time Capsule", src: "../Gnosify II/audio/2 - Bronze Age Time Capsule.mp3" },
+  { title: "Kurupted Odyssey", src: "../Gnosify II/audio/3 - Kurupted Odyssey.mp3" },
+  { title: "Plows, Vines & Game Codes", src: "../Gnosify II/audio/4 - Plows, Vines & Game Codes.mp3" },
+  { title: "Metamorphosis & Chronic Smoke", src: "../Gnosify II/audio/5 - Metamorphosis & Chronic Smoke.mp3" },
+  { title: "Parallel Lives Cipher", src: "../Gnosify II/audio/6 - Parallel Lives Cipher.mp3" },
+  { title: "Archon Autopsy", src: "../Gnosify II/audio/7 - Archon Autopsy.mp3" },
+  { title: "Plows, Vines & Game Codes (Fast)", src: "../Gnosify II/audio/8 - Plows, Vines & Game Codes (Fast).mp3" },
+  { title: "Cat Battles!", src: "../Cat Battles!/audio/1 - Cat Battles!.mp3" },
+  { title: "The Cat Rangers", src: "../Cat Battles!/audio/2 - Cat Battles! The Cat Rangers.mp3" },
+  { title: "Cat Rangers vs. The Iron Paw", src: "../Cat Battles!/audio/3 - Cat Battles! Cat Rangers vs. The Iron Paw.mp3" },
+  { title: "The Cat Illuminati", src: "../Cat Battles!/audio/4 - Cat Battles! The Cat Illuminati.mp3" },
+  { title: "Cat Battles! (End Credits)", src: "../Cat Battles!/audio/5 - Cat Battles! (End Credits).mp3" },
+  { title: "1999 (Bratty Mix)", src: "../Girlz Rapp/audio/1999 (Bratty Mix).mp3" },
+  { title: "Flip It Like a Woman", src: "../Girlz Rapp/audio/Flip It Like a Woman.mp3" },
+  { title: "Flip It Like a Woman (Fast)", src: "../Girlz Rapp/audio/Flip It Like a Woman (Fast).mp3" },
+  { title: "You Don’t Impress Me", src: "../Girlz Rapp/audio/You Don’t Impress Me.mp3" },
+  { title: "Before He Cheats", src: "../Girlz Rapp/audio/Before He Cheats.mp3" },
+  { title: "Jolene in My Own Name", src: "../Girlz Rapp/audio/Jolene in My Own Name.mp3" },
+  { title: "Surveillance Floor 47", src: "../Neon Plaza/audio/1 - Surveillance Floor 47.mp3" },
+  { title: "Sterile Observation Deck", src: "../Neon Plaza/audio/2 - Sterile Observation Deck.mp3" },
+  { title: "Set the Stage", src: "../Neon Plaza/audio/3 - Set the Stage.mp3" },
+  { title: "Escape the Maze", src: "../Neon Plaza/audio/4 - Escape the Maze.mp3" },
+  { title: "Fluorescent Compliance, pt. I", src: "../Neon Plaza/audio/5 - Fluorescent Compliance.mp3" },
+  { title: "Fluorescent Compliance, pt. II", src: "../Neon Plaza/audio/6 - Fluorescent Compliance 2.mp3" },
+  { title: "Glass Spine Protocol", src: "../Neon Plaza/audio/7 - Glass Spine Protocol.mp3" },
+  { title: "Glass Floors, Red Eyes", src: "../Neon Plaza/audio/8 - Glass Floors, Red Eyes.mp3" }
 ];
 
 // Arrangement calculation functions
@@ -368,6 +368,7 @@ function init() {
 
   setupCanvas();
   setupNodes();
+  loadTrack();
 
   window.addEventListener('resize', () => {
     setupCanvas();
