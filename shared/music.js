@@ -131,7 +131,7 @@ const albumConfigs = [
   {
     title: "Neon Plaza",
     artist: "Bus McRider",
-    background: "Neon Plaza.jpeg",
+    background: "Neon Plaza.png",
     tracks: [
       { title: "Surveillance Floor 47", src: "audio/1 - Surveillance Floor 47.mp3" },
       { title: "Sterile Observation Deck", src: "audio/2 - Sterile Observation Deck.mp3" },
