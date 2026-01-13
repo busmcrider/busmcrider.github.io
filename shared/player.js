@@ -85,7 +85,7 @@ volumeSlider.oninput = () => {
 
 let index = 0;
 let autoplay = true;
-let loopMode = 0; // 0 off, 1 track, 2 all
+let loopMode = 0; // 0 off, 1 all, 2 one
 
 let shouldScroll = false;
 
@@ -103,7 +103,7 @@ function preloadTracks() {
   let nextIndex = null;
   let prevIndex = null;
 
-  if (loopMode === 1) {
+  if (loopMode === 2) {
     // Loop one track: no preloading needed (same track replays)
     return;
   }
@@ -111,7 +111,7 @@ function preloadTracks() {
   // Calculate next track index
   if (index < tracks.length - 1) {
     nextIndex = index + 1;
-  } else if (loopMode === 2) {
+  } else if (loopMode === 1) {
     nextIndex = 0; // Loop all: wrap to start
   }
   // else: end of album with no loop, don't preload (next would be different album)
@@ -119,7 +119,7 @@ function preloadTracks() {
   // Calculate previous track index
   if (index > 0) {
     prevIndex = index - 1;
-  } else if (loopMode === 2) {
+  } else if (loopMode === 1) {
     prevIndex = tracks.length - 1; // Loop all: wrap to end
   }
   // else: start of album with no loop, don't preload (prev would be different album)
@@ -278,7 +278,7 @@ prevBtn.onclick = () => prevTrack();
 
 function nextTrack() {
   // When looping one track, restart current track
-  if (loopMode === 1) {
+  if (loopMode === 2) {
     audio.currentTime = 0;
     audio.play();
     return;
@@ -286,7 +286,7 @@ function nextTrack() {
 
   if (index < tracks.length - 1) {
     loadTrack(index + 1, true);
-  } else if (loopMode === 2) {
+  } else if (loopMode === 1) {
     loadTrack(0, true);
   } else if (loopMode === 0 && autoplay && currentIndex !== -1) {
     const nextIndex = (currentIndex + 1) % albums.length;
@@ -296,7 +296,7 @@ function nextTrack() {
 
 function prevTrack() {
   // When looping one track, restart current track
-  if (loopMode === 1) {
+  if (loopMode === 2) {
     audio.currentTime = 0;
     audio.play();
     return;
@@ -304,7 +304,7 @@ function prevTrack() {
 
   if (index > 0) {
     loadTrack(index - 1, true);
-  } else if (loopMode === 2) {
+  } else if (loopMode === 1) {
     loadTrack(tracks.length - 1, true);
   } else if (loopMode === 0 && autoplay && currentIndex !== -1) {
     const prevIndex = (currentIndex - 1 + albums.length) % albums.length;
@@ -333,7 +333,7 @@ audio.onpause = () => {
 };
 
 audio.onended = () => {
-  if (loopMode === 1) {
+  if (loopMode === 2) {
     audio.play();
   } else if (autoplay) {
     nextTrack();
@@ -356,8 +356,8 @@ loopBtn.onclick = () => {
   loopMode = (loopMode + 1) % 3;
   loopBtn.textContent =
     loopMode === 0 ? "↻ OFF" :
-    loopMode === 1 ? "↻ ONE" :
-    "↻ ALL";
+    loopMode === 1 ? "↻ ALL" :
+    "↻ ONE";
 };
 
 // Initialize shortcuts state - inverse of playlist
