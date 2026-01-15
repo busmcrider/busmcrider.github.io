@@ -61,9 +61,9 @@ const albumConfigs = [
       { title: "Bronze Age Time Capsule", src: "audio/2 - Bronze Age Time Capsule.mp3" },
       { title: "Kurupted Odyssey", src: "audio/3 - Kurupted Odyssey.mp3" },
       { title: "Plows, Vines & Game Codes", src: "audio/4 - Plows, Vines & Game Codes.mp3" },
-      { title: "Metamorphosis & Chronic Smoke", src: "audio/5 - Metamorphosis & Chronic Smoke.mp3" },
-      { title: "Parallel Lives Cipher", src: "audio/6 - Parallel Lives Cipher.mp3" },
-      { title: "Archon Autopsy", src: "audio/7 - Archon Autopsy.mp3" },
+      { title: "Metamorphosis", src: "audio/5 - Metamorphosis.mp3" },
+      { title: "Parallel Doooms", src: "audio/6 - Parallel Doooms.mp3" },
+      { title: "Hypostasis 3030", src: "audio/7 - Hypostasis 3030.mp3" },
       { title: "Plows, Vines & Game Codes (Fast)", src: "audio/8 - Plows, Vines & Game Codes (Fast).mp3" }
     ]
   },
@@ -110,7 +110,8 @@ const albumConfigs = [
       { title: "The Cat Rangers", src: "audio/2 - Cat Battles! The Cat Rangers.mp3" },
       { title: "Cat Rangers vs. The Iron Paw", src: "audio/3 - Cat Battles! Cat Rangers vs. The Iron Paw.mp3" },
       { title: "The Cat Illuminati", src: "audio/4 - Cat Battles! The Cat Illuminati.mp3" },
-      { title: "Cat Battles! (End Credits)", src: "audio/5 - Cat Battles! (End Credits).mp3" }
+      { title: "The Return of The Dog", src: "audio/5 - Cat Battles! The Return of The Dog.mp3" },
+      { title: "Cat Battles! (End Credits)", src: "audio/6 - Cat Battles! (End Credits).mp3" }
     ]
   },
 
