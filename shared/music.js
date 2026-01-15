@@ -130,6 +130,20 @@ const albumConfigs = [
   },
 
   {
+    title: "Girlz Rapp II",
+    artist: "CuriousCat",
+    background: "Girlz Rapp II.jpeg",
+    tracks: [
+      { title: "Boots Still Made For Walkin'", src: "audio/1 - Boots Still Made For Walkin'.mp3" },
+      { title: "No Diggity, No Love", src: "audio/2 - No Diggity, No Love.mp3" },
+      { title: "Love Me For The Weekend", src: "audio/3 - Love Me For The Weekend.mp3" },
+      { title: "Not Your Hollaback", src: "audio/4 - Not Your Hollaback.mp3" },
+      { title: "Wishful Thinking", src: "audio/5 - Wishful Thinking.mp3" },
+      { title: "The Impression That I Get (2026 Flip)", src: "audio/6 - The Impression That I Get (2026 Flip).mp3" }
+    ]
+  },
+
+  {
     title: "Neon Plaza",
     artist: "Bus McRider",
     background: "Neon Plaza.png",

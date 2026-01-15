@@ -10,7 +10,7 @@ Music:
 
 [Chorus of Meows](https://busmcrider.github.io/Chorus of Meows/) + [Cat Battles!](https://busmcrider.github.io/Cat Battles!/) (For the cats!)
 
-[Girlz Rapp](https://busmcrider.github.io/Girlz Rapp/) (By Zoë!)
+[Girlz Rapp](https://busmcrider.github.io/Girlz Rapp/) + [Girlz Rapp II](https://busmcrider.github.io/Girlz Rapp II/) (By Zoë!)
 
 [Neon Plaza](https://busmcrider.github.io/Neon Plaza/) (More to come...)
 
