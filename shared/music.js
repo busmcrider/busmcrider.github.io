@@ -155,7 +155,15 @@ const albumConfigs = [
       { title: "Fluorescent Compliance, pt. I", src: "audio/5 - Fluorescent Compliance.mp3" },
       { title: "Fluorescent Compliance, pt. II", src: "audio/6 - Fluorescent Compliance 2.mp3" },
       { title: "Glass Spine Protocol", src: "audio/7 - Glass Spine Protocol.mp3" },
-      { title: "Glass Floors, Red Eyes", src: "audio/8 - Glass Floors, Red Eyes.mp3" }
+      { title: "Glass Floors, Red Eyes", src: "audio/8 - Glass Floors, Red Eyes.mp3" },
+      { title: "Silent Corridor, pt. I", src: "audio/1 - Silent Corridor.mp3" },
+      { title: "Silent Corridor, pt. II", src: "audio/2 - Silent Corridor 2.mp3" },
+      { title: "Grid of Glass, pt. I", src: "audio/3 - Grid of Glass.mp3" },
+      { title: "Grid of Glass, pt. II", src: "audio/4 - Grid of Glass 2.mp3" },
+      { title: "Iron Eclipse", src: "audio/5 - Iron Eclipse.mp3" },
+      { title: "Clockwork Animal", src: "audio/6 - Clockwork Animal.mp3" },
+      { title: "Concrete Hostile Systems, pt. I", src: "audio/7 - Concrete Hostile Systems.mp3" },
+      { title: "Concrete Hostile Systems, pt. II", src: "audio/8 - Concrete Hostile Systems 2.mp3" }
     ]
   },
 
