@@ -410,22 +410,22 @@ document.addEventListener("keydown", e => {
       e.preventDefault();
       audio.paused ? audio.play() : audio.pause();
       break;
-    case "ArrowUp":
+    case "ArrowLeft":
       e.preventDefault();
       prevTrack();
       break;
-    case "ArrowDown":
+    case "ArrowRight":
       e.preventDefault();
       nextTrack();
       break;
-    case "ArrowLeft":
+    case "ArrowUp":
       e.preventDefault();
       if (currentIndex !== -1) {
         const prevIndex = (currentIndex - 1 + albums.length) % albums.length;
         window.location.href = `/${encodeURIComponent(albums[prevIndex])}/`;
       }
       break;
-    case "ArrowRight":
+    case "ArrowDown":
       e.preventDefault();
       if (currentIndex !== -1) {
         const nextIndex = (currentIndex + 1) % albums.length;
