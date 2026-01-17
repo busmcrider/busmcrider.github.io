@@ -171,7 +171,15 @@ const albumConfigs = [
       { title: "Shopping Center (Combo) - Black Glass Slogan, pt. I", src: "audio/5 - Black Glass Slogan.mp3" },
       { title: "Shopping Center (Combo) - Black Glass Slogan, pt. II", src: "audio/6 - Black Glass Slogan 2.mp3" },
       { title: "Shopping Center (Boss) - Pressure Cycle", src: "audio/7 - Pressure Cycle.mp3" },
-      { title: "Shopping Center (Boss) - Pressure Discipline", src: "audio/8 - Pressure Discipline.mp3" }
+      { title: "Shopping Center (Boss) - Pressure Discipline", src: "audio/8 - Pressure Discipline.mp3" },
+      { title: "Casino (Stealth) - Fixed Odds, pt. I", src: "audio/1 - Fixed Odds.mp3" },
+      { title: "Casino (Stealth) - Fixed Odds, pt. II", src: "audio/2 - Fixed Odds 2.mp3" },
+      { title: "Casino (Skirmish) - Fixed Odds, pt. III", src: "audio/3 - Fixed Odds 3.mp3" },
+      { title: "Casino (Skirmish) - Fixed Odds, pt. IV", src: "audio/4 - Fixed Odds 4.mp3" },
+      { title: "Casino (Combo) - System Exploit, pt. I", src: "audio/5 - System Exploit.mp3" },
+      { title: "Casino (Combo) - System Exploit, pt. II", src: "audio/6 - System Exploit 2.mp3" },
+      { title: "Casino (Boss) - House Advantage", src: "audio/7 - House Advantage.mp3" },
+      { title: "Casino (Boss) - System Meltdown", src: "audio/8 - System Meltdown.mp3" }
     ]
   },
 
