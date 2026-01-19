@@ -144,6 +144,22 @@ const albumConfigs = [
   },
 
   {
+    title: "Queenstown",
+    artist: "Capletina",
+    background: "Queenstown.jpeg",
+    tracks: [
+      { title: "Daughters of the Fire", src: "audio/Daughters of the Fire.mp3" },
+      { title: "Pressure Pon Di Pulse", src: "audio/Pressure Pon Di Pulse.mp3" },
+      { title: "Fire Inna Di Heart", src: "audio/Fire Inna Di Heart.mp3" },
+      { title: "Love Me For The Weekend", src: "audio/Love Me For The Weekend (Capletina).mp3" },
+      { title: "Fire in the Clinic", src: "audio/Fire in the Clinic.mp3" },
+      { title: "Daughter of the Lion", src: "audio/Daughter of the Lion.mp3" },
+      { title: "Blaze Up That Hill", src: "audio/Blaze Up That Hill.mp3" },
+      { title: "Fire Pon Di Wayward One", src: "audio/Fire Pon Di Wayward One.mp3" }
+    ]
+  },
+
+  {
     title: "Neon Plaza",
     artist: "Bus McRider",
     background: "Neon Plaza.png",
