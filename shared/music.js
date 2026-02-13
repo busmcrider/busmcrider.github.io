@@ -33,7 +33,9 @@ const albumConfigs = [
       { title: "An Apple A Day", src: "audio/3 - An Apple A Day.mp3" },
       { title: "You Can’t Vote Your Way Out Of This", src: "audio/4 - You Can’t Vote Your Way Out Of This.mp3" },
       { title: "Everyone’s a Problem", src: "audio/5 - Everyone’s a Problem.mp3" },
-      { title: "You Sure About That?", src: "audio/6 - You Sure About That.mp3" }
+      { title: "You Sure About That?", src: "audio/6 - You Sure About That.mp3" },
+      { title: "Everyone’s a Problem", src: "audio/7 - Who Rules You.mp3" },
+      { title: "Everyone’s a Problem", src: "audio/8 - Your Town Sucks.mp3" }
     ]
   },
 
