@@ -202,6 +202,32 @@ const albumConfigs = [
   },
 
   {
+    title: "Besides",
+    artist: "Bus McRider",
+    background: "Besides.jpeg",
+    tracks: [
+      { title: "Shadows in Satin", src: "audio/Shadows in Satin.mp3" },
+      { title: "Strawberry Skies (Dry)", src: "audio/Strawberry Skies (Dry).mp3" },
+      { title: "The Sleep Paw", src: "audio/The Sleep Paw.mp3" },
+      { title: "Dawn Ride", src: "audio/Dawn Ride.mp3" },
+      { title: "Santa Needs A Beer", src: "audio/Santa Needs A Beer.mp3" },
+      { title: "That Wood Is Dry", src: "audio/That Wood Is Dry.mp3" },
+      { title: "Cosmic Blueprince", src: "audio/Cosmic Blueprince.mp3" },
+      { title: "Parallel Lives in the Projector Room", src: "audio/Parallel Lives in the Projector Room.mp3" },
+      { title: "The Apocryphon Slow", src: "audio/The Apocryphon Slow.mp3" },
+      { title: "Enoch 1", src: "audio/Enoch 1.mp3" },
+      { title: "Bronze Age Time Capsule (Slow)", src: "audio/Bronze Age Time Capsule (Slow).mp3" },
+      { title: "Shadows in Satine", src: "audio/Shadows in Satine.mp3" },
+      { title: "Strawberry Skies", src: "audio/Strawberry Skies.mp3" },
+      { title: "Different People (Alt Cut)", src: "audio/Different People (Alt Cut).mp3" },
+      { title: "Silent Night in Blood Red", src: "audio/Silent Night in Blood Red.mp3" },
+      { title: "Night Ride", src: "audio/Night Ride.mp3" },
+      { title: "Fire in El Paso", src: "audio/Fire in El Paso.mp3" },
+      { title: "All In One Place", src: "audio/All In One Place.mp3" }
+    ]
+  },
+
+  {
     title: "2017 - Half Stringer",
     artist: "Charuda",
     background: "Half Stringer.jpg",
