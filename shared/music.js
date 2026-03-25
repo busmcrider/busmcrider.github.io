@@ -162,6 +162,24 @@ const albumConfigs = [
   },
 
   {
+    title: "Castaway",
+    artist: "Bus McRider",
+    background: "Castaway.jpeg",
+    tracks: [
+      { title: "Hatching the Plan", src: "audio/Hatching the Plan.mp3" },
+      { title: "I Will Always Wag My Finger In Your Face", src: "audio/I Will Always Wag My Finger In Your Face.mp3" },
+      { title: "That Wood Is Dry", src: "audio/That Wood Is Dry.mp3" },
+      { title: "My Grandmother's Not Here For A Reason", src: "audio/My Grandmother's Not Here For A Reason.mp3" },
+      { title: "This Is MY Rock", src: "audio/This Is MY Rock.mp3" },
+      { title: "The Sugar Shack", src: "audio/The Sugar Shack.mp3" },
+      { title: "Fishbach out of Water", src: "audio/Fishbach out of Water.mp3" },
+      { title: "I've Gotta Find The Idol", src: "audio/I've Gotta Find The Idol.mp3" },
+      { title: "Goat to the End", src: "audio/Goat to the End.mp3" },
+      { title: "Redemption Island Lullaby", src: "audio/Redemption Island Lullaby.mp3" }
+    ]
+  },
+
+  {
     title: "Neon Plaza",
     artist: "Bus McRider",
     background: "Neon Plaza.png",
