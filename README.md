@@ -2,6 +2,8 @@ Music:
 
 [Stars+Dust](https://busmcrider.github.io/Stars+Dust/) (Merry Christmas!)
 
+[26 Mafia](https://busmcrider.github.io/26 Mafia/) (For the big 26)
+
 [Real Fake Protest Songs](https://busmcrider.github.io/Real Fake Protest Songs/) (For blasting at your local riot)
 
 [Gnosify](https://busmcrider.github.io/Gnosify/) + [Gnosify II](https://busmcrider.github.io/Gnosify II/) (Happy Birthday James!)

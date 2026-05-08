@@ -24,6 +24,20 @@ const albumConfigs = [
   },
 
   {
+    title: "26 Mafia",
+    artist: "Bus McRider",
+    background: "26mafia.jpg",
+    tracks: [
+      { title: "I Stepped In Something Gross", src: "audio/I Stepped In Something Gross.mp3" },
+      { title: "Shop Local", src: "audio/Shop Local.mp3" },
+      { title: "Damn I Need A Hug", src: "audio/Damn I Need A Hug.mp3" },
+      { title: "Put Your Fucking Shopping Cart Back", src: "audio/Put Your Fucking Shopping Cart Back.mp3" },
+      { title: "Bitch Learn To Merge", src: "audio/Bitch Learn To Merge.mp3" },
+      { title: "Forgot About Corndogs", src: "audio/Forgot About Corndogs.mp3" }
+    ]
+  },
+
+  {
     title: "Real Fake Protest Songs",
     artist: "Bus McRider",
     background: "Real Fake Protest Songs.jpeg",
