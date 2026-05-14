@@ -2,6 +2,24 @@
 
 const albumConfigs = [
   {
+    title: "Dead Mega Zebra",
+    artist: "NOTSATAN",
+    background: "Dead Mega Zebra.jpg",
+    tracks: [
+      { title: "Back Alley Echo", src: "audio/Back Alley Echo.mp3" },
+      { title: "Night Bus Skank", src: "audio/Night Bus Skank.mp3" },
+      { title: "Cut Through Fear", src: "audio/Cut Through Fear.mp3" },
+      { title: "Split Wire", src: "audio/Split Wire.mp3" },
+      { title: "Hot Test Signal", src: "audio/Hot Test Signal.mp3" },
+      { title: "Cut Through Fog", src: "audio/Cut Through Fog.mp3" },
+      { title: "Broken Cable", src: "audio/Broken Cable.mp3" },
+      { title: "Murkline Shuffle", src: "audio/Murkline Shuffle.mp3" },
+      { title: "Broken Glass Bass", src: "audio/Broken Glass Bass.mp3" },
+      { title: "Split Wire II", src: "audio/Split Wire II.mp3" }
+    ]
+  },
+
+  {
     title: "Stars+Dust",
     artist: "Bus McRider",
     background: "Stars+Dust.jpeg",

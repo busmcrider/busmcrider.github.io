@@ -1,5 +1,7 @@
 Music:
 
+[Dead Mega Zebra](https://busmcrider.github.io/Dead Mega Zebra/) (RIP)
+
 [Stars+Dust](https://busmcrider.github.io/Stars+Dust/) (Merry Christmas!)
 
 [26 Mafia](https://busmcrider.github.io/26 Mafia/) (For the big 26)
