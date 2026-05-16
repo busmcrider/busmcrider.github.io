@@ -2,6 +2,24 @@
 
 const albumConfigs = [
   {
+    title: "UDOR",
+    artist: "NOTSATAN",
+    background: "UDOR.jpg",
+    tracks: [
+      { title: "Cold Liquid", src: "audio/Cold Liquid.mp3" },
+      { title: "Five Stars", src: "audio/Five Stars.mp3" },
+      { title: "Back Alley Liquid", src: "audio/Back Alley Liquid.mp3" },
+      { title: "Cold Test Signal", src: "audio/Cold Test Signal.mp3" },
+      { title: "Night Signal", src: "audio/Night Signal.mp3" },
+      { title: "Knight Bus Skank", src: "audio/Knight Bus Skank.mp3" },
+      { title: "Split Rim Pressure", src: "audio/Split Rim Pressure.mp3" },
+      { title: "Railyard Ghost", src: "audio/Railyard Ghost.mp3" },
+      { title: "Back Alley Tapes", src: "audio/Back Alley Tapes.mp3" },
+      { title: "Needlewire Riddim", src: "audio/Needlewire Riddim.mp3" }
+    ]
+  },
+
+  {
     title: "Dead Mega Zebra",
     artist: "NOTSATAN",
     background: "Dead Mega Zebra.jpg",
