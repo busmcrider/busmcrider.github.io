@@ -1,6 +1,6 @@
 Music:
 
-[UDOR](https://busmcrider.github.io/UDOR/) (Set ammo)
+[SMACK](https://busmcrider.github.io/SMACK/) + [UDOR](https://busmcrider.github.io/UDOR/) (Set ammo)
 
 [Dead Mega Zebra](https://busmcrider.github.io/Dead Mega Zebra/) (RIP)
 

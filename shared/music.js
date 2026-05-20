@@ -2,6 +2,24 @@
 
 const albumConfigs = [
   {
+    title: "SMACK",
+    artist: "NOTSATAN",
+    background: "SMACK.jpg",
+    tracks: [
+      { title: "Reelwire Bash", src: "audio/Reelwire Bash.mp3" },
+      { title: "Mossy Rollers", src: "audio/Mossy Rollers.mp3" },
+      { title: "Ratchet Drift", src: "audio/Ratchet Drift.mp3" },
+      { title: "Rugged Wire", src: "audio/Rugged Wire.mp3" },
+      { title: "Reelwire Smash", src: "audio/Reelwire Smash.mp3" },
+      { title: "Unforgiven", src: "audio/Unforgiven.mp3" },
+      { title: "Bone Dust Drift", src: "audio/Bone Dust Drift.mp3" },
+      { title: "Ragged Wire", src: "audio/Ragged Wire.mp3" },
+      { title: "Kill Switch", src: "audio/Kill Switch.mp3" },
+      { title: "Tunnel Rat", src: "audio/Tunnel Rat.mp3" }
+    ]
+  },
+
+  {
     title: "UDOR",
     artist: "NOTSATAN",
     background: "UDOR.jpg",
